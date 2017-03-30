@@ -10,9 +10,9 @@
 # GIT
 !*.gitkeep
 
-# Node & Webpacks
+# Node
 node_modules
 .eslintrc
 
-# YuiDoc Themes
-!index.handlebars
+# docs
+docs
