@@ -15,16 +15,16 @@ import gutil from "gulp-util";
 
 //get argument
 let environment = yargs.argv.e;
-let webpack_arg = yargs.argv.w;
+let bundle_arg  = yargs.argv.b;
 
 //check args
 environment = (typeof environment != "undefined") ? environment : "production";
-webpack_arg = (typeof webpack_arg != "undefined") ? webpack_arg : "core";
+bundle_arg = (typeof bundle_arg != "undefined") ? bundle_arg : "cc";
 
 //set consts
-const webpack_name =  webpack_arg;
-const webpack_src  = "./src/" + webpack_name + ".js";
-const webpack_dist = "./dist/js/";
+const bundle_name =  bundle_arg;
+const bundle_src  = "./src/" + bundle_name + ".js";
+const bundle_dist = "./dist/js/";
 
 //set environment
 process.env.NODE_ENV = environment;
@@ -33,7 +33,7 @@ process.env.NODE_ENV = environment;
 
 // set up the browserify instance on a task basis
 const browserify_conf = {
-    entries      : [webpack_src],
+    entries      : [bundle_src],
     cache        : {},
     packageCache : {},
     debug        : !(environment == "production") //true enables source-maps
@@ -52,7 +52,7 @@ var webpack = watchify(browserify(assign({}, watchify.args, browserify_conf)))
                 }, "uglifyify");
 
 //require bundle with expose name
-webpack.require([webpack_src], { expose : webpack_name });
+webpack.require([bundle_src], { expose : bundle_name });
 //events
 webpack.on("update", bundleApp); //on any dep update, runs the bundler
 webpack.on("log", gutil.log);    //output build logs to terminal
@@ -60,10 +60,10 @@ webpack.on("log", gutil.log);    //output build logs to terminal
 function bundleApp() {
     //browserify js bundler
     return webpack.bundle()
-        .on("error", gutil.log.bind(gutil, "Browserify Bundle Error"))
-        .pipe(source(webpack_name + ".bundle.min.js"))
+        .on("error", gutil.log.bind(gutil, "Browserify Bundler Error"))
+        .pipe(source(bundle_name + ".bundle.min.js"))
         //prepend contents
-        .pipe(gulp.dest(webpack_dist));
+        .pipe(gulp.dest(bundle_dist));
 }
 
 //++ Tasks

@@ -1,7 +1,7 @@
 /**
- * Core WebPack
+ * Core Main Bundler
  * ES6 required (babel)
- * @module WebpackCore
+ * @module Main
  */
 
 //load main libraries
