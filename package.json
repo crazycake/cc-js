@@ -13,7 +13,7 @@
   "scripts": {
     "build": "gulp build",
     "watch": "gulp watch",
-    "docs":  "yuidoc src/modules/",
+    "docs":  "yuidoc src/modules/"
   },
   "repository": {
     "type": "git",
