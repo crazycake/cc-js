@@ -1,0 +1,11 @@
+{
+    "name": "CrazyCake JS Core",
+    "description": "CrazyCake webpack core api",
+    "version": "0.2.0",
+    "url": "http://docs.crazycake.cl/",
+    "options": {
+        "outdir": "../../cc-docs/cc-phalcon/js/",
+        "themedir" : "node_modules/yuidoc-lucid-theme",
+        "helpers" : ["node_modules/yuidoc-lucid-theme/helpers/helpers.js"]
+    }
+}

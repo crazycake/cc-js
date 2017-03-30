@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+	<title>cc-js test</title>
+
+	<!-- Global vars -->
+	<script>
+		UA = {
+		    "platform": "Macintosh",
+		    "browser": "Chrome",
+		    "version": "56.0.2924.87",
+		    "shortVersion": "56",
+		    "isMobile": false,
+		    "isLegacy": false,
+		    "requestedUri": "",
+		    "protocol": "http://",
+		    "lang": "es",
+		    "tokenKey": "N3NsZDV6L1hUS0w1ZlliRGx5Zzlxdz09",
+		    "token": "TXBGamJNRDhESFQ4WDE0VDBEOWtVQT09"
+		};
+		APP = {
+		    "dev": 0,
+		    "version": "0.1.0",
+		    "name": "Webapp",
+		    "baseUrl": "http://staging-456386893.us-east-1.elb.amazonaws.com/",
+		    "staticUrl": "http://staging-456386893.us-east-1.elb.amazonaws.com/",
+		    "cssLazy": "http://staging-456386893.us-east-1.elb.amazonaws.com/assets/lazy-47.rev.css",
+		    "googleReCaptchaID": "6LeSTwUTAAAAAImWciy8uizCmbRM6jQB4d5iu7Zg",
+		    "TRANS": {
+		        "ALERTS": {
+		            "INTERNAL_ERROR": "Oops, ha ocurrido un problema, solucionaremos esto a la brevedad.",
+		            "SERVER_TIMEOUT": "Hemos perdido la comunicaci\u00f3n, prueba revisando tu conexi\u00f3n a Internet.",
+		            "CSRF": "Esta p\u00e1gina ha estado inactiva por mucho tiempo, haz\n <a href=\"javascript:location.reload();\">click aqu\u00ed</a> para refrescarla.",
+		            "NOT_FOUND": "Oops, el enlace est\u00e1 roto. Porfavor int\u00e9ntalo m\u00e1s tarde.",
+		            "BAD_REQUEST": "Lo sentimos, no hemos logrado procesar tu petici\u00f3n. Intenta refrescando esta p\u00e1gina.",
+		            "ACCESS_FORBIDDEN": "Tu sesi\u00f3n ha caducado, porfavor <a href=\"./signIn\">ingresa nuevamente aqu\u00ed</a>."
+		        },
+		        "ACTIONS": {
+		            "LOADING": "cargando ...",
+		            "REDIRECTING": "redireccionado ...",
+		            "OK": "Ok",
+		            "ACCEPT": "Aceptar",
+		            "CANCEL": "Cancelar",
+		            "NOT_NOW": "Ahora No",
+		            "SEND": "Enviar",
+		            "GOT_IT": "Entendido",
+		            "DELETE": "Eliminar",
+		            "CONTINUE": "Continuar",
+		            "ACTIVATE": "Activar"
+		        }
+			}
+		};
+	</script>
+
+</head>
+<body>
+
+	<!-- app wrapper -->
+	<div id="app">
+		<h1>
+			<span style="color:blue;">cc-js</span>
+		</h1>
+	</div>
+
+	<!-- Flash Messages -->
+	<div id="app-flash" class="hide">
+	</div>
+
+	<!-- Scripts -->
+	<script type="text/javascript" src="dist/js/core.bundle.min.js"></script>
+	<script>core.start();</script>
+
+	<!-- No script fallback -->
+	<noscript class="app-no-js text-center">
+        This site requires Javascript enabled in your browser.
+	</noscript>
+
+</body>
+</html>

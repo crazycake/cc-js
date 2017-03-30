@@ -1,0 +1,18 @@
+# Linux
+*~
+*.bak
+*.gz
+*.log
+
+# OSX
+.DS_Store
+
+# GIT
+!*.gitkeep
+
+# Node & Webpacks
+node_modules
+.eslintrc
+
+# YuiDoc Themes
+!index.handlebars
