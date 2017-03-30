@@ -1,5 +1,6 @@
 CrazyCake JS
 ------------
+[![npm version](https://badge.fury.io/js/crazycake-js.svg)](https://badge.fury.io/js/crazycake-js)
 
 JS Core for webapps. Gulp as Task Runner, Browserify as bundler.
 
