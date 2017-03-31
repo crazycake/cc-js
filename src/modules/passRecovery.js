@@ -1,47 +1,29 @@
 /**
- * Password Recovery View Model
- * @class PassRecovery
+ * Password Recovery Module
+ * @module PassRecovery
  */
 
-export default new function() {
+export default {
+    name : "passRecovery",
+    vm : {
+        methods : {
+            // Send Recovery Instructions
+            sendRecoveryInstructions(e) {
 
-    //++ Module
-    var self  = this;
-    self.name = "passRecovery";
+                core.ajaxRequest({ method : "POST", uri : "password/sendRecoveryInstructions" }, e.target)
+                .then(function(payload) {
 
-    //++ View Model
-    self.vm = {
-        methods : {}
-    };
+                    if (!payload) {
+                        core.modules.forms.recaptchaReload();
+                        return;
+                    }
+                });
+            },
+            // Saves new password from recovery password form
+            saveNewPassword(e) {
 
-    //++ Methods
-
-    /**
-     * Send Recovery Instructions
-     * @method sendRecoveryInstructions
-     * @param  {Object} event - The Event Handler
-     */
-    self.vm.methods.sendRecoveryInstructions = function(e) {
-
-        //request with promise
-        core.ajaxRequest({ method : "POST", uri : "password/sendRecoveryInstructions" }, e.target)
-        .then(function(payload) {
-
-            if (!payload) {
-                core.modules.forms.recaptchaReload();
-                return;
+                core.ajaxRequest({ method : "POST", uri : "password/saveNewPassword" }, e.target);
             }
-        });
-    };
-
-    /**
-     * Saves new password from recovery password form
-     * @method saveNewPassword
-     * @param  {Object} event - The Event Handler
-     */
-    self.vm.methods.saveNewPassword = function(e) {
-
-        //request with promise
-        core.ajaxRequest({ method : "POST", uri : "password/saveNewPassword" }, e.target);
-    };
+        }
+    }
 };

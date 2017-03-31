@@ -1,243 +1,229 @@
 /**
- * Core: main app module.
+ * Core Module
  * Required scope vars: `{APP, UA}`.
  * Frontend Framework supported: `Foundation 6`, `Bootstrap 4`
- * @class Core
+ * @module Core
  */
 
 import ui from "./core.ui.js";
 
-export default new function() {
-
-    //Check that App Global scope vars are defined
-    if (typeof APP == "undefined" || typeof UA == "undefined")
-        throw new Error("Core -> Error: APP or UA global vars are not defined!");
-
-    //self context
-    var self = this;
-
-    //++ Properties
-
-    /**
-     * @property debug
-     * @type {boolean}
-     */
-    self.debug = false;
+export default {
 
     /**
      * @property ui
      * @type {object}
      */
-    self.ui = ui;
+    ui : ui,
 
     /**
      * @property modules
      * @type {Boolean}
      */
-    self.modules = {};
+    modules : {},
 
     /**
      * @property framework ```foundation, bootstrap, pure```
      * @type {string}
      */
-    self.framework = "pure";
+    framework : "pure",
 
     /**
      * Server Date format
      * @type {string}
      */
-    self.dateFormat =  "YYYY-MM-DD HH:mm:ss";
+    dateFormat : "YYYY-MM-DD HH:mm:ss",
 
-	/**
+    /**
      * XHR Max Timeout (seconds)
      * @type {int}
      */
-	self.timeout = 30000;
-
-    /**
-     * @property window.core
-     * @type {object}
-     */
-    window.core = self;
-
-    //++ jQuery setup
-
-    $.ajaxSetup({
-        cache : true  //improvement for third-party libs like Facebook.
-    });
+    timeout : 30000,
 
     //++ Methods ++
 
     /**
-     * Helper Get BaseUrl
-     * @method baseUrl
-     * @param  {String} uri - Append URI if defined
-     * @return string
+     * Initializer
+     * @method init
      */
-     self.baseUrl = function(uri = "") {
+    init() {
 
-        return APP.baseUrl + uri;
-     };
+        //Check that App Global scope vars are defined
+        if (_.isNil(APP) || _.isNil(UA))
+            throw new Error("Core -> APP or UA global vars are not defined!");
 
-     /**
-      * Helper Get StaticUrl
-      * @method staticUrl
-      * @param  {String} uri - Append URI if defined
-      * @return string
-      */
-      self.staticUrl = function(uri = "") {
+        //Set App data for selectors
+        if (_.isNil(APP.UI))
+            APP.UI = {};
 
-         return APP.staticUrl + uri;
-      };
+        //++ jQuery setup
+        $.ajaxSetup({
+            cache : true  //improvement for third-party libs like Facebook.
+        });
+    },
 
-      /**
-       * Set modules automatically for require function
-       * @method setModules
-       * @param {Array} modules - The required modules
-       */
-      self.setModules = function(modules = []) {
+    /**
+    * Set modules automatically for require function
+    * @method setModules
+    * @param {Array} modules - The required modules
+    */
+    setModules(modules = []) {
 
-          if (!modules.length)
-              return;
+        if (!modules.length)
+            return;
 
-          for (var i = 0; i < modules.length; i++) {
+        for (var i = 0; i < modules.length; i++) {
 
-              var mod = modules[i];
+            var mod = modules[i];
 
-              if (typeof mod.name != "undefined")
-                  self.modules[mod.name] = mod;
-          }
-      };
+            if (typeof mod.name != "undefined")
+                this.modules[mod.name] = mod;
+        }
+    },
 
-      /**
-      * Initializer, if module has a viewModel binds it to DOM automatically
-      * @method start
-      * @param {Array} modules
-      */
-      self.start = function(modules = []) {
+    /**
+     * Starter, if module has a viewModel binds it to DOM automatically
+     * @method start
+     * @param {Array} modules
+     */
+    start(modules = []) {
 
-          var mod_name, mod, data;
+        console.debug("Core -> Starting");
 
-          //1) call inits
-          for (mod_name in modules) {
+        var mod_name, mod, data;
 
-              //check module exists
-              if (_.isUndefined(self.modules[mod_name])) {
-                  console.warn("Core -> Attempting to load an undefined module (" + mod_name + ").");
-                  continue;
-              }
+        //1) call inits
+        for (mod_name in modules) {
 
-              //get module
-              mod  = self.modules[mod_name];
-              data = modules[mod_name];
+            //check module exists
+            if (_.isUndefined(this.modules[mod_name])) {
+                console.warn("Core -> Attempting to load an undefined module (" + mod_name + ").");
+                continue;
+            }
 
-              //check if module has init method & call it
-              if (_.isFunction(mod.init))
+            //get module
+            mod  = this.modules[mod_name];
+            data = modules[mod_name];
+
+            //check if module has init method & call it
+            if (_.isFunction(mod.init))
                 mod.init(data);
-          }
+        }
 
-          //2) load viewModels
-          for (mod_name in modules) {
+        //2) load viewModels
+        for (mod_name in modules) {
 
-              //check module exists
-              if (_.isUndefined(self.modules[mod_name]))
+            //check module exists
+            if (_.isUndefined(this.modules[mod_name]))
                 continue;
 
-              //get module
-              mod = self.modules[mod_name];
+            //get module
+            mod = this.modules[mod_name];
 
-              //bind model to DOM?
-              if (!_.isObject(mod.vm))
+            //bind model to DOM?
+            if (!_.isObject(mod.vm))
                 continue;
 
-              if(_.isUndefined(mod.vm.el))
-                mod.vm.el = "#vue-" + mod_name;
-
-              if(typeof Vue == "undefined")
+            if(_.isNil(Vue))
                 return console.warn("Core -> Vue has not loaded!");
 
-              console.log("Core -> New Vue instance for module " + mod_name, mod.vm);
+            console.log("Core -> New Vue instance for module: " + mod_name, mod.vm);
 
-              //set new Vue instance (object prop updated)
-              mod.vm = new Vue(mod.vm);
-          }
+            //set new Vue instance (object prop updated)
+            mod.vm = new Vue(mod.vm);
+        }
 
-          //3) load UI
-          self.loadUI();
+        //3) load UI
+        this.loadUI();
+    },
 
-          console.debug("Core -> Started.");
-      };
+    /**
+     * Core load UI, called automatically after loading modules.
+     * @method loadUI
+     */
+    loadUI() {
 
-      /**
-       * Core load UI, called automatically after loading modules.
-       * @method loadUI
-       */
-      self.loadUI = function() {
+        //load fast click for mobile
+        if (UA.isMobile && !_.isUndefined(FastClick))
+            FastClick.attach(document.body);
 
-          //load fast click for mobile
-          if (UA.isMobile && typeof FastClick != "undefined")
-              FastClick.attach(document.body);
+        //load UI framework?
+        if (!_.isUndefined(Foundation))
+            this.initFoundation();
+        else if (_.isFunction($().emulateTransitionEnd))
+            this.initBootstrap();
 
-          //load Foundation framework
-          if (typeof Foundation != "undefined")
-              self.initFoundation();
-          //load Bootstrap framework
-          else if (typeof $().emulateTransitionEnd == "function")
-              self.initBootstrap();
+        //load forms module
+        if (!_.isUndefined(this.modules.forms))
+            this.modules.forms.load();
 
-          //load forms module
-          if (!_.isUndefined(self.modules.forms))
-              self.modules.forms.load();
+        //load UI module
+        this.ui.init();
 
-          //load UI module
-          self.ui.init();
+        //css async loading
+        if(!_.isUndefined(APP.cssLazy) && APP.cssLazy) {
 
-          //css async loading
-          if(!_.isUndefined(APP.cssLazy) && APP.cssLazy) {
-
-              console.log("Core -> loading CSS file (async)", APP.cssLazy);
-              loadCSS(APP.cssLazy);
-          }
-      };
+            console.log("Core -> loading CSS file (async)", APP.cssLazy);
+            loadCSS(APP.cssLazy);
+        }
+    },
 
     /**
      * Foundation Initializer, loaded automatically.
-     * Call this function if an element has loaded dynamically and uses foundation js plugins.
      * @method initFoundation
      * @param {Object} element - The jQuery element, default is document object.
      */
-    self.initFoundation = function(element) {
+    initFoundation(element) {
 
         console.log("Core -> Initializing Foundation...");
 
         //check default element
-        if (typeof element == "undefined")
+        if (_.isUndefined(element))
             element = $(document);
         else if (element instanceof jQuery === false)
             element = $(element);
 
         //set framework
-        self.framework = "foundation";
+        this.framework = "foundation";
         //init foundation
         element.foundation();
-    };
+    },
 
     /**
      * Bootstrap Initializer, loaded automatically.
      * @method initBootstrap
      */
-    self.initBootstrap = function() {
+    initBootstrap() {
 
         console.log("Core -> Initializing Bootstrap...");
 
         //set framework
-        self.framework = "bootstrap";
-    };
+        this.framework = "bootstrap";
+    },
 
     /**
-     * Ajax request with form validation.
-     * Validates a form, if valid, sends a promise request with Q lib.
-     * @link https://github.com/kriskowal/q
+    * Helper Get BaseUrl
+    * @method baseUrl
+    * @param  {String} uri - Append URI if defined
+    * @return string
+    */
+    baseUrl(uri = "") {
+
+        return APP.baseUrl + uri;
+    },
+
+    /**
+    * Helper Get StaticUrl
+    * @method staticUrl
+    * @param  {String} uri - Append URI if defined
+    * @return string
+    */
+    staticUrl(uri = "") {
+
+        return APP.staticUrl + uri;
+    },
+
+    /**
+     * Ajax request with auto form validation.
      * @method ajaxRequest
      * @param  {Object} request - A simple request object
      * @param  {Object} form - The form HTML object
@@ -245,7 +231,7 @@ export default new function() {
      * @param  {Object} events - Alert Event handlers object
      * @return {Object} promise
      */
-    self.ajaxRequest = function(request = null, form = null, extended_data = null, events = null) {
+    ajaxRequest(request = null, form = null, extended_data = null, events = null) {
 
         //validation, request is required
         if (_.isNull(request))
@@ -263,7 +249,7 @@ export default new function() {
         if (!_.isNull(form)) {
 
             //validate abide form
-            if (!self.modules.forms.isValid(form))
+            if (!this.modules.forms.isValid(form))
                 return P.resolve();
 
             //serialize data to URL encoding
@@ -296,29 +282,30 @@ export default new function() {
         }
 
         //set url
-        let url = !_.isNil(request.url) ? request.url : self.baseUrl(request.uri);
+        let url = !_.isNil(request.url) ? request.url : this.baseUrl(request.uri);
         //set options
         var options = {
             url      : url,
             type     : request.method,
             data     : payload,
             dataType : "json",
-            timeout  : self.timeout
+            timeout  : this.timeout
         };
 
         console.log("Core -> new promise request ["+url+"] payload:", payload);
 
+        var s = this;
         //make ajax request with promises
         return P.resolve(
             $.ajax(options)
             //handle fail event for jQuery ajax request
-            .fail(self.handleAjaxError)
+            .fail(s.handleAjaxError)
         )
         //handle response
         .then((data) => {
 
             //handle ajax response
-            if (!self.handleAjaxResponse(data, events))
+            if (!s.handleAjaxResponse(data, events))
                 return false;
 
             var payload = data.response.payload;
@@ -327,9 +314,7 @@ export default new function() {
             return !_.isNull(payload) ? payload : true;
         })
         .catch((e) => {
-
             console.warn("Core -> Promise exception", e);
-            //throw e;
         })
         //promise finisher
         .finally(() => {
@@ -344,7 +329,7 @@ export default new function() {
 
             return true;
         });
-    };
+    },
 
     /**
      * Ajax Response Handler, validates if response data has no errors.
@@ -353,7 +338,7 @@ export default new function() {
      * @param  {Object} data - The JSON response object
      * @param  {Object} events - Alert Events Handler
      */
-    self.handleAjaxResponse = function(data = null, events = null) {
+    handleAjaxResponse(data = null, events = null) {
 
         //undefined data?
         if (_.isNull(data))
@@ -364,6 +349,7 @@ export default new function() {
         //check for error
         var response = data.response;
 
+        var s = this;
         var onErrorResponse = function() {
 
             var onCloseFn = null;
@@ -380,13 +366,13 @@ export default new function() {
              }
 
             //call the alert message
-            self.ui.showAlert(response.payload, response.type, onCloseFn, onClickFn);
+            s.ui.showAlert(response.payload, response.type, onCloseFn, onClickFn);
         };
 
         //check for ajax error
         if (response.status == "error") {
 
-            self.handleAjaxError(response.code, response.error);
+            this.handleAjaxError(response.code, response.error);
             return false;
         }
         //app errors
@@ -398,14 +384,14 @@ export default new function() {
         //redirection
         else if (!_.isUndefined(response.redirect)) {
 
-            self.redirectTo(response.redirect);
+            this.redirectTo(response.redirect);
             return true;
         }
         //no errors, return true
         else {
             return true;
         }
-    };
+    },
 
     /**
      * Ajax Error Response Handler
@@ -413,7 +399,7 @@ export default new function() {
      * @param  {Object} x - The jQuery Response object
      * @param  {String} error - The jQuery error object
      */
-    self.handleAjaxError = function(x, error) {
+    handleAjaxError(x, error) {
 
         //set message null as default
         var message = null;
@@ -463,8 +449,8 @@ export default new function() {
 
         console.warn(log);
         //show the alert message
-        self.ui.showAlert(message, "warning");
-    };
+        this.ui.showAlert(message, "warning");
+    },
 
     /**
      * Redirect router method
@@ -472,9 +458,9 @@ export default new function() {
      * @method redirectTo
      * @param  {String} uri - The webapp URI
      */
-    self.redirectTo = function(uri = "") {
+    redirectTo(uri = "") {
 
-        //self-reload
+        //page reload
         if(uri === true) {
 
             location.reload();
@@ -491,73 +477,49 @@ export default new function() {
 
         //redirect to contact
         location.href = APP.baseUrl + uri;
-    };
+    },
 
     /**
      * Check if given URL is a resource URL
      * @method isResourceUrl
      * @return {Boolean}
      */
-    self.isResourceUrl = function(url = "") {
+    isResourceUrl(url = "") {
 
         let types = /(\.jpg|\.png|\.svg|\.gif)/i;
 
-        return self.isUrl(url) && types.test(url);
-    };
+        return this.isUrl(url) && types.test(url);
+    },
 
     /**
      * Check if given URL starts with http
      * @method isUrl
      * @return {Boolean}
      */
-    self.isUrl = function(url = "") {
+    isUrl(url = "") {
 
         return url.substring(0, 4) == "http";
-    };
-
-	/**
-	 * Get URI parameter by name
-	 */
-	self.getQueryString = function(name, url = false) {
-
-		if (!url)
-			url = window.location.href;
-
-		name = name.replace(/[\[\]]/g, "\\$&");
-		var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-
-		results = regex.exec(url);
-
-		if (!results) return null;
-		if (!results[2]) return '';
-
-		return decodeURIComponent(results[2].replace(/\+/g, " "));
-	};
+    },
 
     /**
-     * App test methods
-     * @method test
-     * @param  {String} option - The option string [ajax_timeout, ajax_loading, dom_events]
-     * @param  {Object} object - A jQuery or HTML object element
+     * Get URI parameter by name
      */
-    self.test = function(option, object) {
+    getQueryString(name, url = false) {
 
-        var assert = true;
+        if (!url)
+            url = window.location.href;
 
-        //timeout simulator
-        if (option == "timeout") {
-            self.ajaxRequest({ method : "GET", url : "http://250.21.0.180:8081/fake/path/" });
-        }
-        //get dom events associated to a given object
-        else if (option == "events") {
-            var obj = _.isObject(object) ? object[0] : $(object)[0];
-            return $._data(obj, "events");
-        }
-        else {
-            assert = false;
-        }
+        name = name.replace(/[\[\]]/g, "\\$&");
+        let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
 
-        //default return
-        return "Core -> Assert ("+assert+")";
-    };
+        results = regex.exec(url);
+
+        if (!results)
+            return null;
+
+        if (!results[2])
+            return "";
+
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 };

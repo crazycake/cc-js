@@ -1,52 +1,45 @@
 /**
- * Forms View Model - Handle Form Validation & Actions
+ * Forms Module - Handle Form Validation & Actions
  * Dependencies: ```formValidation jQuery plugin```, ```google reCaptcha JS SDK```
- * @class Forms
+ * @module Forms
  */
  /* global grecaptcha */
  /* eslint no-undef: "error" */
 
-export default new function() {
+//++ UI Selectors
+_.assign(APP.UI, {
+    sel_recaptcha : "#app-recaptcha"
+});
 
-    //++ Module
-    var self  = this;
-    self.name = "forms";
-
-    //++ UI Selectors
-	_.assign(APP.UI, {
-        sel_recaptcha : "#app-recaptcha"
-	});
-
-    //++ Methods
-
+export default {
+    name  : "forms",
+    debug : false,
     /**
      * Autoloads validation for `form[data-validate]` selector
      * @method load
      * @param {Object} context - The jQuery object element context (optional)
      */
-    self.load = function(context) {
+    load(context) {
 
-        var forms = (typeof context == "undefined") ? $("form[data-validate]") : $("form[data-validate]", context);
+        var forms = _.isNil(context) ? $("form[data-validate]") : $("form[data-validate]", context);
 
         if (!forms.length) return;
 
+        var s = this;
         //loop through each form
         forms.each(function() {
-            //object reference
-            var form = $(this);
+
             //get required inputs
-            var elements = form.find("[data-fv-required]");
-            var options  = {
-                fields : {}
-            };
+            var options  = { fields : {} };
 
             //loop through each element form
-            elements.each(function() {
+            $(this).find("[data-fv-required]").each(function() {
                 //object reference
                 var name = $(this).attr("name");
 
                 //skip undefined names
-                if (typeof name == "undefined") return;
+                if (_.isNil(name))
+                    return;
 
                 //set validators
                 options.fields[name] = {
@@ -54,13 +47,13 @@ export default new function() {
                 };
 
                 //append required props
-                self.setFieldPattern($(this), options.fields[name].validators);
+                s.setFieldPattern($(this), options.fields[name].validators);
             });
 
             //new Form Validation instance
-            self.newValidator(form, options);
+            s.newValidator($(this), options);
         });
-    };
+    },
 
     /**
      * Creates a New Form Validation. (private use)
@@ -70,7 +63,7 @@ export default new function() {
      * @param  {Object} form - A form jQuery object or native element
      * @param  {Object} options - Extended Options
      */
-    self.newValidator = function(form = null, options) {
+    newValidator(form = null, options) {
 
         //default selector
         if (_.isNull(form))
@@ -90,26 +83,19 @@ export default new function() {
          let opts = {
             framework : framework,
             err       : { clazz : "form-error" },
-            /*icon : {
-                valid      : "fa fa-check",
-                invalid    : "fa fa-times",
-                validating : "fa fa-refresh"
-            }*/
-            //on success
-            onSuccess: function(e) {
-                //prevent default submit
+            onSuccess : function(e) {
                 e.preventDefault();
-           }
+            }
         };
 
         //extend options
         _.assign(opts, options);
 
         //init plugin
-        if (core.debug) { console.log("Forms -> loading form with options:", opts); }
+        if (this.debug) { console.log("Forms -> loading form with options:", opts); }
         //instance
         form.formValidation(opts);
-    };
+    },
 
     /**
      * Check if a Form is valid [formValidator]
@@ -117,13 +103,13 @@ export default new function() {
      * @param  {Object} form - A form jQuery object or native element
      * @return {Boolean}
      */
-    self.isValid = function(form) {
+    isValid(form) {
 
         if (form instanceof jQuery === false)
             form = $(form);
 
 		//no form validation instance
-        if (typeof form.data == "undefined" || typeof form.data("formValidation") == "undefined")
+        if (_.isUndefined(form.data) || _.isUndefined(form.data("formValidation")))
             return true;
 
         //check for input hidden fields that are required
@@ -131,7 +117,7 @@ export default new function() {
 
         if (inputs_hidden.length) {
 
-            if (core.debug) { console.log("Forms -> Revalidating hidden inputs..."); }
+            if (this.debug) { console.log("Forms -> Revalidating hidden inputs..."); }
             //loop
             inputs_hidden.each(function() {
                 //revalidate field
@@ -144,7 +130,7 @@ export default new function() {
         //check result
         var is_valid = form.data("formValidation").isValid();
 
-        if (!is_valid && core.debug) {
+        if (!is_valid && this.debug) {
 
             console.log("Forms -> Some form element(s) are not valid:");
 
@@ -154,7 +140,7 @@ export default new function() {
         }
 
         return is_valid;
-    };
+    },
 
     /**
      * Revalidates a field in form.
@@ -162,7 +148,7 @@ export default new function() {
      * @param  {String} field - The field name
      * @param  {Object} form - A form jQuery object or native element context (optional)
      */
-    self.revalidateField = function(field, form = null) {
+    revalidateField(field, form = null) {
 
         if(_.isNull(form)) {
             form = $("form[data-validate]");
@@ -181,10 +167,10 @@ export default new function() {
         }
 
         //update all fields
-        form.find("[data-fv-required]").each(function(){
+        form.find("[data-fv-required]").each(function() {
             fv.updateStatus($(this).attr("name"), "NOT_VALIDATED");
         });
-    };
+    },
 
     /**
      * Enable or Disable form submit buttons
@@ -192,14 +178,14 @@ export default new function() {
      * @param  {Object} form - A form jQuery object or native element
      * @param  {Boolean} flag - The enable/disable flag, defaults to tue
      */
-    self.enableSubmitButtons = function(form, flag = true) {
+    enableSubmitButtons(form, flag = true) {
 
         if (form instanceof jQuery === false)
             form = $(form);
 
-        var fv = form.data("formValidation");
+        let fv = form.data("formValidation");
         fv.disableSubmitButtons(!flag);
-    };
+    },
 
     /**
      * Cleans a form and reset validation
@@ -207,7 +193,7 @@ export default new function() {
      * @param  {Object} form - A form jQuery object or native element
      * @param  {Boolean} force - Selector clean up.
      */
-    self.clean = function(form, force = false) {
+    clean(form, force = false) {
 
         if (form instanceof jQuery === false)
             form = $(form);
@@ -223,20 +209,20 @@ export default new function() {
             $("textarea", form).val("");
             $("select", form).prop("selectedIndex", 0);
         }
-    };
+    },
 
     /**
      * Update hidden validators in given context
      * @method updateHiddenValidators
      * @param  {Object} form - A form jQuery object or native element
      */
-    self.updateHiddenValidators = function(form) {
+    updateHiddenValidators(form) {
 
         if (form instanceof jQuery === false)
             form = $(form);
 
         $('input[data-fv-validator="true"]', form).val("1");
-    };
+    },
 
     /**
      * Add a dynamic field to form
@@ -245,13 +231,13 @@ export default new function() {
      * @param  {Object} context - A jQuery object or native element
      * @param  {Object} validators_obj - Validators Object (formValidation)
      */
-    self.addField = function(field_name, context, validators_obj) {
+    addField(field_name, context, validators_obj) {
 
         if (context instanceof jQuery === false)
             context = $(context);
 
         //field target
-        var field;
+        let field;
         //set object
         if (field_name instanceof jQuery === true)
             field = field_name;
@@ -259,25 +245,28 @@ export default new function() {
             field = $("[name='"+field_name+"']", context);
 
         //default validator
-        var v = {validators : { notEmpty : {} }};
+        let v = {validators : { notEmpty : {} }};
 
-        if (typeof validators_obj == "object")
-            v = {validators : validators_obj};
+        if (_.isObject(validators_obj))
+            v = { validators : validators_obj };
 
         //append required props
-        self.setFieldPattern(field, v.validators);
+        this.setFieldPattern(field, v.validators);
 
-        var form = field.closest("form");
+        let form = field.closest("form");
 
-        if (typeof form == "undefined")
-            return console.warn("Forms -> addField: Cant find closest element form for field.", field);
-        else if (typeof form.data("formValidation") == "undefined")
+        if (_.isUndefined(form)) {
+            console.warn("Forms -> addField: Cant find closest element form for field.", field);
+            return;
+        }
+
+        if (_.isUndefined(form.data("formValidation")))
             return;
 
-        var fv = form.data("formValidation");
+        let fv = form.data("formValidation");
         //formValidation API
         fv.addField(field_name, v);
-    };
+    },
 
     /**
      * Set validator field pattern in data attribute
@@ -285,23 +274,23 @@ export default new function() {
      * @param  {object} field - The jQuery field object
      * @param  {object} validators - The validators object
      */
-    self.setFieldPattern = function(field, validators) {
+    setFieldPattern(field, validators) {
 
         try {
 
-            var pattern = field.attr("data-fv-required");
+            let pattern = field.attr("data-fv-required");
 
             if (!pattern.length)
                 return;
 
-            var obj = eval("({" + pattern + "})");
+            let obj = eval("({" + pattern + "})");
             //append required props
             _.assign(validators, obj);
         }
         catch (e) {
-            console.warn("Form pattern error:", e);
+            console.warn("Form -> setFieldPattern exception:", e);
         }
-    };
+    },
 
     /**
      * Strips HTML from a given string
@@ -309,13 +298,13 @@ export default new function() {
      * @param  {string} string - An input string
      * @return {string}
      */
-    self.stripHtml = function(string = null) {
+    stripHtml(string = null) {
 
         if(_.isNull(string))
             return "";
 
         return string.replace(/<\/?[^>]+(>|$)/g, "");
-    };
+    },
 
     /**
     * App Google reCaptcha onLoad Callback.
@@ -323,26 +312,27 @@ export default new function() {
     * @method recaptchaOnLoad
     * @property {Object} grecaptcha is global and is defined by reCaptcha SDK.
     */
-    self.recaptchaOnLoad = function() {
+    recaptchaOnLoad() {
 
-        if (core.debug) { console.log("Forms -> reCaptcha loaded! Main Selector: " + APP.UI.sel_recaptcha); }
+        if (this.debug) { console.log("Forms -> reCaptcha loaded! Main Selector: " + APP.UI.sel_recaptcha); }
 
         var selector = $(APP.UI.sel_recaptcha);
+        var s        = this;
 
         //calback function when user entered valid data
         let callback_fn = function() {
 
-            if (core.debug) { console.log("Forms -> reCaptcha validation OK!"); }
+            if (s.debug) { console.log("Forms -> reCaptcha validation OK!"); }
 
             //set valid option on sibling input hidden
             $(APP.UI.sel_recaptcha).siblings("input:hidden").eq(0).val("1");
             //reset form field
-            self.revalidateField("reCaptchaValue");
+            s.revalidateField("reCaptchaValue");
         };
 
         //widget size
-        let size  = typeof selector.attr("data-size") != "undefined" ? selector.attr("data-size") : "normal";
-        let theme = typeof selector.attr("data-theme") != "undefined" ? selector.attr("data-theme") : "light";
+        let size  = !_.isUndefined(selector.attr("data-size")) ? selector.attr("data-size") : "normal";
+        let theme = !_.isUndefined(selector.attr("data-theme")) ? selector.attr("data-theme") : "light";
 
         //render reCaptcha through API call
         grecaptcha.render(APP.UI.sel_recaptcha.replace("#", ""), {
@@ -352,26 +342,23 @@ export default new function() {
             "callback" : callback_fn
         });
 
-        //hide after x secs
-        setTimeout(function() {
-            //clean any previous error
-            selector.siblings("small").eq(0).empty();
-        }, 1500);
-    };
+        //hide after x secs, clean any previous error
+        _.delay(() => { selector.siblings("small").eq(0).empty(); }, 1500);
+    },
 
     /**
      * Reloads a reCaptcha element.
      * @method recaptchaReload
      */
-    self.recaptchaReload = function() {
+    recaptchaReload() {
 
-        if (core.debug) { console.log("Forms -> reloading reCaptcha..."); }
+        if (this.debug) { console.log("Forms -> reloading reCaptcha..."); }
 
         //reset reCaptcha
-        if (typeof grecaptcha != "undefined")
+        if (!_.isUndefined(grecaptcha))
             grecaptcha.reset();
 
         //clean hidden input for validation
         $(APP.UI.sel_recaptcha).siblings("input:hidden").eq(0).val("");
-    };
+    }
 };

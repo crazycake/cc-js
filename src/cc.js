@@ -29,10 +29,12 @@ import forms from "./modules/forms.js";
 import passRecovery from "./modules/passRecovery.js";
 import facebook from "./modules/facebook.js";
 
-/* Load modules */
-
 //export core property
 module.exports.core = core;
+window.core = core;
+
+//init core
+core.init();
 
 //set modules
 core.setModules([

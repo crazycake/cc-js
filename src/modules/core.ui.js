@@ -1,72 +1,62 @@
 /**
- * App Core UI
+ * Core UI Module
  * Required scope vars: `{APP, UA}`.
- * @class Core.UI
+ * @module CoreUI
  */
 
-export default new function() {
+//common jQuery selectors
+_.assign(APP.UI, {
+    //selectors
+    sel_app            : "#app",
+    sel_header         : "#app-header",
+    sel_footer         : "#app-footer",
+    sel_content        : "#app-content",
+    sel_loading_box    : "#app-loading",
+    sel_flash_messages : "#app-flash",
+    sel_alert_box      : "div.app-alert",
+    sel_tooltips       : '[data-toggle="tooltip"]',
+    //setting vars
+    alert              : { position : "fixed", top : "5%", top_small : "0", live_time : 8000 },
+    loading            : { position : "fixed", top : "25%", top_small : "25%" },
+    skip_flash		   : false,
+    pixel_ratio        : _.isUndefined(window.devicePixelRatio) ? 1 : window.devicePixelRatio
+});
 
-    //self context
-    var self = this;
-
-    //++ UI
-
-    //Set App data for selectors
-    if (_.isUndefined(APP.UI)) APP.UI = {};
-
-    //common jQuery selectors
-    _.assign(APP.UI, {
-        //selectors
-        sel_app            : "#app",
-        sel_header         : "#app-header",
-        sel_footer         : "#app-footer",
-        sel_content        : "#app-content",
-        sel_loading_box    : "#app-loading",
-        sel_flash_messages : "#app-flash",
-        sel_alert_box      : "div.app-alert",
-        sel_tooltips       : '[data-toggle="tooltip"]',
-        //setting vars
-        alert              : { position : "fixed", top : "5%", top_small : "0", live_time : 8000 },
-        loading            : { position : "fixed", top : "25%", top_small : "25%" },
-		skip_flash		   : false,
-        pixel_ratio        : _.isUndefined(window.devicePixelRatio) ? 1 : window.devicePixelRatio
-    });
-
-    //++ Methods ++
+export default {
 
     /**
-     * Core UI Init
+     * Initializer
      * @method init
      */
-    self.init = function() {
+    init() {
 
         //load UI module
-        if (typeof core.modules.ui != "undefined")
+        if (!_.Undefined(core.modules.ui))
             core.modules.ui.init();
 
         //ajax setup
-        self.setAjaxLoadingHandler();
+        this.setAjaxLoadingHandler();
         //load images, apply retina & fallback
-        self.loadImages();
-        self.retinaImages();
-        self.fallbackImages();
+        this.loadImages();
+        this.retinaImages();
+        this.fallbackImages();
         //check server flash messages
-        self.showFlashAlerts();
+        this.showFlashAlerts();
 
         //tooltips
-        if(self.framework == "bootstrap")
-            self.loadTooltips();
-    };
+        if(core.framework == "bootstrap")
+            this.loadTooltips();
+    },
 
     /**
      * jQuery Ajax Handler, loaded automatically.
      * @method setAjaxLoadingHandler
      */
-    self.setAjaxLoadingHandler = function() {
+    setAjaxLoadingHandler() {
 
         //this vars must be declared outside ajaxHandler function
         var ajax_timer;
-        var app_loading = self.showLoading(null, true); //hide by default
+        var app_loading = this.showLoading(null, true); //hide by default
 
         //ajax handler, show loading if ajax takes more than a X secs, only for POST request
         var handler = function(opts, show_loading) {
@@ -93,7 +83,7 @@ export default new function() {
          .ajaxError(function(e, xhr, opts)    { handler(opts, false); })
          .ajaxSend(function(e, xhr, opts)     { handler(opts, true);  })
          .ajaxComplete(function(e, xhr, opts) { handler(opts, false); });
-    };
+    },
 
     /**
      * App post-action message alerts.
@@ -104,7 +94,7 @@ export default new function() {
      * @param  {Function} on_click - The onClick callback function (optional).
      * @param  {Boolean} autohide - Autohides the alert after 8 seconds (optional).
      */
-    self.showAlert = function(payload = "", type = "info", on_close, on_click, autohide = true) {
+    showAlert(payload = "", type = "info", on_close, on_click, autohide = true) {
 
         //set alert types
         var types = ["success", "warning", "info", "alert", "secondary"];
@@ -137,11 +127,13 @@ export default new function() {
 
         //SHOW alert appending to body
         $("body").append(div_alert);
+
+        var s = this;
         //center object after appended to body, special case for mobile
         var center_object = function() {
 
             //special case for mobile
-            if (self.checkWindowSize("small")) {
+            if (s.checkWindowSize("small")) {
 
                 div_alert.addClass("small-screen").center(APP.UI.alert.position, APP.UI.alert.top_small);
                 return;
@@ -202,13 +194,13 @@ export default new function() {
         _.delay(() => { hide_alert(); }, APP.UI.alert.live_time);
 
         return true;
-    };
+    },
 
     /**
      * Prints pending server flash messages (stored in session), loaded automatically.
      * @method showFlashAlerts
      */
-    self.showFlashAlerts = function() {
+    showFlashAlerts() {
 
         //check for a flash message pending
         if (!$(APP.UI.sel_flash_messages).length || APP.UI.skip_flash)
@@ -225,19 +217,20 @@ export default new function() {
             var type = $(this).attr("class");
             //show message
             if (html.length)
-                self.showAlert(html, type);
+                this.showAlert(html, type);
         });
 
         return true;
-    };
+    },
 
     /**
      * Display a loading alert message.
      * @method showLoading
+     * @param  {String} Text - Optional text.
      * @param  {Boolean} hidden - Forces the loading element to be hidden.
      * @return {Object} A jQuery object element
      */
-    self.showLoading = function(text = null, hidden = false) {
+    showLoading(text = null, hidden = false) {
 
         //set loading object selector
         var loading_obj = $(APP.UI.sel_loading_box);
@@ -255,14 +248,14 @@ export default new function() {
         }
 
         //add special behavior for small screen
-        if (self.checkWindowSize("small"))
+        if (this.checkWindowSize("small"))
             loading_obj.addClass("small-screen");
 
 		//set content
         let content = _.isNull(text) ? APP.TRANS.ACTIONS.LOADING : text;
         loading_obj.html(content);
 
-        let top = self.checkWindowSize("small") ? APP.UI.loading.top_small : APP.UI.loading.top;
+        let top = this.checkWindowSize("small") ? APP.UI.loading.top_small : APP.UI.loading.top;
 
         if (!_.isUndefined(APP.UI.loading.center) && APP.UI.loading.center)
             loading_obj.center(APP.UI.loading.position, top);
@@ -272,17 +265,17 @@ export default new function() {
             loading_obj.show("fast");
 
         return loading_obj;
-    };
+    },
 
     /**
      * Hides loading message
      * @method hideLoading
      */
-    self.hideLoading = function() {
+    hideLoading() {
 
         //set loading object selector
         $(APP.UI.sel_loading_box).fadeOut("fast");
-    };
+    },
 
     /**
      * Creates a new modal object
@@ -290,7 +283,7 @@ export default new function() {
      * @param {Object} element - The jQuery element object
      * @param {Object} options - Widget options
      */
-    self.newModal = function(element, options = {}) {
+    newModal(element, options = {}) {
 
         //new foundation modal
         if (core.framework == "foundation") {
@@ -302,14 +295,14 @@ export default new function() {
 
             element.modal(options);
         }
-    };
+    },
 
     /**
      * Hides a crated modal
      * @method hideModal
      * @param  {object} element - The jquery element
      */
-    self.hideModal = function(element) {
+    hideModal(element) {
 
         //new foundation modal
         if (core.framework == "foundation") {
@@ -321,7 +314,7 @@ export default new function() {
 
             element.modal("hide");
         }
-    };
+    },
 
     /**
      * Creates a new dialog object
@@ -329,10 +322,10 @@ export default new function() {
      * @param {Object} element - The jQuery element object
      * @param {Object} options - Widget options
      */
-    self.newDialog = function(options) {
+    newDialog(options) {
 
         $.ccdialog(options);
-    };
+    },
 
     /**
      * Creates a new layer object
@@ -340,46 +333,37 @@ export default new function() {
      * @param {Object} element - The jQuery element object
      * @param {Object} options - Widget options
      */
-    self.newLayer = function(element, options) {
+    newLayer(element, options) {
 
         element.cclayer(options);
-    };
+    },
 
     /**
      * Closes cclayer dialog
      * @method isOverlayVisible
      */
-    self.isOverlayVisible = function() {
+    isOverlayVisible() {
 
         return $.cclayer.isVisible();
-    };
+    },
 
     /**
      * Hides cclayer
      * @method hideLayer
      */
-    self.hideLayer = function() {
+    hideLayer() {
 
         $.cclayer.close();
-    };
+    },
 
     /**
      * Hides cclayer dialog
      * @method hideDialog
      */
-    self.hideDialog = function() {
+    hideDialog() {
 
-        self.hideLayer();
-    };
-
-    /**
-     * Closes cclayer dialog
-     * @method isOverlayVisible
-     */
-    self.isOverlayVisible = function() {
-
-        return $.cclayer.isVisible();
-    };
+        this.hideLayer();
+    },
 
     /**
      * Validates screen size is equal to given size.
@@ -388,7 +372,7 @@ export default new function() {
      * @param  {String} size - The Screen size: small, medium, large.
      * @return {Boolean}
      */
-    self.checkWindowSize = function(size) {
+    checkWindowSize(size) {
 
         //foundation
         if (core.framework == "foundation") {
@@ -407,9 +391,8 @@ export default new function() {
                 env = envs[i];
                 $el.addClass("hidden-" + env + "-up");
 
-                if ($el.is(":hidden")) {
-                    break; // env detected
-                }
+                if ($el.is(":hidden"))
+                    break;
             }
             $el.remove();
 
@@ -422,14 +405,14 @@ export default new function() {
         }
 
         return false;
-    };
+    },
 
     /**
      * Async loding image
      * @method loadImages
      * @param  {Object} context - A jQuery element context (optional)
      */
-    self.loadImages = function(context = false) {
+    loadImages(context = false) {
 
         var objects = !context ? $("img[data-loader]", context) : $("img[data-loader]");
 
@@ -456,7 +439,7 @@ export default new function() {
             //trigger download
             img.src = obj.attr("data-loader");
         });
-    };
+    },
 
     /**
      * Image preloader, returns an array with image paths [token replaced: "$"]
@@ -465,7 +448,7 @@ export default new function() {
      * @param  {Int} indexes - The indexes, example: image1.png, image2.png, ...
      * @return {Array} The image object array
      */
-    self.preloadImages = function(image_path, indexes) {
+    preloadImages(image_path, indexes) {
 
         if (_.isUndefined(indexes) || indexes === 0)
             indexes = 1;
@@ -481,37 +464,38 @@ export default new function() {
         }
 
         return objects;
-    };
+    },
 
     /**
      * Toggle Retina Images for supported platforms.
      * @method retinaImages
      * @param  {Object} context - A jQuery element context (optional)
      */
-    self.retinaImages = function(context = false) {
+    retinaImages(context = false) {
 
-        if (!self.isRetina()) return;
+        if (!this.isRetina()) return;
 
         //get elements
         var elements = !context ? $("img[data-retina]", context) : $("img[data-retina]");
 
+        var s = this;
         //for each image with attr data-retina
         elements.each(function() {
 
             var obj     = $(this);
-            var new_src = self.retinaImagePath(obj.attr("src"), true);
+            var new_src = s.retinaImagePath(obj.attr("src"), true);
 
             obj.removeAttr("data-retina")
                .attr("src", new_src);
         });
-    };
+    },
 
     /**
      * checks if display is retina
      * @method isRetina
      * @return {Boolean}
      */
-    self.isRetina = function() {
+    isRetina() {
 
         let media_query = "(-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-resolution: 1.5dppx)";
 
@@ -522,14 +506,14 @@ export default new function() {
             return true;
 
         return false;
-    };
+    },
 
     /**
      * Fallback for images that failed loading.
      * @method fallbackImages
      * @param  {Object} context - A jQuery element context (optional)
      */
-    self.fallbackImages = function(context = false) {
+    fallbackImages(context = false) {
 
         var objects = !context ? $("img[data-fallback]", context) : $("img[data-fallback]");
 
@@ -539,15 +523,15 @@ export default new function() {
 
             $(this).attr("src", core.staticUrl(APP.UI.img_fallback));
         });
-    };
+    },
 
 	/**
 	 * Return retina image path for URLs
 	 * @method retinaImagePath
 	 */
-	self.retinaImagePath = function(url = "", force = false) {
+	retinaImagePath(url = "", force = false) {
 
-        if(!force && !self.isRetina())
+        if(!force && !this.isRetina())
             return url;
 
         var ext = url.slice(-4);
@@ -557,7 +541,7 @@ export default new function() {
             return url;
 
         return url.replace(ext, "@2x"+ext);
-	};
+	},
 
     /**
      * Get resized image path.
@@ -568,7 +552,7 @@ export default new function() {
      * @param  {string} key - The suffix key to append
      * @return string
      */
-    self.resizedImagePath = function(url = "", key = "TN") {
+    resizedImagePath(url = "", key = "TN") {
 
         var regex   = /\.([0-9a-z]+)(?:[\?#]|$)/i;
         var new_url = url.replace(regex, "_" + key + ".$1?");
@@ -578,15 +562,15 @@ export default new function() {
             new_url = new_url.substring(0, new_url.length - 1);
 
         return new_url;
-    };
+    },
 
     /**
      * Load Bootstrap tooltips
      * @method loadTooltips
      */
-    self.loadTooltips = function() {
+    loadTooltips() {
 
         if(APP.UI.sel_tooltips.length)
             $(APP.UI.sel_tooltips).tooltip();
-    };
+    }
 };
