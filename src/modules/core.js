@@ -451,7 +451,7 @@ export default {
 
         console.warn(log);
         //show the alert message
-        this.ui.showAlert(message, "warning");
+        core.ui.showAlert(message, "warning");
     },
 
     /**
