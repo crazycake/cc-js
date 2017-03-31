@@ -4,9 +4,7 @@
  */
 
 //++ UI selectors
-_.assign(APP.UI, {
-    sel_account_modal : "#app-modal-account-activation"
-});
+const SEL_ACCOUNT_MODAL = "#app-modal-account-activation";
 
 export default {
     name : "auth",
@@ -47,7 +45,7 @@ export default {
                     }
 
                     //modal closer
-                    core.ui.hideModal($(APP.UI.sel_account_modal));
+                    core.ui.hideModal($(SEL_ACCOUNT_MODAL));
                     //show succes message
                     core.ui.showAlert(payload, "success");
 
@@ -60,7 +58,7 @@ export default {
                 core.modules.forms.recaptchaReload();
 
                 //new modal
-                core.ui.newModal($(APP.UI.sel_account_modal));
+                core.ui.newModal($(SEL_ACCOUNT_MODAL));
             }
         }
     }

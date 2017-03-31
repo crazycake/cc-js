@@ -4,8 +4,7 @@
  * @module CoreUI
  */
 
-//common jQuery selectors
-_.assign(APP.UI, {
+const UI_PROPS = {
     //selectors
     sel_app            : "#app",
     sel_header         : "#app-header",
@@ -20,7 +19,7 @@ _.assign(APP.UI, {
     loading            : { position : "fixed", top : "25%", top_small : "25%" },
     skip_flash		   : false,
     pixel_ratio        : _.isUndefined(window.devicePixelRatio) ? 1 : window.devicePixelRatio
-});
+};
 
 export default {
 
@@ -30,8 +29,10 @@ export default {
      */
     init() {
 
+        _.assign(APP.UI, UI_PROPS);
+
         //load UI module
-        if (!_.Undefined(core.modules.ui))
+        if (!_.isUndefined(core.modules.ui))
             core.modules.ui.init();
 
         //ajax setup

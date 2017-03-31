@@ -48,7 +48,7 @@ export default {
     init() {
 
         //Check that App Global scope vars are defined
-        if (_.isNil(APP) || _.isNil(UA))
+        if (typeof APP == "undefined" || typeof UA == "undefined")
             throw new Error("Core -> APP or UA global vars are not defined!");
 
         //Set App data for selectors
@@ -123,7 +123,7 @@ export default {
             if (!_.isObject(mod.vm))
                 continue;
 
-            if(_.isNil(Vue))
+            if(typeof Vue != "undefined")
                 return console.warn("Core -> Vue has not loaded!");
 
             console.log("Core -> New Vue instance for module: " + mod_name, mod.vm);
@@ -143,11 +143,11 @@ export default {
     loadUI() {
 
         //load fast click for mobile
-        if (UA.isMobile && !_.isUndefined(FastClick))
+        if (UA.isMobile)
             FastClick.attach(document.body);
 
         //load UI framework?
-        if (!_.isUndefined(Foundation))
+        if (typeof Foundation != "undefined")
             this.initFoundation();
         else if (_.isFunction($().emulateTransitionEnd))
             this.initBootstrap();

@@ -34,7 +34,7 @@ export default {
 	init() {
 
 		//Check that facebook conf is set
-	    if (_.isUndefined(APP.facebookAppID) || _.isUndefined(UA))
+	    if (_.isUndefined(APP.facebookAppID) || typeof UA == "undefined")
 	        return false;
 
 		// extend props

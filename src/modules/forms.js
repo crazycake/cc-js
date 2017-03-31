@@ -6,10 +6,8 @@
  /* global grecaptcha */
  /* eslint no-undef: "error" */
 
-//++ UI Selectors
-_.assign(APP.UI, {
-    sel_recaptcha : "#app-recaptcha"
-});
+//++ selectors
+const SEL_RECAPTCHA = "#app-recaptcha";
 
 export default {
     name  : "forms",
@@ -314,9 +312,9 @@ export default {
     */
     recaptchaOnLoad() {
 
-        if (this.debug) { console.log("Forms -> reCaptcha loaded! Main Selector: " + APP.UI.sel_recaptcha); }
+        if (this.debug) { console.log("Forms -> reCaptcha loaded! Main Selector: " + SEL_RECAPTCHA); }
 
-        var selector = $(APP.UI.sel_recaptcha);
+        var selector = $(SEL_RECAPTCHA);
         var s        = this;
 
         //calback function when user entered valid data
@@ -325,7 +323,7 @@ export default {
             if (s.debug) { console.log("Forms -> reCaptcha validation OK!"); }
 
             //set valid option on sibling input hidden
-            $(APP.UI.sel_recaptcha).siblings("input:hidden").eq(0).val("1");
+            $(SEL_RECAPTCHA).siblings("input:hidden").eq(0).val("1");
             //reset form field
             s.revalidateField("reCaptchaValue");
         };
@@ -335,7 +333,7 @@ export default {
         let theme = !_.isUndefined(selector.attr("data-theme")) ? selector.attr("data-theme") : "light";
 
         //render reCaptcha through API call
-        grecaptcha.render(APP.UI.sel_recaptcha.replace("#", ""), {
+        grecaptcha.render(SEL_RECAPTCHA.replace("#", ""), {
             "sitekey"  : APP.googleReCaptchaID,
             "size"     : size,
             "theme"    : theme,
@@ -355,10 +353,10 @@ export default {
         if (this.debug) { console.log("Forms -> reloading reCaptcha..."); }
 
         //reset reCaptcha
-        if (!_.isUndefined(grecaptcha))
+        if (typeof grecaptcha == "undefined")
             grecaptcha.reset();
 
         //clean hidden input for validation
-        $(APP.UI.sel_recaptcha).siblings("input:hidden").eq(0).val("");
+        $(SEL_RECAPTCHA).siblings("input:hidden").eq(0).val("");
     }
 };
