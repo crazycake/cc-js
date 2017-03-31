@@ -26,7 +26,7 @@ export default {
                 //set callback function for specific error message
                 var events = {
                     onClick : {
-                        ACCOUNT_PENDING : self.vm.openActivationForm //binded method
+                        ACCOUNT_PENDING : this.openActivationForm
                     }
                 };
 

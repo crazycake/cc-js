@@ -123,8 +123,10 @@ export default {
             if (!_.isObject(mod.vm))
                 continue;
 
-            if(typeof Vue != "undefined")
-                return console.warn("Core -> Vue has not loaded!");
+            if(typeof Vue == "undefined") {
+                console.warn("Core -> Vue has not loaded!");
+                return;
+            }
 
             console.log("Core -> New Vue instance for module: " + mod_name, mod.vm);
 

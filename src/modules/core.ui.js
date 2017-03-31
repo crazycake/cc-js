@@ -212,13 +212,14 @@ export default {
         if (!messages.length)
             return;
 
+        var s = this;
         messages.each(function() {
             //set a delay to show once at a time
             var html = $(this).html();
             var type = $(this).attr("class");
             //show message
             if (html.length)
-                this.showAlert(html, type);
+                s.showAlert(html, type);
         });
 
         return true;
