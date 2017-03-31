@@ -9,6 +9,7 @@ const SEL_ACCOUNT_MODAL = "#app-modal-account-activation";
 export default {
     name : "auth",
     vm : {
+		el : "#vue-auth",
         data : {
             email : ""
         },

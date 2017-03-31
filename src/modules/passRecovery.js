@@ -6,6 +6,7 @@
 export default {
     name : "passRecovery",
     vm : {
+		el : "#vue-passRecovery",
         methods : {
             // Send Recovery Instructions
             sendRecoveryInstructions(e) {
