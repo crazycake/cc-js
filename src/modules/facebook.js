@@ -136,7 +136,26 @@ export default {
 						return s.shareUrl($(this).attr("data-url"));
 
 					//login actions
-					s.login(s.handleUserData, action);
+					s.login((response, action) => {
+
+						//check response
+						if (!response.authResponse)
+							return;
+
+						let data = { "signed_request" : response.authResponse.signedRequest };
+
+						//login / register action
+						if (action == "login") {
+							//call logged in function
+							s.config.login_fn(data);
+						}
+						//delete account action
+						else if (action == "deauthorize" && _.isFunction(s.config.deauthorize_fn)) {
+							//delete fb app
+							s.config.deauthorize_fn(data);
+						}
+
+					}, action);
 				});
 
 				//enable button
@@ -159,12 +178,13 @@ export default {
 	 */
 	login(fn_callback, action) {
 
+		var s = core.modules.facebook;
+
 		//fb buttons
-		var fb_buttons = $("." + this.config.dom_class);
+		var fb_buttons = $("." + s.config.dom_class);
 		//disable button
 		fb_buttons.prop("disabled", true);
 
-		var s = this;
 		//login event
 		FB.login((response) => {
 
@@ -195,13 +215,15 @@ export default {
 	 */
 	loginFailed(response, fn_pending) {
 
+		var s = core.modules.facebook;
+
 		//check response
 		if (_.isUndefined(response.status))
 			return;
 
 		//call failed function
-		if (_.isFunction(this.config.login_failed_fn))
-			this.config.login_failed_fn(response.status, fn_pending);
+		if (_.isFunction(s.config.login_failed_fn))
+			s.config.login_failed_fn(response.status, fn_pending);
 	},
 
     /**
@@ -268,32 +290,6 @@ export default {
 				fn_callback(response);
 			}
 		});
-	},
-
-	/**
-	 * Handles facebook user data response
-	 * @method handleUserData
-	 * @param  {object} response - The response object
-	 * @param  {string} action - The action type: ```login, share-url```
-	 */
-	handleUserData(response, action) {
-
-		//check response
-		if (!response.authResponse)
-			return;
-
-		var data = { "signed_request" : response.authResponse.signedRequest };
-
-		//login / register action
-		if (action == "login") {
-			//call logged in function
-			this.config.login_fn(data);
-		}
-		//delete account action
-		else if (action == "deauthorize" && _.isFunction(this.config.deauthorize_fn)) {
-			//delete fb app
-			this.config.deauthorize_fn(data);
-		}
 	},
 
 	/**
