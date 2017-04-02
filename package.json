@@ -62,6 +62,7 @@
   },
   "browserify-shim": {
     "bluebird": "P",
+	  "fastclick" : "FastClick",
     "fg-loadcss": "loadCSS",
     "jquery": "jQuery",
     "js-cookie": "Cookies",
