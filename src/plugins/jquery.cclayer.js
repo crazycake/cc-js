@@ -1,7 +1,6 @@
 /**
- * cclayer jQuery plugin v 1.1
- * Requires jQuery 1.7.x or superior
- * Supports mayor browsers including IE9
+ * cclayer jQuery plugin
+ * Requires jQuery 1.7.x or greater.
  * @author Nicolas Pulido M.
  * Usage:
  * $(element).cclayer({
@@ -44,6 +43,7 @@
 	 * Returns boolean if cclayer is active or not
 	 */
 	$.cclayer.isVisible = function() {
+		
 		return $("div.cclayer-overlay").length ? true : false;
 	};
 
@@ -51,9 +51,11 @@
 		cclayer element
 	------------------------------------------------------------------------------------------------ **/
 	$.fn.cclayer = function(options) {
-		//get context
-		var self = $(this);
-		return $.fn.cclayer.core.init(options, self);
+		
+		if(typeof options == "undefined")
+			options = {}; 
+			
+		return $.fn.cclayer.core.init(options, $(this));
 	};
 
 	//DEFAULT VALUES
@@ -76,9 +78,11 @@
 	//CORE
 	$.fn.cclayer.core = {
 
-		init: function(options, el) {
+		init : function(options, el) {
+			
 			//extend options
 			this.opts = $.extend({}, $.fn.cclayer.defaults, options);
+			
 			//check if cclayer was already invoked
 			if ($("div.cclayer-overlay").length || el.is(":visible"))
 				return;
@@ -89,7 +93,7 @@
 
 			return this;
 		},
-		make: function(options, el) {
+		make : function(options, el) {
 
 			var self = this;
 			//drop any overlay created before
@@ -123,13 +127,50 @@
 					"z-index"    : options.zindex
 				});
 			}
+			
+			//POSITION
+			self.setPosition(options, el);
+			// on resize
+			var resizer;
+			$(window).resize(function() {
+				clearTimeout(resizer);
+				resizer = setTimeout(function (){ self.setPosition(options, el); }, 100);
+			});
 
+			/** -- EVENTS -- **/
+			//force escape?
+			if (options.escape) {
+				
+				//onClick event
+				div_overlay.one("click", function() { self.close(options, el); });
+
+				//onKeyUp event for ESC key
+				$(document).one("keyup", function(e) {
+					//prevent any binding action
+					e.preventDefault();
+					e.stopPropagation();
+
+					//ENTER or ESC key
+					if (e.keyCode == 27)
+						self.close(options, el);
+				});
+			}
+			else {
+				div_overlay.off("click");
+			}
+
+			//add "destroyed" event handler for "onClose" param
+			if (typeof options.onClose == "function")
+				div_overlay.on("destroyed", options.onClose);
+
+			//finally append to body
+			div_overlay.appendTo("body");
+		},
+		setPosition : function(options, el) {
+			
 			//positioning element to display
-			var css_pos  	 = "absolute";
-			var css_x 	 	 = "0";
-			var css_y 	     = "0";
-			var css_margin_x = 0;
-			var css_margin_y = 0;
+			var css_pos = "absolute", css_x = "0", css_y = "0";
+			var css_margin_x = 0, css_margin_y = 0;
 
 			var x     = options.left;
 			var xRule = "left";
@@ -147,76 +188,41 @@
 				yRule = "bottom";
 			}
 
-			//get element width & height
-			var elem_width  = el.width();
-			var elem_height = el.height();
-
 			//FIXED position
 			if (options.fixed) {
-				css_pos = "fixed";
+				
 				//set css position props
-				css_x = x + "%";
-				css_y = y + "%";
+				css_pos = "fixed";
+				css_x   = x + "%";
+				css_y   = y + "%";
 
-				css_margin_x = -(elem_width / (100/x)) + "px";
-				css_margin_y = -(elem_height / (100/y)) + "px";
+				css_margin_x = -(el.width() / (100/x)) + "px";
+				css_margin_y = -(el.height() / (100/y)) + "px";
 			}
 			//ABSOLUTE position
 			else {
 				//set css position props
-				css_x = (Math.max($(window).width() - elem_width, 0)/(100/x)) + $(window).scrollLeft();
-				css_y = (Math.max($(window).height() - elem_height, 0)/(100/y)) + $(window).scrollTop();
+				css_x = (Math.max($(window).width() - el.width(), 0)/(100/x)) + $(window).scrollLeft();
+				css_y = (Math.max($(window).height() - el.height(), 0)/(100/y)) + $(window).scrollTop();
 			}
-
-			//set css props
-			el.css({
+			
+			var props = {
 				"position" : css_pos,
 				"z-index"  : (options.zindex + 1)
-			})
-			//dynamic props
-			.css(xRule, css_x)
-			.css(yRule, css_y)
-			.css("margin-"+xRule, css_margin_x)
-			.css("margin-"+yRule, css_margin_y);
-
-			/** -- EVENTS -- **/
-			//force escape?
-			if (options.escape) {
-				//onClick event
-				div_overlay.one("click", function() {
-					//close action
-					self.close(options, el);
-				});
-
-				//onKeyUp event for ESC key
-				$(document).one("keyup", function(e) {
-					//prevent any binding action
-					e.preventDefault();
-					e.stopPropagation();
-
-					//ENTER or ESC key
-					if (e.keyCode == 27) {
-						self.close(options, el);
-					}
-				});
-			}
-			else {
-				div_overlay.off("click");
-			}
-
-			//add "destroyed" event handler for "onClose" param
-			if (typeof options.onClose == "function")
-				div_overlay.on("destroyed", options.onClose);
-
-			//finally append to body
-			div_overlay.appendTo("body");
+			};
+			props[xRule] = css_x;
+			props[yRule] = css_y;
+			props["margin-"+xRule] = css_margin_x;
+			props["margin-"+yRule] = css_margin_y;
+			//set css props
+			el.css(props);
 		},
-		drop: function() {
+		drop : function() {
 			//removes an existing dialog
 			if ($("div.cclayer-overlay").length)
 				$("div.cclayer-overlay").remove();
 		},
-		show: function(options, el) {
+		show : function(options, el) {
 
 			//if fixed, disable html,body scroll
 			if (options.fixed) {
@@ -228,9 +234,7 @@
 			$("div.cclayer-overlay").fadeIn("fast");
 
 			//blur focus on anchors, inputs & buttons
-			$("a").blur();
-			$("input").blur();
-			$("button").blur();
+			$("a,input,button").blur();
 
 			//show with defined animation?
 			if (typeof options.onShowAnim == "function")
@@ -242,7 +246,7 @@
 			if (typeof options.onShow == "function")
 				options.onShow();
 		},
-		close: function(options, el) {
+		close : function(options, el) {
 
 			//close with defined animation?
 			if (typeof options.onCloseAnim == "function")
@@ -259,7 +263,7 @@
 				$("body").css("position", "static");
 			}
 
-			//delete the overlay
+			//devare the overlay
 			this.drop();
 		}
 	};
@@ -268,7 +272,8 @@
 	------------------------------------------------------------------------------------------------ **/
 	//creating an event "destroyed"
 	jQuery.event.special.destroyed = {
-		remove: function(o) {
+		
+		remove : function(o) {
 
 			if (o.handler)
 				o.handler();

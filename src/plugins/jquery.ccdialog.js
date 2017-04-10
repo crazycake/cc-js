@@ -1,7 +1,6 @@
 /**
- * ccdialog jQuery plugin v 1.0
+ * ccdialog jQuery plugin
  * Requires jQuery 1.7.x or superior, and cclayer plugin
- * Support IE9+
  * @author Nicolas Pulido M.
  * Usage:
  * $.ccdialog({
@@ -27,9 +26,9 @@
 		cclayer public methods
 	------------------------------------------------------------------------------------------------ **/
 	$.ccdialog = function(options) {
-
-		if (typeof options == "undefined")
-			options = {};
+		
+		if(typeof options == "undefined")
+			options = {}; 
 
 		//returns the core object
 		return $.ccdialog.core.init(options);
@@ -64,9 +63,11 @@
 	//CORE
 	$.ccdialog.core = {
 
-		init: function(options) {
+		init : function(options) {
+			
 			//extend options
 			this.opts = $.extend({}, $.ccdialog.defaults, options);
+			
 			//drop a previously created dialog
 			this.drop();
 			this.create(this.opts);
@@ -74,13 +75,13 @@
 
 			return this;
 		},
-		create: function(options) {
+		create : function(options) {
 
 			var self = this;
+			
 			//wrappers
 			var div_wrapper = $("<div>").addClass("cclayer-dialog").css("display", "none");
 			var div_box     = $("<div>").addClass("box");
-
 			//contents
 			var div_title  = $("<div>").addClass("header").html(options.title);
 			var div_body   = $("<div>").addClass("body").html(options.content);
@@ -105,8 +106,8 @@
 
 			//append buttons?
 			var show_footer = false;
-			//loop through buttons
-			var index = 0;
+			var index 		= 0;
+			
 			for (var key in options.buttons) {
 
 				var btn = options.buttons[key];
@@ -119,10 +120,8 @@
 										.addClass("button-"+index)
 										.html(btn.label);
 
-				if (typeof btn.click == "function")
-					button_element.click(btn.click);
-				else
-					button_element.click(self.close);
+
+				button_element.click(typeof btn.click == "function" ? btn.click : self.close);
 
 				button_element.appendTo(div_footer);
 
@@ -134,12 +133,12 @@
 			if (show_footer)
 				div_footer.appendTo(div_box);
 		},
-		drop: function() {
+		drop : function() {
 			//removes an existing dialog
 			if ($("div.cclayer-dialog").length)
 				$("div.cclayer-dialog").remove();
 		},
-		show: function(options) {
+		show : function(options) {
 
 			var fn_onclose = null;
 			//check onClose function
@@ -156,7 +155,7 @@
 				onClose      : fn_onclose
 			});
 		},
-		close: function() {
+		close : function() {
 			//simpleModal - close
 			$.cclayer.close();
 		}
@@ -166,7 +165,8 @@
 	------------------------------------------------------------------------------------------------ **/
 	//creating an event "destroyed"
 	jQuery.event.special.destroyed = {
-		remove: function(o) {
+		
+		remove : function(o) {
 
 			if (o.handler)
 				o.handler();
