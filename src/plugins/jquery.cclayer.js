@@ -109,20 +109,13 @@
 			//OVERLAY CSS
 			if (options.overlay) {
 
-				var doc_height = $(document).height();
-
-				if (doc_height < $(window).height())
-					doc_height = "100%";
-				else
-					doc_height += "px";
-
 				div_overlay.css({
 					"display"    : "none",
 					"position"   : "fixed",
 					"top"        : "0",
 					"left"       : "0",
-					"width"      : "100%",
-					"height"     : doc_height,
+					"width"      : "100vw",
+					"height"     : "100vh",
 					"background" : options.overlayColor,
 					"z-index"    : options.zindex
 				});
