@@ -76,11 +76,6 @@ export default {
         //Set app UI data for selectors
         if (_.isNil(APP.UI))
             APP.UI = {};
-            
-        //++ jQuery setup
-        $.ajaxSetup({
-            cache : true  //improvement for third-party libs like Facebook.
-        });
 
         let mod_name, mod, data;
 
