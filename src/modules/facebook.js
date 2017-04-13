@@ -1,5 +1,5 @@
 /**
- * Facebook Module - SDK wrapper, required scope vars: `{APP, UA}`.
+ * Facebook Module - SDK wrapper.
  * @module Facebook
  */
 
@@ -33,12 +33,17 @@ export default {
 	 */
 	init() {
 
-		//Check that facebook conf is set
-	    if (_.isUndefined(APP.facebookAppID) || typeof UA == "undefined")
+		// check that facebook conf is set
+	    if (_.isUndefined(APP.facebookAppID)) {
+            console.warn("Facebook -> APP.facebookAppID is not defined!");
 	        return false;
+        }
+        
+        // set SDK lang
+        let lang = !_.isNil(UA.lang) ? UA.lang : "en";
 
 		// extend props
-		this.config.lang 	  = this.sdk_langs[UA.lang];
+		this.config.lang 	  = this.sdk_langs[lang];
 		this.config.id        = APP.facebookAppID;
 		this.config.scope     = APP.facebookAppScope;
 		this.config.login_url = APP.facebookLoginURL;

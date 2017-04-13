@@ -48,13 +48,13 @@ export default {
     init() {
 
         //Check that App Global scope vars are defined
-        if (typeof APP == "undefined" || typeof UA == "undefined")
-            throw new Error("Core -> APP or UA global vars are not defined!");
+        if (typeof APP == "undefined")
+            throw new Error("Core -> APP global scoped var is not defined!");
 
-        //Set App data for selectors
+        //Set app UI data for selectors
         if (_.isNil(APP.UI))
             APP.UI = {};
-
+            
         //++ jQuery setup
         $.ajaxSetup({
             cache : true  //improvement for third-party libs like Facebook.
@@ -145,7 +145,7 @@ export default {
     loadUI() {
 
         //load fast click for mobile
-        if (UA.isMobile)
+        if (typeof UA != "undefined" && UA.isMobile)
             FastClick.attach(document.body);
 
         //load UI framework?
@@ -231,9 +231,10 @@ export default {
      * @param  {Object} form - The form HTML object
      * @param  {Object} extended_data - An object to be extended as sending data (optional)
      * @param  {Object} events - Alert Event handlers object
+     * @param  {Object} csrf - Append UA CRSF token key & value
      * @return {Object} promise
      */
-    ajaxRequest(request = null, form = null, extended_data = null, events = null) {
+    ajaxRequest(request = null, form = null, extended_data = null, events = null, csrf = true) {
 
         //validation, request is required
         if (_.isNull(request))
@@ -274,7 +275,7 @@ export default {
         }
 
         //append CSRF token
-        if (request.method == "POST") {
+        if (csrf && request.method == "POST") {
 
             //check if element is null
             if (_.isNull(form))
