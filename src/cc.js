@@ -33,9 +33,6 @@ import facebook from "./modules/facebook.js";
 module.exports.core = core;
 window.core = core;
 
-//init core
-core.init();
-
 //set modules
 core.setModules([
     auth,

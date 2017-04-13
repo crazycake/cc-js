@@ -42,26 +42,6 @@ export default {
     //++ Methods ++
 
     /**
-     * Initializer
-     * @method init
-     */
-    init() {
-
-        //Check that App Global scope vars are defined
-        if (typeof APP == "undefined")
-            throw new Error("Core -> APP global scoped var is not defined!");
-
-        //Set app UI data for selectors
-        if (_.isNil(APP.UI))
-            APP.UI = {};
-            
-        //++ jQuery setup
-        $.ajaxSetup({
-            cache : true  //improvement for third-party libs like Facebook.
-        });
-    },
-
-    /**
     * Set modules automatically for require function
     * @method setModules
     * @param {Array} modules - The required modules
@@ -88,8 +68,21 @@ export default {
     start(modules = []) {
 
         console.debug("Core -> Starting");
+        
+        //Check that App Global scope vars are defined
+        if (typeof APP == "undefined")
+            throw new Error("Core -> APP global scoped var is not defined!");
 
-        var mod_name, mod, data;
+        //Set app UI data for selectors
+        if (_.isNil(APP.UI))
+            APP.UI = {};
+            
+        //++ jQuery setup
+        $.ajaxSetup({
+            cache : true  //improvement for third-party libs like Facebook.
+        });
+
+        let mod_name, mod, data;
 
         //1) call inits
         for (mod_name in modules) {
