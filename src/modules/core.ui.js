@@ -254,7 +254,7 @@ export default {
             loading_obj.addClass("small-screen");
 
 		//set content
-        let content = _.isNull(text) ? APP.TRANS.ACTIONS.LOADING : text;
+        let content = _.isNull(text) ? APP.TRANS.ALERTS.LOADING : text;
         loading_obj.html(content);
 
         let top = this.checkWindowSize("small") ? APP.UI.loading.top_small : APP.UI.loading.top;
