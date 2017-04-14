@@ -232,12 +232,12 @@ export default {
         var payload = {};
         var submit_btn;
 
-        //check for a non jquery object
-        if (!_.isNull(form) && form instanceof jQuery === false)
-            form = $(form);
-
-        //check form element has a Foundation data-invalid attribute
+        //check form element has a form data-invalid attribute
         if (!_.isNull(form)) {
+            
+            //check for a non jquery object
+            if (form instanceof jQuery === false)
+                form = $(form);
 
             //validate abide form
             if (!this.modules.forms.isValid(form))
