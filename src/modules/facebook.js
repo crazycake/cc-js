@@ -40,7 +40,7 @@ export default {
         }
         
         // set SDK lang
-        let lang = !_.isNil(UA.lang) ? UA.lang : "en";
+        let lang = !_.isNil(APP.UA.lang) ? APP.UA.lang : "en";
 
 		// extend props
 		this.config.lang 	  = this.sdk_langs[lang];
@@ -68,7 +68,7 @@ export default {
 
 		//disable js sdk only for mobile
 		if (!core.modules.facebook.config.disable_js_sdk)
-			this.config.disable_js_sdk = UA.isMobile;
+			this.config.disable_js_sdk = APP.UA.isMobile;
 
 		//For mobile use redirections pages, get library request
 		if (!this.config.disable_js_sdk)

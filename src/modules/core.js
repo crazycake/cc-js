@@ -1,6 +1,6 @@
 /**
  * Core Module
- * Required scope vars: `{APP, UA}`.
+ * Required scope vars: {APP}
  * Frontend Framework supported: `Foundation 6`, `Bootstrap 4`
  * @module Core
  */
@@ -73,10 +73,6 @@ export default {
         if (typeof APP == "undefined")
             throw new Error("Core -> APP global scoped var is not defined!");
 
-        //Set app UI data for selectors
-        if (_.isNil(APP.UI))
-            APP.UI = {};
-
         let mod_name, mod, data;
 
         //1) call inits
@@ -133,7 +129,7 @@ export default {
     loadUI() {
 
         //load fast click for mobile
-        if (typeof UA != "undefined" && UA.isMobile)
+        if (!_.isNil(APP.UA) && APP.UA.isMobile)
             FastClick.attach(document.body);
 
         //load UI framework?
@@ -219,7 +215,7 @@ export default {
      * @param  {Object} form - The form HTML object
      * @param  {Object} extended_data - An object to be extended as sending data (optional)
      * @param  {Object} events - Alert Event handlers object
-     * @param  {Object} csrf - Append UA CRSF token key & value
+     * @param  {Object} csrf - Append APP.UA CRSF token key & value
      * @return {Object} promise
      */
     ajaxRequest(request = null, form = null, extended_data = null, events = null, csrf = true) {
@@ -267,9 +263,9 @@ export default {
 
             //check if element is null
             if (_.isNull(form))
-                payload[UA.tokenKey] = UA.token; //object style
+                payload[APP.UA.tokenKey] = APP.UA.token; //object style
             else
-                payload.push({ name : UA.tokenKey, value : UA.token }); //serialized object struct
+                payload.push({ name : APP.UA.tokenKey, value : APP.UA.token }); //serialized object struct
         }
 
         //set url

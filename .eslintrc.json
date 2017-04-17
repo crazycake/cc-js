@@ -7,8 +7,6 @@
     },
     "globals": {
         "APP"         : false,
-        "UA"          : false,
-        "FB"          : false,
         "$"           : false,
         "jQuery"      : false,
         "_"           : false,

@@ -1,6 +1,6 @@
 /**
  * Core UI Module
- * Required scope vars: `{APP, UA}`.
+ * Required scope vars: {APP}
  * @module CoreUI
  */
 
@@ -28,8 +28,10 @@ export default {
      * @method init
      */
     init() {
-
-        _.assign(APP.UI, UI_PROPS);
+        
+        // set app UI data for selectors
+        if (_.isNil(APP.UI))
+            APP.UI = UI_PROPS;
 
         //load UI module
         if (!_.isUndefined(core.modules.ui))
