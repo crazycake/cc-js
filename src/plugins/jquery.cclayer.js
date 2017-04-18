@@ -35,7 +35,7 @@
 		if (!$("div.cclayer-overlay").length)
 			return;
 
-		$("div.cclayer-overlay").trigger("click");
+		$("div.cclayer-overlay").trigger("close");
 		return;
 	};
 
@@ -95,9 +95,9 @@
 		},
 		make : function(options, el) {
 
-			var self = this;
+			var s = this;
 			//drop any overlay created before
-			self.drop();
+			s.drop();
 
 			//overlay div
 			var div_overlay = $("<div>").addClass("cclayer-overlay");
@@ -122,12 +122,12 @@
 			}
 			
 			//POSITION
-			self.setPosition(options, el);
+			s.setPosition(options, el);
 			// on resize
 			var resizer;
 			$(window).resize(function() {
 				clearTimeout(resizer);
-				resizer = setTimeout(function (){ self.setPosition(options, el); }, 100);
+				resizer = setTimeout(function (){ s.setPosition(options, el); }, 100);
 			});
 
 			/** -- EVENTS -- **/
@@ -135,7 +135,7 @@
 			if (options.escape) {
 				
 				//onClick event
-				div_overlay.one("click", function() { self.close(options, el); });
+				div_overlay.one("click", function() { s.close(options, el); });
 
 				//onKeyUp event for ESC key
 				$(document).one("keyup", function(e) {
@@ -145,12 +145,15 @@
 
 					//ENTER or ESC key
 					if (e.keyCode == 27)
-						self.close(options, el);
+						s.close(options, el);
 				});
 			}
 			else {
 				div_overlay.off("click");
 			}
+			
+			// set close event (for no escape option)
+			div_overlay.one("close", function() { s.close(options, el); });
 
 			//add "destroyed" event handler for "onClose" param
 			if (typeof options.onClose == "function")
