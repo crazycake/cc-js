@@ -4,7 +4,7 @@
  * @module CoreUI
  */
 
-const UI_PROPS = {
+const UI_DEFAULTS = {
     //selectors
     sel_app            : "#app",
     sel_header         : "#app-header",
@@ -17,8 +17,8 @@ const UI_PROPS = {
     //setting vars
     alert              : { position : "fixed", top : "5%", top_small : "0", live_time : 8000 },
     loading            : { position : "fixed", top : "25%", top_small : "25%" },
-    skip_flash		   : false,
-    pixel_ratio        : _.isUndefined(window.devicePixelRatio) ? 1 : window.devicePixelRatio
+    pixel_ratio        : _.isUndefined(window.devicePixelRatio) ? 1 : window.devicePixelRatio,
+    show_flash_alerts  : true
 };
 
 export default {
@@ -30,8 +30,11 @@ export default {
     init() {
         
         // set app UI data for selectors
-        if (_.isNil(APP.UI))
-            APP.UI = UI_PROPS;
+        APP.UI = UI_DEFAULTS;
+        
+        // append conf
+        if(!_.isUndefined(core.modules.ui.conf))
+            _.assign(APP.UI, core.modules.ui.conf());
 
         //load UI module
         if (!_.isUndefined(core.modules.ui))
@@ -206,7 +209,7 @@ export default {
     showFlashAlerts() {
 
         //check for a flash message pending
-        if (!$(APP.UI.sel_flash_messages).length || APP.UI.skip_flash)
+        if (!APP.UI.show_flash_alerts || !$(APP.UI.sel_flash_messages).length)
             return;
 
         var messages = $(APP.UI.sel_flash_messages).children("div");
