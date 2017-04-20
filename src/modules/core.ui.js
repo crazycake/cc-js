@@ -33,7 +33,7 @@ export default {
         APP.UI = UI_DEFAULTS;
         
         // append conf
-        if(!_.isUndefined(core.modules.ui.conf))
+        if(!_.isNil(core.modules.ui) && _.isFunction(core.modules.ui.conf))
             _.assign(APP.UI, core.modules.ui.conf());
 
         //load UI module
