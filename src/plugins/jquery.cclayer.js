@@ -123,12 +123,15 @@
 			
 			//POSITION
 			s.setPosition(options, el);
-			// on resize
-			var resizer;
-			$(window).resize(function() {
-				clearTimeout(resizer);
-				resizer = setTimeout(function (){ s.setPosition(options, el); }, 100);
-			});
+			
+			// on resize event for non mobile devices
+			if(typeof APP != "undefined" && !APP.UA.isMobile) {
+				var resizer;
+				$(window).resize(function() {
+					clearTimeout(resizer);
+					resizer = setTimeout(function (){ s.setPosition(options, el); }, 100);
+				});
+			}
 
 			/** -- EVENTS -- **/
 			//force escape?
