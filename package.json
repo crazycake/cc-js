@@ -6,6 +6,7 @@
   "readme": "Run npm install then gulp.",
   "license": "MIT",
   "main": "dist/js/core.bundle.min.js",
+  "homepage": "https://github.com/crazycake/cc-js",
   "files": [
     "dist",
     "src"
@@ -19,7 +20,6 @@
     "type": "git",
     "url": "git+https://github.com/crazycake/cc-js.git"
   },
-  "homepage": "https://github.com/crazycake/adminplus#readme",
   "devDependencies": {
     "babel-core": "^6.24.0",
     "babel-preset-es2015": "^6.24.0",
