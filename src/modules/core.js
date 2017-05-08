@@ -1,7 +1,6 @@
 /**
  * Core Module
  * Required scope vars: {APP}
- * Frontend Framework supported: `Foundation 6`, `Bootstrap 4`
  * @module Core
  */
 
@@ -295,10 +294,8 @@ export default {
             if (!s.handleAjaxResponse(data, events))
                 return false;
 
-            var payload = data.response.payload;
-
             //set true value if payload is null
-            return !_.isNull(payload) ? payload : true;
+            return !_.isNull(data.payload) ? data.payload : true;
         })
         .catch((e) => {
             console.warn("Core -> Promise exception", e);
@@ -319,59 +316,55 @@ export default {
     },
 
     /**
-     * Ajax Response Handler, validates if response data has no errors.
+     * Ajax Response Handler, checks if response has errors.
      * Also can set event-callback function in case the response is an error.
      * @method handleAjaxResponse
-     * @param  {Object} data - The JSON response object
+     * @param  {Object} response - The JSON response object
      * @param  {Object} events - Alert Events Handler
      */
-    handleAjaxResponse(data = null, events = null) {
+    handleAjaxResponse(res = null, events = null) {
 
-        //undefined data?
-        if (_.isNull(data))
+        //undefined res?
+        if (_.isNull(res))
             return false;
 
-        console.log("Core -> handleAjaxResponse: ", data);
-
-        //check for error
-        var response = data.response;
+        console.log("Core -> handling xhr response: ", res);
 
         var s = this;
         var onErrorResponse = function() {
 
-            var onCloseFn = null;
-            var onClickFn = null;
+            let onCloseFn = null, onClickFn = null;
 
             //set the callback function if set in error events functions
-            if (_.isString(response.namespace) && _.isObject(events)) {
+            if (_.isString(res.namespace) && _.isObject(events)) {
 
-                if (_.isObject(events.onClose) && !_.isUndefined(events.onClose[response.namespace]))
-                    onCloseFn = _.isFunction(events.onClose[response.namespace]) ? events.onClose[response.namespace] : null;
+                if (_.isObject(events.onClose) && !_.isUndefined(events.onClose[res.namespace]))
+                    onCloseFn = _.isFunction(events.onClose[res.namespace]) ? events.onClose[res.namespace] : null;
 
-                if (_.isObject(events.onClick) && !_.isUndefined(events.onClick[response.namespace]))
-                    onClickFn = _.isFunction(events.onClick[response.namespace]) ? events.onClick[response.namespace] : null;
+                if (_.isObject(events.onClick) && !_.isUndefined(events.onClick[res.namespace]))
+                    onClickFn = _.isFunction(events.onClick[res.namespace]) ? events.onClick[res.namespace] : null;
              }
 
             //call the alert message
-            s.ui.showAlert(response.payload, response.type, onCloseFn, onClickFn);
+            s.ui.showAlert(res.payload, res.type, onCloseFn, onClickFn);
         };
 
         //check for ajax error
-        if (response.status == "error") {
+        if (res.status == "error") {
 
-            this.handleAjaxError(response.code, response.error);
+            this.handleAjaxError(res.code, res.error);
             return false;
         }
         //app errors
-        else if (typeof response.type != "undefined") {
+        else if (!_.isUndefined(res.type)) {
 
             onErrorResponse();
             return false;
         }
         //redirection
-        else if (!_.isUndefined(response.redirect)) {
+        else if (!_.isUndefined(res.redirect)) {
 
-            this.redirectTo(response.redirect);
+            this.redirectTo(res.redirect);
             return true;
         }
         //no errors, return true
@@ -389,10 +382,10 @@ export default {
     handleAjaxError(x, error) {
 
         //set message null as default
-        var message = null;
-        var log     = "";
-        var code    = _.isObject(x) ? x.status : x;
-        var text    = _.isObject(x) ? x.responseText : code;
+        let message = null, log = "";
+        
+        let code = _.isObject(x) ? x.status : x;
+        let text = _.isObject(x) ? x.responseText : code;
 
         //sever parse error
         if (error == "parsererror") {
@@ -433,9 +426,9 @@ export default {
             message = APP.TRANS.ALERTS.INTERNAL_ERROR;
             log     = "Core -> unknown error: " + text;
         }
-
-        console.warn(log);
+        
         //show the alert message
+        console.warn(log);
         core.ui.showAlert(message, "warning");
     },
 
@@ -454,9 +447,7 @@ export default {
             return;
         }
 
-        var uri_map = {
-           notFound : "error/notFound"
-        };
+        var uri_map = { notFound : "error/notFound" };
 
         //check if has a uri map
         if (!_.isUndefined(uri_map[uri]))
