@@ -388,22 +388,24 @@ export default {
         //bootstrap
         else if (core.framework == "bootstrap") {
 
-            var envs = ["xs", "sm", "md", "lg"];
-            var env = "";
+            let bk          = "";
+            let breakpoints = ["xs", "sm", "md", "lg"];
 
-            var $el = $("<div>");
+            let $el = $("<div>");
             $el.appendTo($("body"));
 
-            for (var i = envs.length - 1; i >= 0; i--) {
-                env = envs[i];
-                $el.addClass("hidden-" + env + "-up");
+            for (let i = breakpoints.length - 1; i >= 0; i--) {
+                
+                bk = breakpoints[i];
+                
+                $el.addClass("hidden-" + bk + "-up");
 
                 if ($el.is(":hidden"))
                     break;
             }
             $el.remove();
 
-            return size == env;
+            return size == bk;
         }
         //listener on core modules ui [onCheckWindowSize]
         else if(!_.isNil(core.modules.ui) && _.isFunction(core.modules.ui.onCheckWindowSize)) {
