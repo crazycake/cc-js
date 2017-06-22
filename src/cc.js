@@ -35,8 +35,8 @@ window.core = core;
 
 //set modules
 core.setModules([
-    auth,
-    forms,
-    passRecovery,
-    facebook
+	auth,
+	forms,
+	passRecovery,
+	facebook
 ]);

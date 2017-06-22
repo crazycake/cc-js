@@ -33,23 +33,23 @@ process.env.NODE_ENV = environment;
 
 // set up the browserify instance on a task basis
 const browserify_conf = {
-    entries      : [bundle_src],
-    cache        : {},
-    packageCache : {},
-    debug        : !(environment == "production") //true enables source-maps
+	entries      : [bundle_src],
+	cache        : {},
+	packageCache : {},
+	debug        : !(environment == "production") //true enables source-maps
 };
 
 //set browserify object
 var webpack = watchify(browserify(assign({}, watchify.args, browserify_conf)))
-                //es6 transpiler
-                .transform(babelify, {
-                    presets : ["es2015"],
-                    ignore  : "./src/plugins/"
-                })
-                //minify
-                .transform({
-                    global : true
-                }, "uglifyify");
+				//es6 transpiler
+				.transform(babelify, {
+					presets : ["es2015"],
+					ignore  : "./src/plugins/"
+				})
+				//minify
+				.transform({
+					global : true
+				}, "uglifyify");
 
 //require bundle with expose name
 webpack.require([bundle_src], { expose : bundle_name });
@@ -58,12 +58,12 @@ webpack.on("update", bundleApp); //on any dep update, runs the bundler
 webpack.on("log", gutil.log);    //output build logs to terminal
 
 function bundleApp() {
-    //browserify js bundler
-    return webpack.bundle()
-        .on("error", gutil.log.bind(gutil, "Browserify Bundler Error"))
-        .pipe(source(bundle_name + ".bundle.min.js"))
-        //prepend contents
-        .pipe(gulp.dest(bundle_dist));
+	//browserify js bundler
+	return webpack.bundle()
+		.on("error", gutil.log.bind(gutil, "Browserify Bundler Error"))
+		.pipe(source(bundle_name + ".bundle.min.js"))
+		//prepend contents
+		.pipe(gulp.dest(bundle_dist));
 }
 
 //++ Tasks

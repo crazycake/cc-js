@@ -4,23 +4,23 @@
  */
 
 export default {
-    name : "facebook",
+	name : "facebook",
 	config : {
-		 api_version           : "v2.5",                  // openGraph version
-		 lang                  : "en",             		  // set SDK lang (self property)
-		 dom_class             : "app-btn-fb",            // jQuery selector
-		 graph_url             : "//graph.facebook.com/", // openGraph URL
-		 id                    : "",                      // facebook app id
-		 scope                 : "",                	  // facebook app scope perms
-		 login_url             : "",                	  // facebook app default login URL
-		 share_url             : null,                    // facebook dynamic share og URL (set above)
-		 has_loaded            : false,                   // flag that sets if sdk has loaded
-		 disable_js_sdk        : false,                   // disables javascript SDK
-		 login_fn              : null,                    // callback function when user is already logged in
-		 login_failed_fn       : null,                    // callback function when user didnt logged in
-		 deauthorize_fn        : null,                    // callback function when app is deleted (set in app model)
-		 before_redirection_fn : null,                    // callback for before redirection event (for php redirection)
-		 loaded_text_attr      : "data-fb-loaded"         // loaded button text for facebook js SDK button
+		api_version           : "v2.5",                  // openGraph version
+		lang                  : "en",             		  // set SDK lang (self property)
+		dom_class             : "app-btn-fb",            // jQuery selector
+		graph_url             : "//graph.facebook.com/", // openGraph URL
+		id                    : "",                      // facebook app id
+		scope                 : "",                	  // facebook app scope perms
+		login_url             : "",                	  // facebook app default login URL
+		share_url             : null,                    // facebook dynamic share og URL (set above)
+		has_loaded            : false,                   // flag that sets if sdk has loaded
+		disable_js_sdk        : false,                   // disables javascript SDK
+		login_fn              : null,                    // callback function when user is already logged in
+		login_failed_fn       : null,                    // callback function when user didnt logged in
+		deauthorize_fn        : null,                    // callback function when app is deleted (set in app model)
+		before_redirection_fn : null,                    // callback for before redirection event (for php redirection)
+		loaded_text_attr      : "data-fb-loaded"         // loaded button text for facebook js SDK button
 	},
 	sdk_langs : {
 		es : "es_LA",
@@ -34,13 +34,13 @@ export default {
 	init() {
 
 		// check that facebook conf is set
-	    if (_.isUndefined(APP.facebookAppID)) {
-            console.warn("Facebook -> APP.facebookAppID is not defined!");
-	        return false;
-        }
-        
-        // set SDK lang
-        let lang = !_.isNil(APP.UA.lang) ? APP.UA.lang : "en";
+		if (_.isUndefined(APP.facebookAppID)) {
+			console.warn("Facebook -> APP.facebookAppID is not defined!");
+			return false;
+		}
+		
+		// set SDK lang
+		let lang = !_.isNil(APP.UA.lang) ? APP.UA.lang : "en";
 
 		// extend props
 		this.config.lang 	  = this.sdk_langs[lang];
@@ -50,9 +50,9 @@ export default {
 		this.config.share_url = "https://www.facebook.com/dialog/share?app_id=" + APP.facebookAppID +
 								"&display=popup&href=<url>&redirect_uri=" + window.location.href;
 
-        //set default login by facebook action
-        if (_.isNull(this.config.login_fn))
-            this.config.login_fn = this.loginUserByFacebook;
+		//set default login by facebook action
+		if (_.isNull(this.config.login_fn))
+			this.config.login_fn = this.loginUserByFacebook;
 
 		//append the "fb-root" div required by facebook
 		$("body").append('<div id="fb-root"></div>');
@@ -107,25 +107,25 @@ export default {
 		this.config.has_loaded = true;
 	},
 
-    /**
-     * Get the SDK facebook library, async load.
-     * @method getLibraryScript
-     * @async
-     * @param {Object} fb_buttons - The jQuery buttons elements
-     */
-    getLibraryScript(fb_buttons) {
+	/**
+	 * Get the SDK facebook library, async load.
+	 * @method getLibraryScript
+	 * @async
+	 * @param {Object} fb_buttons - The jQuery buttons elements
+	 */
+	getLibraryScript(fb_buttons) {
 
 		var s = this;
-        //Load Facebook javascript SDK
+		//Load Facebook javascript SDK
 		$.getScript("//connect.facebook.net/" + this.config.lang + "/all.js", () => {
 
 			//Init facebook SDK
 			FB.init({
-                appId   : s.config.id,          //Facebook app ID
-                version : s.config.api_version, //API version
-                status  : true,                 //Check Facebook Login status
-                cookie  : true,                 //Use client cookie session?
-                xfbml   : true                  //Look for social plugins on the page
+				appId   : s.config.id,          //Facebook app ID
+				version : s.config.api_version, //API version
+				status  : true,                 //Check Facebook Login status
+				cookie  : true,                 //Use client cookie session?
+				xfbml   : true                  //Look for social plugins on the page
 			});
 
 			//Get Login Status
@@ -173,7 +173,7 @@ export default {
 
 			console.log("Facebook -> Ready!");
 		});
-    },
+	},
 
 	/**
 	 * Facebook login through js SDK
@@ -231,16 +231,16 @@ export default {
 			s.config.login_failed_fn(response.status, fn_pending);
 	},
 
-    /**
-     * Request Login user Form Handler with Facebook JS SDK
-     * @method loginUserByFacebook
-     * @param  {Object} fb_payload - The facebook SDK payload
-     */
-    loginUserByFacebook(fb_payload) {
+	/**
+	 * Request Login user Form Handler with Facebook JS SDK
+	 * @method loginUserByFacebook
+	 * @param  {Object} fb_payload - The facebook SDK payload
+	 */
+	loginUserByFacebook(fb_payload) {
 
-        //request with promise
-        core.ajaxRequest({ method : "POST", uri :  "facebook/login" }, null, fb_payload);
-    },
+		//request with promise
+		core.ajaxRequest({ method : "POST", uri :  "facebook/login" }, null, fb_payload);
+	},
 
 	/**
 	 * Force session logout from facebook
@@ -264,7 +264,7 @@ export default {
 		});
 	},
 
-    /**
+	/**
 	 * Deletes app from user facebook account
 	 * @method delete
 	 * @param  {Function} fn_callback - The callback function
@@ -284,11 +284,11 @@ export default {
 
 		//get request to server (jsonp)
 		$.ajax({
-            type     : "GET",
-            url      : this.config.graph_url + user_id,
-            dataType : "jsonp",
-            success  : fn_callback,
-            error    : function(e) {
+			type     : "GET",
+			url      : this.config.graph_url + user_id,
+			dataType : "jsonp",
+			success  : fn_callback,
+			error    : function(e) {
 				var response = {};
 				response.error = e.status;
 				//call callback
@@ -342,10 +342,10 @@ export default {
 		buttons.each(function() {
 
 			//check if button has attribute
-            var attr = $(this).attr(s.config.loaded_text_attr);
+			var attr = $(this).attr(s.config.loaded_text_attr);
 
-            if (typeof attr == "undefined" || attr === false)
-                return;
+			if (typeof attr == "undefined" || attr === false)
+				return;
 
 			//update text button (search for a one level span)
 			var text_element = $(this).children("span").length ? $(this).children("span") : $(this);
