@@ -7,12 +7,12 @@ export default {
 	name : "facebook",
 	config : {
 		api_version           : "v2.5",                  // openGraph version
-		lang                  : "en",             		  // set SDK lang (self property)
+		lang                  : "en",             		 // set SDK lang (self property)
 		dom_class             : "app-btn-fb",            // jQuery selector
 		graph_url             : "//graph.facebook.com/", // openGraph URL
 		id                    : "",                      // facebook app id
-		scope                 : "",                	  // facebook app scope perms
-		login_url             : "",                	  // facebook app default login URL
+		scope                 : "",                	  	 // facebook app scope perms
+		login_url             : "",                	  	 // facebook app default login URL
 		share_url             : null,                    // facebook dynamic share og URL (set above)
 		has_loaded            : false,                   // flag that sets if sdk has loaded
 		disable_js_sdk        : false,                   // disables javascript SDK
@@ -38,7 +38,7 @@ export default {
 			console.warn("Facebook -> APP.facebookAppID is not defined!");
 			return false;
 		}
-		
+
 		// set SDK lang
 		let lang = !_.isNil(APP.UA.lang) ? APP.UA.lang : "en";
 
