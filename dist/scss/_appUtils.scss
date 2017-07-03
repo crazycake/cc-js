@@ -35,8 +35,8 @@
 	//@debug "Including font: " + $font-path;
 
 	$extmods: (
-		eot: "?",
-		svg: "#" + str-replace($name, " ", "_")
+		eot : "?",
+		svg : "#" + str-replace($name, " ", "_")
 	);
 
 	$formats: (
@@ -45,9 +45,9 @@
 	);
 
 	@each $ext in $exts {
-		$extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
-		$format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
-		$src: append($src, url(quote($font-path + "." + $extmod)) format(quote($format)), comma);
+		$extmod : if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+		$format : if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+		$src    : append($src, url(quote($font-path + "." + $extmod)) format(quote($format)), comma);
 	}
 
 	@font-face {
@@ -78,17 +78,12 @@
 	$url: $file + $suffix + '.' + $type + "?v=" + $version;
 
 	//MediaQueries
-	@media only screen and (-webkit-min-device-pixel-ratio: 2),
-	only screen and (-moz-min-device-pixel-ratio: 2),
-	only screen and (-o-min-device-pixel-ratio: 2/1),
+	@media
 	only screen and (min-device-pixel-ratio: 2),
 	only screen and (min-resolution: 192dpi),
 	only screen and (min-resolution: 2dppx) {
 		& {
 			background-image: url($url);
-			-webkit-background-size: $width $height;
-			-moz-background-size: $width $height;
-			-o-background-size: $width $height;
 			background-size: $width $height;
 		}
 	}
@@ -112,9 +107,9 @@
 }
 
 %block-center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 %align-middle {
@@ -133,29 +128,5 @@
 %use-gpu {
 	transform: translate3d(0, 0, 0);
 	backface-visibility: hidden;
-  perspective: 1000;
-}
-
-/* Other Helpful classes
----------------------------------------------------------------------------------------- */
-
-//Vue framework
-[v-cloak] { visibility: hidden; }
-
-//class helpers
-.d-invisible  { visibility: hidden; opacity: 0; }
-.p-relative   { position: relative; }
-.d-none       { display: none; }
-.w-100        { width: 100%; }
-.h-100        { height: 100%; }
-.d-table      { display: table; }
-.d-table-cell { display: table-cell; vertical-align: middle; }
-
-//no-script fallback (uses classes fixed and center)
-noscript {
-	position: fixed;
-	display: block;
-	width: 100%;
-	padding: 1rem;
-	z-index: 9999;
+	perspective: 1000;
 }
