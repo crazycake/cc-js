@@ -1,7 +1,7 @@
 /*!
  * FormValidation (http://formvalidation.io)
  * The best jQuery plugin to validate form fields. Support Bootstrap, Foundation, Pure, SemanticUI, UIKit and custom frameworks
- * 
+ *
  * This is a custom build that does NOT consist of all validators. Only popular validators are included:
  * - between
  * - callback
@@ -3909,7 +3909,7 @@ if (typeof jQuery === 'undefined') {
 			if (value === '') {
 				return true;
 			}
-			
+
 			value = this._format(value);
 
 			var locale         = validator.getLocale(),
@@ -4125,7 +4125,7 @@ if (typeof jQuery === 'undefined') {
 			if (value === '') {
 				return true;
 			}
-			
+
 			value = this._format(value);
 
 			var locale         = validator.getLocale(),
@@ -4514,7 +4514,7 @@ if (typeof jQuery === 'undefined') {
 
 				return dfd;
 			}
-			
+
 			if (options.delay) {
 				// Since the form might have multiple fields with the same name
 				// I have to attach the timer to the field element

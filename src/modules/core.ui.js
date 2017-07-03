@@ -28,10 +28,10 @@ export default {
 	 * @method init
 	 */
 	init() {
-		
+
 		// set app UI data for selectors
 		APP.UI = UI_DEFAULTS;
-		
+
 		// append conf
 		if(!_.isNil(core.modules.ui) && _.isFunction(core.modules.ui.conf))
 			_.assign(APP.UI, core.modules.ui.conf());
@@ -395,9 +395,9 @@ export default {
 			$el.appendTo($("body"));
 
 			for (let i = breakpoints.length - 1; i >= 0; i--) {
-				
+
 				bk = breakpoints[i];
-				
+
 				$el.addClass("hidden-" + bk + "-up");
 
 				if ($el.is(":hidden"))

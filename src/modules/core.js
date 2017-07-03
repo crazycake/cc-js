@@ -67,7 +67,7 @@ export default {
 	start(modules = []) {
 
 		console.debug("Core -> Starting");
-		
+
 		//Check that App Global scope vars are defined
 		if (typeof APP == "undefined")
 			throw new Error("Core -> APP global scoped var is not defined!");
@@ -229,7 +229,7 @@ export default {
 
 		//check form element has a form data-invalid attribute
 		if (!_.isNull(form)) {
-			
+
 			//check for a non jquery object
 			if (form instanceof jQuery === false)
 				form = $(form);
@@ -383,7 +383,7 @@ export default {
 
 		//set message null as default
 		let message = null, log = "";
-		
+
 		let code = _.isObject(x) ? x.status : x;
 		let text = _.isObject(x) ? x.responseText : code;
 
@@ -426,7 +426,7 @@ export default {
 			message = APP.TRANS.ALERTS.INTERNAL_ERROR;
 			log     = "Core -> unknown error: " + text;
 		}
-		
+
 		//show the alert message
 		console.warn(log);
 		core.ui.showAlert(message, "warning");

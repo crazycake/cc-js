@@ -26,9 +26,9 @@
 		cclayer public methods
 	------------------------------------------------------------------------------------------------ **/
 	$.ccdialog = function(options) {
-		
+
 		if(typeof options == "undefined")
-			options = {}; 
+			options = {};
 
 		//returns the core object
 		return $.ccdialog.core.init(options);
@@ -64,10 +64,10 @@
 	$.ccdialog.core = {
 
 		init : function(options) {
-			
+
 			//extend options
 			this.opts = $.extend({}, $.ccdialog.defaults, options);
-			
+
 			//drop a previously created dialog
 			this.drop();
 			this.create(this.opts);
@@ -78,7 +78,7 @@
 		create : function(options) {
 
 			var self = this;
-			
+
 			//wrappers
 			var div_wrapper = $("<div>").addClass("cclayer-dialog").css("display", "none");
 			var div_box     = $("<div>").addClass("box");
@@ -107,7 +107,7 @@
 			//append buttons?
 			var show_footer = false;
 			var index 		= 0;
-			
+
 			for (var key in options.buttons) {
 
 				var btn = options.buttons[key];
@@ -165,7 +165,7 @@
 	------------------------------------------------------------------------------------------------ **/
 	//creating an event "destroyed"
 	jQuery.event.special.destroyed = {
-		
+
 		remove : function(o) {
 
 			if (o.handler)

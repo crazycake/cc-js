@@ -43,7 +43,7 @@
 	 * Returns boolean if cclayer is active or not
 	 */
 	$.cclayer.isVisible = function() {
-		
+
 		return $("div.cclayer-overlay").length ? true : false;
 	};
 
@@ -51,10 +51,10 @@
 		cclayer element
 	------------------------------------------------------------------------------------------------ **/
 	$.fn.cclayer = function(options) {
-		
+
 		if(typeof options == "undefined")
-			options = {}; 
-			
+			options = {};
+
 		return $.fn.cclayer.core.init(options, $(this));
 	};
 
@@ -79,10 +79,10 @@
 	$.fn.cclayer.core = {
 
 		init : function(options, el) {
-			
+
 			//extend options
 			this.opts = $.extend({}, $.fn.cclayer.defaults, options);
-			
+
 			//check if cclayer was already invoked
 			if ($("div.cclayer-overlay").length || el.is(":visible"))
 				return;
@@ -120,10 +120,10 @@
 					"z-index"    : options.zindex
 				});
 			}
-			
+
 			//POSITION
 			s.setPosition(options, el);
-			
+
 			// on resize event for non mobile devices
 			if(typeof APP != "undefined" && !APP.UA.isMobile) {
 				var resizer;
@@ -136,7 +136,7 @@
 			/** -- EVENTS -- **/
 			//force escape?
 			if (options.escape) {
-				
+
 				//onClick event
 				div_overlay.one("click", function() { s.close(options, el); });
 
@@ -154,7 +154,7 @@
 			else {
 				div_overlay.off("click");
 			}
-			
+
 			// set close event (for no escape option)
 			div_overlay.one("close", function() { s.close(options, el); });
 
@@ -166,7 +166,7 @@
 			div_overlay.appendTo("body");
 		},
 		setPosition : function(options, el) {
-			
+
 			//positioning element to display
 			var css_pos = "absolute", css_x = "0", css_y = "0";
 			var css_margin_x = 0, css_margin_y = 0;
@@ -189,7 +189,7 @@
 
 			//FIXED position
 			if (options.fixed) {
-				
+
 				//set css position props
 				css_pos = "fixed";
 				css_x   = x + "%";
@@ -204,7 +204,7 @@
 				css_x = (Math.max($(window).width() - el.width(), 0)/(100/x)) + $(window).scrollLeft();
 				css_y = (Math.max($(window).height() - el.height(), 0)/(100/y)) + $(window).scrollTop();
 			}
-			
+
 			var props = {
 				"position" : css_pos,
 				"z-index"  : (options.zindex + 1)
@@ -271,7 +271,7 @@
 	------------------------------------------------------------------------------------------------ **/
 	//creating an event "destroyed"
 	jQuery.event.special.destroyed = {
-		
+
 		remove : function(o) {
 
 			if (o.handler)
