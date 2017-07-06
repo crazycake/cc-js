@@ -48,7 +48,7 @@ jQuery.fn.center = function(position, top, left) {
 /**
  * Gets the padding value of an element.
  * @method $.fn.padding
- * @param  string direction The padding CSS property: [top, bottom, left, right]. Defaults to left.
+ * @param  string direction - The padding CSS property: [top, bottom, left, right]. Defaults to left.
  * @return {Int}
  */
 jQuery.fn.padding = function(direction) {
