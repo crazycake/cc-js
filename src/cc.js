@@ -1,7 +1,7 @@
 /**
  * Core Main Bundler
  * ES6 required (babel)
- * @module Main
+ * @module CC
  */
 
 //load main libraries
