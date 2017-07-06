@@ -22,9 +22,12 @@
 	if (typeof $.cclayer != "function")
 		throw new Error('ccdialog: cclayer jQuery plugin is required');
 
-	/** ------------------------------------------------------------------------------------------------
-		cclayer public methods
-	------------------------------------------------------------------------------------------------ **/
+	/**
+	 * Main function
+	 * @method $.ccdialog
+	 * @param  {Object} options - The input options
+	 * @return {Function}
+	 */
 	$.ccdialog = function(options) {
 
 		if(typeof options == "undefined")
@@ -36,16 +39,16 @@
 
 	/**
 	 * Closes cclayer
+	 * @method $.ccdialog.close
 	 */
 	$.ccdialog.close = function() {
 		$.cclayer.close();
 	};
 
-	/** ------------------------------------------------------------------------------------------------
-		cclayer element
-	------------------------------------------------------------------------------------------------ **/
-
-	//DEFAULT VALUES
+	/**
+	 * Defaults
+	 * @type {Object}
+	 */
 	$.ccdialog.defaults = {
 		title        : "",
 		content      : "",
@@ -60,7 +63,10 @@
 		smallScreen  : 640
 	};
 
-	//CORE
+	/**
+	 * Core
+	 * @type {Object}
+	 */
 	$.ccdialog.core = {
 
 		init : function(options) {
@@ -160,10 +166,12 @@
 			$.cclayer.close();
 		}
 	};
-	/** ------------------------------------------------------------------------------------------------
-		jQuery setup
-	------------------------------------------------------------------------------------------------ **/
-	//creating an event "destroyed"
+
+	/**
+	 * jQuery event binding
+	 * Bind action for event destroyed
+	 * @type {Object}
+	 */
 	jQuery.event.special.destroyed = {
 
 		remove : function(o) {

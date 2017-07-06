@@ -4,7 +4,10 @@
  */
 
 export default {
+
 	name : "facebook",
+
+	//defaults
 	config : {
 		api_version           : "v2.5",                  // openGraph version
 		lang                  : "en",             		 // set SDK lang (self property)
@@ -178,8 +181,8 @@ export default {
 	/**
 	 * Facebook login through js SDK
 	 * @method login
-	 * @param  {Function} fn_callback - The callback function
-	 * @param  {String} action - The action type: `login`, `share-url`.
+	 * @param {Function} fn_callback - The callback function
+	 * @param {String} action - The action type: `login`, `share-url`.
 	 */
 	login(fn_callback, action) {
 
@@ -215,8 +218,8 @@ export default {
 	 * 	country restrictions or age restrictions (facebook app config).
 	 * + __unknown__: user havent login to facebook or 3rd party cookies are blocked.
 	 * @method loginFailed
-	 * @param  {Object} response - The response object
-	 * @param  {Function} fn_pending - The pending function
+	 * @param {Object} response - The response object
+	 * @param {Function} fn_pending - The pending function
 	 */
 	loginFailed(response, fn_pending) {
 
@@ -234,7 +237,7 @@ export default {
 	/**
 	 * Request Login user Form Handler with Facebook JS SDK
 	 * @method loginUserByFacebook
-	 * @param  {Object} fb_payload - The facebook SDK payload
+	 * @param {Object} fb_payload - The facebook SDK payload
 	 */
 	loginUserByFacebook(fb_payload) {
 
@@ -245,7 +248,7 @@ export default {
 	/**
 	 * Force session logout from facebook
 	 * @method logout
-	 * @param  {Function} fn_callback - The callback function
+	 * @param {Function} fn_callback - The callback function
 	 */
 	logout(fn_callback) {
 
@@ -267,7 +270,7 @@ export default {
 	/**
 	 * Deletes app from user facebook account
 	 * @method delete
-	 * @param  {Function} fn_callback - The callback function
+	 * @param {Function} fn_callback - The callback function
 	 */
 	delete(fn_callback) {
 
@@ -277,8 +280,8 @@ export default {
 	/**
 	 * Get user facebook profile data
 	 * @method getPublicUserData
-	 * @param  {Int} user_id - The user ID
-	 * @param  {Function} fn_callback - The callback function
+	 * @param {Int} user_id - The user ID
+	 * @param {Function} fn_callback - The callback function
 	 */
 	getPublicUserData(user_id, fn_callback) {
 
@@ -316,7 +319,7 @@ export default {
 	/**
 	 * Facebook share action
 	 * @method shareUrl
-	 * @param  {string} url - The URL to share
+	 * @param {String} url - The URL to share
 	 */
 	shareUrl(url) {
 
@@ -333,7 +336,7 @@ export default {
 	/**
 	 * Toogle loading text in a button. Button must have ```loaded_text_attr``` attribute.
 	 * @method toggleButtonText
-	 * @param  {Object} buttons - The jQuery object button elements
+	 * @param {Object} buttons - The jQuery object button elements
 	 */
 	toggleButtonText(buttons) {
 

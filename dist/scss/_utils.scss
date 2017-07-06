@@ -27,7 +27,9 @@
 /* Mixins
 ---------------------------------------------------------------------------------------- */
 
-//Load Fonts
+/**
+ * Load Font, outputs fontface rule
+ */
 @mixin load-font($name, $path, $weight: null, $style: null, $exts: eot woff2 woff ttf svg) {
 
 	$src: null;
@@ -58,13 +60,17 @@
 	}
 }
 
-//background cover image (3rd argument to use custom background to small & medium screen)
+/**
+ * Background cover image (3rd argument to use custom background to small & medium screen)
+ */
 @mixin bg-cover($image-path, $attachment: fixed) {
 	background: url($image-path) no-repeat center center $attachment;
 	background-size: cover;
 }
 
-//background image retina support
+/**
+ * Background image retina support
+ */
 @mixin bg-retina($file, $type, $width, $height, $version:'0.1') {
 
 	background-image: url($file + '.' + $type + "?v=" + $version);

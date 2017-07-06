@@ -2,15 +2,15 @@
  * jQuery extended
  * Useful jQuery extensions
  * @author Nicolas Pulido <nicolas.pulido@crazycake.cl>
- * @version 1.0.0
  */
 
 /**
  * Centers an element with CSS position property
- * @param  string position CSS position property: [fixed, absolute, static]
- * @param  int top CSS top value
- * @param  int left CSS left value
- * @return object
+ * @method $.fn.center
+ * @param {String} position - CSS position property: [fixed, absolute, static]
+ * @param {Int} top - CSS top value
+ * @param {Int} left - CSS left value
+ * @return {Object}
  */
 jQuery.fn.center = function(position, top, left) {
 
@@ -47,8 +47,9 @@ jQuery.fn.center = function(position, top, left) {
 
 /**
  * Gets the padding value of an element.
+ * @method $.fn.padding
  * @param  string direction The padding CSS property: [top, bottom, left, right]. Defaults to left.
- * @return int
+ * @return {Int}
  */
 jQuery.fn.padding = function(direction) {
 
@@ -61,7 +62,8 @@ jQuery.fn.padding = function(direction) {
 
 /**
  * Check if a jquery object (selector) exists in DOM
- * @return {boolean}
+ * @method $.fn.exists
+ * @return {Boolean}
  */
 jQuery.fn.exists = function() {
 

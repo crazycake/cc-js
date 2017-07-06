@@ -3,8 +3,9 @@
  * Dependencies: ```formValidation jQuery plugin```, ```google reCaptcha JS SDK```
  * @module Forms
  */
- /* global grecaptcha */
- /* eslint no-undef: "error" */
+
+/* global grecaptcha */
+/* eslint no-undef: "error" */
 
 //++ selectors
 const SEL_RECAPTCHA = "#app-recaptcha";
@@ -12,6 +13,7 @@ const SEL_RECAPTCHA = "#app-recaptcha";
 export default {
 	name  : "forms",
 	debug : false,
+
 	/**
 	 * Autoloads validation for `form[data-validate]` selector
 	 * @method load
@@ -58,8 +60,8 @@ export default {
 	 * Ref: [http://formvalidation.io/api/]
 	 * TODO: set bootstrap icon classes (glyphs)
 	 * @method newValidator
-	 * @param  {Object} form - A form jQuery object or native element
-	 * @param  {Object} options - Extended Options
+	 * @param {Object} form - A form jQuery object or native element
+	 * @param {Object} options - Extended Options
 	 */
 	newValidator(form = null, options) {
 
@@ -225,9 +227,9 @@ export default {
 	/**
 	 * Add a dynamic field to form
 	 * @method addField
-	 * @param  {String} field_name - The field name
-	 * @param  {Object} context - A jQuery object or native element
-	 * @param  {Object} validators_obj - Validators Object (formValidation)
+	 * @param {String} field_name - The field name
+	 * @param {Object} context - A jQuery object or native element
+	 * @param {Object} validators_obj - Validators Object (formValidation)
 	 */
 	addField(field_name, context, validators_obj) {
 
@@ -269,8 +271,8 @@ export default {
 	/**
 	 * Set validator field pattern in data attribute
 	 * @method setFieldPattern
-	 * @param  {object} field - The jQuery field object
-	 * @param  {object} validators - The validators object
+	 * @param {Object} field - The jQuery field object
+	 * @param {Object} validators - The validators object
 	 */
 	setFieldPattern(field, validators) {
 
@@ -293,8 +295,8 @@ export default {
 	/**
 	 * Strips HTML from a given string
 	 * @method stripHtml
-	 * @param  {string} string - An input string
-	 * @return {string}
+	 * @param  {String} string - An input string
+	 * @return {String}
 	 */
 	stripHtml(string = null) {
 

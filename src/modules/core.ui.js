@@ -4,6 +4,10 @@
  * @module CoreUI
  */
 
+/**
+ * UI defaults properties
+ * @type {Object}
+ */
 const UI_DEFAULTS = {
 	//selectors
 	sel_app            : "#app",
@@ -94,11 +98,11 @@ export default {
 	/**
 	 * App post-action message alerts.
 	 * @method showAlert
-	 * @param  {String} payload - The payload content
-	 * @param  {String} type - The Message type [success, warning, info, alert]
-	 * @param  {Function} on_close - The onClose callback function (optional).
-	 * @param  {Function} on_click - The onClick callback function (optional).
-	 * @param  {Boolean} autohide - Autohides the alert after 8 seconds (optional).
+	 * @param {String} payload - The payload content
+	 * @param {String} type - The Message type [success, warning, info, alert]
+	 * @param {Function} on_close - The onClose callback function (optional).
+	 * @param {Function} on_click - The onClick callback function (optional).
+	 * @param {Boolean} autohide - Autohides the alert after 8 seconds (optional).
 	 */
 	showAlert(payload = "", type = "info", on_close, on_click, autohide = true) {
 
@@ -307,7 +311,7 @@ export default {
 	/**
 	 * Hides a crated modal
 	 * @method hideModal
-	 * @param  {object} element - The jquery element
+	 * @param  {Object} element - The jquery element
 	 */
 	hideModal(element) {
 
@@ -374,7 +378,6 @@ export default {
 
 	/**
 	 * Validates screen size is equal to given size.
-	 * @TODO: check screen size with Bootstrap
 	 * @method checkWindowSize
 	 * @param  {String} size - The Screen size: small, medium, large.
 	 * @return {Boolean}
@@ -555,11 +558,11 @@ export default {
 	/**
 	 * Get resized image path.
 	 * @method resizedImagePath
-	 * Example: ./media/dj/IMAGE1.jpg?v=5
-	 *          ./media/dj/IMAGE1_TH.jpg?v=5
-	 * @param  {string} url - An image URL
-	 * @param  {string} key - The suffix key to append
-	 * @return string
+	 * Example: `./media/dj/IMAGE1.jpg?v=5`
+	 *          `./media/dj/IMAGE1_TH.jpg?v=5`
+	 * @param  {String} url - An image URL
+	 * @param  {String} key - The suffix key to append
+	 * @return {String}
 	 */
 	resizedImagePath(url = "", key = "TN") {
 

@@ -22,13 +22,16 @@
 
 (function($) {
 
-	/** ------------------------------------------------------------------------------------------------
-		cclayer public methods
-	------------------------------------------------------------------------------------------------ **/
+	/**
+	 * Main function
+	 * @method $.cclayer
+	 * @return {Function}
+	 */
 	$.cclayer = function() {};
 
 	/**
 	 * Closes cclayer
+	 * @method $.cclayer.close
 	 */
 	$.cclayer.close = function() {
 
@@ -41,15 +44,20 @@
 
 	/**
 	 * Returns boolean if cclayer is active or not
+	 * @method $.cclayer.isVisible
+	 * @return {Boolean}
 	 */
 	$.cclayer.isVisible = function() {
 
 		return $("div.cclayer-overlay").length ? true : false;
 	};
 
-	/** ------------------------------------------------------------------------------------------------
-		cclayer element
-	------------------------------------------------------------------------------------------------ **/
+	/**
+	 * CC Layer main function
+	 * @method $.fn.cclayer
+	 * @param  {Object} options - The input options
+	 * @return {Function}
+	 */
 	$.fn.cclayer = function(options) {
 
 		if(typeof options == "undefined")
@@ -58,7 +66,10 @@
 		return $.fn.cclayer.core.init(options, $(this));
 	};
 
-	//DEFAULT VALUES
+	/**
+	 * Default values
+	 * @type {Object}
+	 */
 	$.fn.cclayer.defaults = {
 		fixed        : false,
 		overlay      : true,
@@ -75,7 +86,10 @@
 		escape       : true
 	};
 
-	//CORE
+	/**
+	 * Core
+	 * @type {Object}
+	 */
 	$.fn.cclayer.core = {
 
 		init : function(options, el) {
@@ -266,10 +280,12 @@
 			this.drop();
 		}
 	};
-	/** ------------------------------------------------------------------------------------------------
-		jQuery setup
-	------------------------------------------------------------------------------------------------ **/
-	//creating an event "destroyed"
+
+	/**
+	 * jQuery event binding
+	 * Bind action for event destroyed
+	 * @type {Object}
+	 */
 	jQuery.event.special.destroyed = {
 
 		remove : function(o) {

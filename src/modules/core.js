@@ -10,31 +10,31 @@ export default {
 
 	/**
 	 * @property ui
-	 * @type {object}
+	 * @type {Object}
 	 */
 	ui : ui,
 
 	/**
 	 * @property modules
-	 * @type {Boolean}
+	 * @type {Object}
 	 */
 	modules : {},
 
 	/**
 	 * @property framework ```foundation, bootstrap, pure```
-	 * @type {string}
+	 * @type {String}
 	 */
 	framework : "pure",
 
 	/**
-	 * Server Date format
-	 * @type {string}
+	 * @property dateFormat - Server Date format
+	 * @type {String}
 	 */
 	dateFormat : "YYYY-MM-DD HH:mm:ss",
 
 	/**
-	 * XHR Max Timeout (seconds)
-	 * @type {int}
+	 * @property timeout - XHR Max Timeout (seconds)
+	 * @type {Int}
 	 */
 	timeout : 30000,
 
@@ -460,6 +460,7 @@ export default {
 	/**
 	 * Check if given URL is a resource URL
 	 * @method isResourceUrl
+	 * @param {String} url - input URL or URI
 	 * @return {Boolean}
 	 */
 	isResourceUrl(url = "") {
@@ -472,6 +473,7 @@ export default {
 	/**
 	 * Check if given URL starts with http
 	 * @method isUrl
+	 * @param {String} url - Validates an HTTP url
 	 * @return {Boolean}
 	 */
 	isUrl(url = "") {
@@ -481,6 +483,10 @@ export default {
 
 	/**
 	 * Get URI parameter by name
+	 * @method getQueryString
+	 * @param {String} name - The parameter name
+	 * @param {Boolean} url - Get from window URL by default
+	 * @return {String}
 	 */
 	getQueryString(name, url = false) {
 
