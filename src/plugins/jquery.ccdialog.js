@@ -59,7 +59,7 @@
 		buttons      : [],
 		onClose      : null,
 		escape       : true,
-		zindex       : 9999,
+		zindex       : 100,
 		smallScreen  : 640
 	};
 
