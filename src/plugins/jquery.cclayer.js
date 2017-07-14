@@ -15,7 +15,7 @@
 		onClose      : (function) event onClose
 		onShowAnim   : (function) event onShowAnim, custom Show animation
 		onCloseAnim  : (function) event onCloseAnim, custom Close animation
-		zindex       : (int) css z-index value, default value is 100.
+		zindex       : (int) css z-index value, default value is 99.
 		escape 		 : (boolean) Allows user to escape the modal with ESC key or a Click outside the element. Defaults is true.
 	});
  */
