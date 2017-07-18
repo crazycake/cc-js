@@ -25,6 +25,7 @@ export default {
 		before_redirection_fn : null,                    // callback for before redirection event (for php redirection)
 		loaded_text_attr      : "data-fb-loaded"         // loaded button text for facebook js SDK button
 	},
+
 	sdk_langs : {
 		es : "es_LA",
 		en : "en_US"
@@ -38,6 +39,7 @@ export default {
 
 		// check that facebook conf is set
 		if (_.isUndefined(APP.facebookAppID)) {
+
 			console.warn("Facebook -> APP.facebookAppID is not defined!");
 			return false;
 		}
