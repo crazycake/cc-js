@@ -234,7 +234,7 @@ export default {
 			if (form instanceof jQuery === false)
 				form = $(form);
 
-			//validate abide form
+			//validate form
 			if (!this.modules.forms.isValid(form))
 				return P.resolve();
 
