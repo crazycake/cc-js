@@ -434,7 +434,6 @@ export default {
 
 	/**
 	 * Redirect router method
-	 * TODO: detect protocol schema.
 	 * @method redirectTo
 	 * @param  {String} uri - The webapp URI
 	 */
