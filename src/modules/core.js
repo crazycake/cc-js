@@ -278,6 +278,10 @@ export default {
 			timeout  : this.timeout
 		};
 
+		//set headers?
+		if(!_.isNil(request.headers))
+			options.headers = request.headers;
+
 		console.log("Core -> new promise request ["+url+"] payload:", payload);
 
 		var s = this;
