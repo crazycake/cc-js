@@ -258,7 +258,7 @@ export default {
 		}
 
 		//append CSRF token
-		if (csrf && request.method == "POST") {
+		if (csrf && request.method == "POST" && !_.isNil(APP.UA.tokenKey)) {
 
 			//check if element is null
 			if (_.isNull(form))
