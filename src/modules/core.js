@@ -386,7 +386,7 @@ export default {
 	handleAjaxError(x, error) {
 
 		//set message null as default
-		let message = null, log = "";
+		let message = false, log = "";
 
 		let code = _.isObject(x) ? x.status : x;
 		let text = _.isObject(x) ? x.responseText : code;
@@ -427,13 +427,14 @@ export default {
 			log     = "Core -> invalid CSRF token: " + code;
 		}
 		else {
-			message = APP.TRANS.ALERTS.INTERNAL_ERROR;
-			log     = "Core -> unknown error: " + text;
+			log = "Core -> respone error: " + text;
 		}
 
 		//show the alert message
 		console.warn(log);
-		core.ui.showAlert(message, "warning");
+
+		if(message)
+			core.ui.showAlert(message, "warning");
 	},
 
 	/**
