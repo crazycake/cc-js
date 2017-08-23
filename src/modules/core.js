@@ -427,7 +427,7 @@ export default {
 			log     = "Core -> invalid CSRF token: " + code;
 		}
 		else {
-			log = "Core -> respone error: " + text;
+			log = "Core -> response error: " + text;
 		}
 
 		//show the alert message
