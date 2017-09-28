@@ -10,7 +10,7 @@ JS Core for webapps. Gulp as Task Runner, Browserify as bundler.
 
 ###### (Optional)
 
-`npm install npm-check  eslint -g`
+`npm install npm-check eslint -g`
 
 ### Usage
 

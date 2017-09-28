@@ -5,7 +5,6 @@
 //required modules
 import babelify   from "babelify";
 import browserify from "browserify";
-import assign     from "lodash.assign";
 import source     from "vinyl-source-stream";
 import watchify   from "watchify";
 import yargs      from "yargs";
@@ -40,7 +39,7 @@ const browserify_conf = {
 };
 
 //set browserify object
-var webpack = watchify(browserify(assign({}, watchify.args, browserify_conf)))
+let b = watchify(browserify(browserify_conf))
 				//es6 transpiler
 				.transform(babelify, {
 					presets : ["es2015"],
@@ -52,14 +51,14 @@ var webpack = watchify(browserify(assign({}, watchify.args, browserify_conf)))
 				}, "uglifyify");
 
 //require bundle with expose name
-webpack.require([bundle_src], { expose : bundle_name });
+b.require([bundle_src], { expose : bundle_name });
 //events
-webpack.on("update", bundleApp); //on any dep update, runs the bundler
-webpack.on("log", gutil.log);    //output build logs to terminal
+b.on("update", bundleApp); //on any dep update, runs the bundler
+b.on("log", gutil.log);    //output build logs to terminal
 
 function bundleApp() {
 	//browserify js bundler
-	return webpack.bundle()
+	return b.bundle()
 		.on("error", gutil.log.bind(gutil, "Browserify Bundler Error"))
 		.pipe(source(bundle_name + ".bundle.min.js"))
 		//prepend contents
