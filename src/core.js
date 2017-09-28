@@ -355,6 +355,36 @@ export default {
 	},
 
 	/**
+	 * jQuery Ajax Handler for loading state
+	 * @method setAjaxLoadingHandler
+	 */
+	setAjaxLoadingHandler() {
+
+		let s = this;
+		let ajax_timer;
+		//ajax handler, show loading if ajax takes more than a X secs, only for POST request
+		let handler = (opts, set_loading) => {
+
+			if (set_loading) {
+				//clear timer
+				clearTimeout(ajax_timer);
+				//waiting time to show loading box
+				ajax_timer = setTimeout(() => { s.loading = true; }, 1000);
+				return;
+			}
+			//otherwise clear timer and hide loading
+			clearTimeout(ajax_timer);
+			s.loading = false;
+		};
+
+		//ajax events
+		$(document)
+		 .ajaxSend((e, xhr, opts)     => { handler(opts, true);  })
+		 .ajaxError((e, xhr, opts)    => { handler(opts, false); })
+		 .ajaxComplete((e, xhr, opts) => { handler(opts, false); });
+	},
+
+	/**
 	 * Get URI parameter by name
 	 * @method getQueryString
 	 * @param {String} name - The parameter name
@@ -422,36 +452,6 @@ export default {
 			new_url = new_url.substring(0, new_url.length - 1);
 
 		return new_url;
-	},
-
-	/**
-	 * jQuery Ajax Handler for loading state
-	 * @method setAjaxLoadingHandler
-	 */
-	setAjaxLoadingHandler() {
-
-		let s = this;
-		let ajax_timer;
-		//ajax handler, show loading if ajax takes more than a X secs, only for POST request
-		let handler = (opts, set_loading) => {
-
-			if (set_loading) {
-				//clear timer
-				clearTimeout(ajax_timer);
-				//waiting time to show loading box
-				ajax_timer = setTimeout(() => { s.loading = true; }, 1000);
-				return;
-			}
-			//otherwise clear timer and hide loading
-			clearTimeout(ajax_timer);
-			s.loading = false;
-		};
-
-		//ajax events
-		$(document)
-		 .ajaxSend((e, xhr, opts)     => { handler(opts, true);  })
-		 .ajaxError((e, xhr, opts)    => { handler(opts, false); })
-		 .ajaxComplete((e, xhr, opts) => { handler(opts, false); });
 	},
 
 	/**
