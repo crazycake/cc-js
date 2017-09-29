@@ -251,9 +251,7 @@ export default {
 			//set true value if payload is null
 			return !_.isNil(data.payload) ? data.payload : data;
 		})
-		.catch((e) => {
-			console.warn("Core -> Promise exception", e);
-		})
+		.catch((e) => { console.warn("Core -> Promise exception", e); })
 		//promise finisher
 		.finally(() => {
 
@@ -392,8 +390,8 @@ export default {
 		if (!url)
 			url = window.location.href;
 
-		let regex = new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"),
-		results   = regex.exec(url);
+		let regex   = new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"),
+			results = regex.exec(url);
 
 		if (!results)
 			return null;
@@ -415,8 +413,8 @@ export default {
 	 */
 	resizedImagePath(url = "", key = "TN") {
 
-		let regex   = /\.([0-9a-z]+)(?:[\?#]|$)/i;
-		let new_url = url.replace(regex, "_" + key + ".$1?");
+		let regex   = /\.([0-9a-z]+)(?:[\?#]|$)/i,
+			new_url = url.replace(regex, "_" + key + ".$1?");
 
 		//remove single question marks
 		if(new_url[new_url.length - 1] == "?")
