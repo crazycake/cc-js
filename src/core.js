@@ -182,8 +182,8 @@ export default {
 			throw new Error("Core -> ajaxRequest: invalid request input object");
 
 		//define payload
-		let payload    = {};
-		let submit_btn = null;
+		let payload    = {},
+			submit_btn = null;
 
 		//check form element has a form data-invalid attribute
 		if (!_.isNull(form)) {
@@ -198,7 +198,7 @@ export default {
 			submit_btn = form.find('button[type="submit"]');
 
 			if (submit_btn.length)
-				submit_btn.attr("disabled","disabled");
+				submit_btn.prop("disabled", true);
 		}
 
 		//extend more data?
@@ -235,15 +235,11 @@ export default {
 		if(!_.isNil(request.headers))
 			options.headers = request.headers;
 
+		let s = this;
+
 		console.log("Core -> new promise request ["+url+"] payload:", payload);
 
-		let s = this;
-		//make ajax request with promises
-		return P.resolve(
-			$.ajax(options)
-			//handle fail event for jQuery ajax request
-			.fail(s.getAjaxError)
-		)
+		return P.resolve( $.ajax(options).fail(s.getAjaxError) )
 		//handle response
 		.then((data) => {
 
@@ -263,7 +259,7 @@ export default {
 
 			//re-enable button
 			if (submit_btn)
-				submit_btn.removeAttr("disabled");
+				submit_btn.prop("disabled", false);
 
 			return true;
 		});
