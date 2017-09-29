@@ -409,6 +409,27 @@ export default {
 	},
 
 	/**
+	 * Get resized image path .
+	 * @method resizedImagePath
+	 * Example: `./media/dj/IMAGE1.jpg?v=5`
+	 *          `./media/dj/IMAGE1_TH.jpg?v=5`
+	 * @param  {String} url - An image URL
+	 * @param  {String} key - The suffix key to append
+	 * @return {String}
+	 */
+	resizedImagePath(url = "", key = "TN") {
+
+		let regex   = /\.([0-9a-z]+)(?:[\?#]|$)/i;
+		let new_url = url.replace(regex, "_" + key + ".$1?");
+
+		//remove single question marks
+		if(new_url[new_url.length - 1] == "?")
+			new_url = new_url.substring(0, new_url.length - 1);
+
+		return new_url;
+	},
+
+	/**
 	 * Image preloader, returns an array with image paths [token replaced: "$"]
 	 * @method preloadImages
 	 * @param  {String} image_path - The source path
@@ -431,27 +452,6 @@ export default {
 		}
 
 		return objects;
-	},
-
-	/**
-	 * Get resized image path .
-	 * @method resizedImagePath
-	 * Example: `./media/dj/IMAGE1.jpg?v=5`
-	 *          `./media/dj/IMAGE1_TH.jpg?v=5`
-	 * @param  {String} url - An image URL
-	 * @param  {String} key - The suffix key to append
-	 * @return {String}
-	 */
-	resizedImagePath(url = "", key = "TN") {
-
-		let regex   = /\.([0-9a-z]+)(?:[\?#]|$)/i;
-		let new_url = url.replace(regex, "_" + key + ".$1?");
-
-		//remove single question marks
-		if(new_url[new_url.length - 1] == "?")
-			new_url = new_url.substring(0, new_url.length - 1);
-
-		return new_url;
 	},
 
 	/**
