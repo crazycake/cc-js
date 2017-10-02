@@ -251,7 +251,7 @@ export default {
 			//set true value if payload is null
 			return !_.isNil(data.payload) ? data.payload : data;
 		})
-		.catch((e) => { console.warn("Core -> Promise exception", e); })
+		.catch((e) => { console.warn("Core -> promise exception", e); })
 		//promise finisher
 		.finally(() => {
 
