@@ -306,41 +306,41 @@ export default {
 		//sever parse error
 		if (err == "parsererror") {
 			msg = APP.TRANS.ALERTS.INTERNAL_ERROR;
-			log = "Core -> parsererror: " + text;
+			log = "Core -> server parse error: " + text;
 		}
 		//timeout
 		else if (err == "timeout" || code == 408) {
 			msg = APP.TRANS.ALERTS.SERVER_TIMEOUT;
-			log = "Core -> timeout: " + x;
+			log = "Core -> server timeout: " + x;
 		}
 		//400 bad request
 		else if (code == 400) {
 			msg = APP.TRANS.ALERTS.BAD_REQUEST;
-			log = "Core -> bad request: " + code;
+			log = "Core -> server bad request: " + code;
 		}
 		//403 access forbidden
 		else if (code == 403) {
 			msg = APP.TRANS.ALERTS.ACCESS_FORBIDDEN;
-			log = "Core -> access forbidden: " + code;
+			log = "Core -> server access forbidden: " + code;
 		}
 		//404 not found
 		else if (code == 404) {
 			msg = APP.TRANS.ALERTS.NOT_FOUND;
-			log = "Core -> not found: " + code;
+			log = "Core -> server, request not found: " + code;
 		}
 		//method now allowed (invalid GET or POST method)
 		else if (code == 405) {
 			msg = APP.TRANS.ALERTS.NOT_FOUND;
-			log = "Core -> method now allowed: " + code;
+			log = "Core -> server method now allowed: " + code;
 		}
 		//invalid CSRF token
 		else if (code == 498) {
 			msg = APP.TRANS.ALERTS.CSRF;
-			log = "Core -> invalid CSRF token: " + code;
+			log = "Core -> invalid CSRF server token: " + code;
 		}
 		else {
 			msg = text;
-			log = "Core -> response error: " + text;
+			log = "Core -> server response error: " + text;
 		}
 
 		console.warn(log);
