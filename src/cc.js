@@ -4,10 +4,8 @@
  */
 
 //load main libraries
-import "html5shiv";
 import "fastclick";
 import "lodash";
-import "bluebird";
 import "jquery";
 import "fg-loadcss";
 

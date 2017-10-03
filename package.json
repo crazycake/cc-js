@@ -35,10 +35,8 @@
     "yargs": "^7.0.2"
   },
   "dependencies": {
-    "bluebird": "^3.5.0",
     "fastclick": "^1.0.6",
     "fg-loadcss": "^1.3.1",
-    "html5shiv": "^3.7.3",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4"
   },
@@ -48,15 +46,12 @@
     ]
   },
   "browser": {
-    "bluebird": "./node_modules/bluebird/js/browser/bluebird.core.js",
     "fastclick": "./node_modules/fastclick/lib/fastclick.js",
     "fg-loadcss": "./node_modules/fg-loadcss/src/loadCSS.js",
-    "html5shiv": "./node_modules/html5shiv/dist/html5shiv.js",
     "jquery": "./node_modules/jquery/dist/jquery.js",
     "lodash": "./node_modules/lodash/lodash.js"
   },
   "browserify-shim": {
-    "bluebird": "P",
     "fastclick": "FastClick",
     "fg-loadcss": "loadCSS",
     "jquery": "jQuery",
