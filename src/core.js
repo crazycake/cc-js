@@ -169,17 +169,16 @@ export default {
 	/**
 	 * Ajax request with response handler.
 	 * @method ajaxRequest
-	 * @param  {Object} request - A simple request object
+	 * @param  {Object} request - Axios request object
 	 * @param  {Object} form - The form HTML object
-	 * @param  {Object} extended_data - An object to be extended as sending data (optional)
 	 * @param  {Object} csrf - Append APP.UA CRSF token key & value
 	 * @return {Object} promise
 	 */
-	ajaxRequest(request = null, form = null, extended_data = null, csrf = true) {
+	ajaxRequest(request = null, form = null, csrf = true) {
 
 		//validation, request is required
 		if (_.isNull(request))
-			throw new Error("Core -> ajaxRequest: invalid request input object");
+			throw new Error("Core -> ajaxRequest: invalid input request object");
 
 		//define payload
 		let payload    = {},
@@ -192,8 +191,8 @@ export default {
 			if (form instanceof jQuery === false)
 				form = $(form);
 
-			//serialize data to URL encoding
-			payload = form.serializeArray();
+			//form data to object
+			$.each(form.serializeArray(), function() { payload[this.name] = this.value; });
 			//disable submit button
 			submit_btn = form.find('button[type="submit"]');
 
@@ -201,88 +200,70 @@ export default {
 				submit_btn.prop("disabled", true);
 		}
 
-		//extend more data?
-		if (_.isObject(extended_data)) {
+		//append CSRF token?
+		if (csrf && request.method == "POST" && !_.isNil(APP.UA.tokenKey))
+			payload[APP.UA.tokenKey] = APP.UA.token;
 
-			//check if element is null
-			if (_.isNil(form))
-				_.assign(payload, extended_data); //considerar objetos livianos (selectionDirection error)
-			else
-				payload.push({ name : "payload", value : JSON.stringify(extended_data) });  //serialized object struct
-		}
-
-		//append CSRF token
-		if (csrf && request.method == "POST" && !_.isNil(APP.UA.tokenKey)) {
-
-			if (_.isNull(form))
-				payload[APP.UA.tokenKey] = APP.UA.token; //object style
-			else
-				payload.push({ name : APP.UA.tokenKey, value : APP.UA.token }); //serialized object struct
-		}
-
-		//set url
-		let url = !_.isNil(request.url) ? request.url : this.baseUrl(request.uri);
 		//set options
-		let options = {
-			url      : url,
-			type     : request.method,
-			data     : payload,
+		let options = _.assign({
+			method   : "GET",
+			timeout  : this.timeout,
 			dataType : "json",
-			timeout  : request.timeout || this.timeout
-		};
+		}, request);
 
-		//set headers?
-		if(!_.isNil(request.headers))
-			options.headers = request.headers;
+		//set payload
+		options.data = _.assign(payload, request.data);
+
+		if(!_.isNil(options.uri))
+			options.url = this.baseUrl(options.uri);
 
 		let s = this;
 
-		console.log("Core -> new promise request ["+url+"] payload:", payload);
+		console.log("Core -> new xhr request", options);
 
-		return P.resolve( $.ajax(options).fail(s.getAjaxError) )
-		//handle response
-		.then((data) => {
+		return $.ajax(options)
+			.done(function(data) {
 
-			//handle ajax response
-			let r = s.handleAjaxResponse(data);
-			if (r || r.error)
-				return r;
+				//handle ajax response (error handling)
+				let r = s.handleAjaxResponse(data);
+				if (r || r.error)
+					return r;
 
-			//set true value if payload is null
-			return !_.isNil(data.payload) ? data.payload : data;
-		})
-		.catch((e) => { console.warn("Core -> promise exception", e); })
-		//promise finisher
-		.finally(() => {
+				return !_.isNil(data.payload) ? data.payload : data;
+			})
+			.fail(function(xhr, textStatus) {
 
-			//re-enable button
-			if (submit_btn)
-				submit_btn.prop("disabled", false);
+				console.warn("Core -> xhr request failed", xhr);
+				return s.getAjaxError(xhr, textStatus);
+			}).
+			always(function() {
 
-			return true;
-		});
+				//re-enable button?
+				if (submit_btn)
+					submit_btn.prop("disabled", false);
+			});
 	},
 
 	/**
 	 * Ajax Response Handler, checks if response has errors.
 	 * Also can set event-callback function in case the response is an error.
 	 * @method handleAjaxResponse
-	 * @param  {Object} response - The JSON response object
+	 * @param  {Object} data - The response data object
 	 */
-	handleAjaxResponse(res = null) {
+	handleAjaxResponse(data) {
 
-		if (!_.isObject(res))
+		console.log("Core -> handling xhr response: ", data);
+
+		if (!_.isObject(data))
 			return false;
 
-		console.log("Core -> handling xhr response: ", res);
-
-		//check for ajax error
-		if (res.status == "error")
-			return this.getAjaxError(res.code, res.error);
+		//check for response error
+		if (data.status == "error")
+			return this.getAjaxError(data.code, data.error);
 
 		//redirection?
-		if (!_.isNil(res.redirect)) {
-			location.href = this.baseUrl(res.redirect);
+		if (!_.isNil(data.redirect)) {
+			location.href = this.baseUrl(data.redirect);
 			return true;
 		}
 
@@ -292,16 +273,14 @@ export default {
 	/**
 	 * Ajax Error Response Handler
 	 * @method getAjaxError
-	 * @param  {Object} x - The jQuery Response object
-	 * @param  {String} err - The jQuery error object
+	 * @param  {Object} xhr - The response object
+	 * @param  {String} err - The error string
 	 */
-	getAjaxError(x, err) {
+	getAjaxError(xhr, err = "") {
 
-		//set message null as default
-		let msg = false, log = "";
-
-		let code = _.isObject(x) ? x.status : x;
-		let text = _.isObject(x) ? x.responseText : code;
+		let msg  = false, log = "";
+		let code = _.isObject(xhr) ? xhr.status : xhr;
+		let text = _.isObject(xhr) ? xhr.responseText : xhr;
 
 		//sever parse error
 		if (err == "parsererror") {
@@ -311,7 +290,7 @@ export default {
 		//timeout
 		else if (err == "timeout" || code == 408) {
 			msg = APP.TRANS.ALERTS.SERVER_TIMEOUT;
-			log = "Core -> server timeout: " + x;
+			log = "Core -> server timeout";
 		}
 		//400 bad request
 		else if (code == 400) {
@@ -326,7 +305,7 @@ export default {
 		//404 not found
 		else if (code == 404) {
 			msg = APP.TRANS.ALERTS.NOT_FOUND;
-			log = "Core -> server, request not found: " + code;
+			log = "Core -> server request not found: " + code;
 		}
 		//method now allowed (invalid GET or POST method)
 		else if (code == 405) {
