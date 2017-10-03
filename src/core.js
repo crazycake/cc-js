@@ -128,8 +128,8 @@ export default {
 			FastClick.attach(document.body);
 
 		//load UI module
-		if (!_.isUndefined(core.modules.ui))
-			core.modules.ui.init();
+		if (!_.isUndefined(this.modules.ui))
+			this.modules.ui.init();
 
 		//ajax setup
 		this.setAjaxLoadingHandler();
