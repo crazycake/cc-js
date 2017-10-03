@@ -214,7 +214,7 @@ export default {
 		console.log("Core -> new xhr request", options);
 
 		return $.ajax(options)
-			.done(function(data) {
+			.then(function(data) {
 
 				//handle ajax response (error handling)
 				let r = s.handleAjaxResponse(data);
