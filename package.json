@@ -1,6 +1,6 @@
 {
   "name": "crazycake-js",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "author": "Nicolas Pulido <nicolas.pulido@crazycake.cl>",
   "description": "CrazyCake JS Core",
   "readme": "Run npm install, gulp is required.",
