@@ -311,7 +311,7 @@ export default {
 		}
 		else {
 			msg = text;
-			log = "Core -> server response error: " + text;
+			log = "Core -> server response exception: " + text;
 		}
 
 		console.warn(log);
@@ -404,12 +404,12 @@ export default {
 				//clear timer
 				clearTimeout(ajax_timer);
 				//waiting time to show loading box
-				ajax_timer = setTimeout(() => { ctx.isLoading = true; }, 1000);
+				ajax_timer = setTimeout(() => { ctx.loading.active = true; }, 1000);
 				return;
 			}
 			//otherwise clear timer and hide loading
 			clearTimeout(ajax_timer);
-			ctx.isLoading = false;
+			ctx.loading.active = false;
 		};
 
 		//ajax events
