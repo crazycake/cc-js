@@ -60,41 +60,6 @@
 	}
 }
 
-/**
- * Background cover image (3rd argument to use custom background to small & medium screen)
- */
-@mixin bg-cover($image-path, $attachment: fixed) {
-	background: url($image-path) no-repeat center center $attachment;
-	background-size: cover;
-}
-
-/**
- * Background image retina support
- */
-@mixin bg-retina($file, $type, $width, $height, $version:'0.1') {
-
-	background-image: url($file + '.' + $type + "?v=" + $version);
-
-	//set suffix
-	$suffix: "";
-	@if $type != "svg" {
-		$suffix: "@2x";
-	}
-	//set url
-	$url: $file + $suffix + '.' + $type + "?v=" + $version;
-
-	//MediaQueries
-	@media
-	only screen and (min-device-pixel-ratio: 2),
-	only screen and (min-resolution: 192dpi),
-	only screen and (min-resolution: 2dppx) {
-		& {
-			background-image: url($url);
-			background-size: $width $height;
-		}
-	}
-}
-
 /* Placeholders
 ---------------------------------------------------------------------------------------- */
 
