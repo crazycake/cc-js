@@ -316,7 +316,7 @@ export default {
 
 		console.warn(log);
 
-		return { code : code, error : msg };
+		return { code : code, error : err, message : msg };
 	},
 
 	/**
