@@ -226,7 +226,7 @@ export default {
 			.fail(function(xhr, textStatus) {
 
 				console.warn("Core -> xhr request failed", xhr);
-				return s.getAjaxError(xhr, textStatus);
+				return s.parseAjaxError(xhr, textStatus);
 			}).
 			always(function() {
 
@@ -251,7 +251,7 @@ export default {
 
 		//check for response error
 		if (data.status == "error")
-			return this.getAjaxError(data.code, data.error);
+			return this.parseAjaxError(data.code, data.error, data.message || null);
 
 		//redirection?
 		if (!_.isNil(data.redirect)) {
@@ -264,13 +264,14 @@ export default {
 
 	/**
 	 * Ajax Error Response Handler
-	 * @method getAjaxError
+	 * @method parseAjaxError
 	 * @param  {Object} xhr - The response object
 	 * @param  {String} err - The error string
+	 * @param  {String} msg - The message string
 	 */
-	getAjaxError(xhr, err = "") {
+	parseAjaxError(xhr, err = "", msg = null) {
 
-		let msg  = false, log = "";
+		let log  = "";
 		let code = _.isObject(xhr) ? xhr.status : xhr;
 		let text = _.isObject(xhr) ? xhr.responseText : xhr;
 
@@ -310,7 +311,7 @@ export default {
 			log = "Core -> invalid CSRF server token: " + code;
 		}
 		else {
-			msg = text;
+			msg = msg || text;
 			log = "Core -> server response exception: " + text;
 		}
 
