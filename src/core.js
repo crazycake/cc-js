@@ -186,7 +186,7 @@ export default {
 			//form data to object
 			$.each(form.serializeArray(), function() { payload[this.name] = this.value; });
 			//disable submit button
-			submit_btn = form.find('button[type="submit"]');
+			submit_btn = form.find("button");
 
 			if (submit_btn.length)
 				submit_btn.prop("disabled", true);
