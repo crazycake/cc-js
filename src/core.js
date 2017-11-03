@@ -277,7 +277,7 @@ export default {
 
 		//sever parse error
 		if (err == "parsererror") {
-			msg = APP.TRANS.ALERTS.INTERNAL_ERROR;
+			msg = APP.TRANS.ALERTS.SERVER_ERROR;
 			log = "Core -> server parse error: " + text;
 		}
 		//timeout
@@ -285,13 +285,8 @@ export default {
 			msg = APP.TRANS.ALERTS.SERVER_TIMEOUT;
 			log = "Core -> server timeout";
 		}
-		//400 bad request
-		else if (code == 400) {
-			msg = APP.TRANS.ALERTS.BAD_REQUEST;
-			log = "Core -> server bad request: " + code;
-		}
-		//403 access forbidden
-		else if (code == 403) {
+		//401 unauthorized
+		else if (code == 401) {
 			msg = APP.TRANS.ALERTS.ACCESS_FORBIDDEN;
 			log = "Core -> server access forbidden: " + code;
 		}
@@ -299,11 +294,6 @@ export default {
 		else if (code == 404) {
 			msg = APP.TRANS.ALERTS.NOT_FOUND;
 			log = "Core -> server request not found: " + code;
-		}
-		//method now allowed (invalid GET or POST method)
-		else if (code == 405) {
-			msg = APP.TRANS.ALERTS.NOT_FOUND;
-			log = "Core -> server method now allowed: " + code;
 		}
 		//invalid CSRF token
 		else if (code == 498) {
