@@ -12,4 +12,5 @@
 
 # Node
 node_modules
+package.lock
 .eslintrc
