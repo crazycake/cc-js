@@ -430,7 +430,7 @@ export default {
 		console.warn(log);
 
 		if(message)
-			core.ui.showAlert(message, "alert");
+			core.ui.showAlert(message, "warning");
 	},
 
 	/**
