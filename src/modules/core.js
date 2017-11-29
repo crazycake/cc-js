@@ -356,7 +356,7 @@ export default {
 		//check for ajax error
 		if (res.status == "error") {
 
-			this.handleAjaxError(res.code, res.error);
+			this.handleAjaxError(res.code, res.error, res.message || null);
 			return false;
 		}
 		//app errors
@@ -382,11 +382,12 @@ export default {
 	 * @method handleAjaxError
 	 * @param  {Object} x - The jQuery Response object
 	 * @param  {String} error - The jQuery error object
+	 * @param  {String} message - Iput message
 	 */
-	handleAjaxError(x, error) {
+	handleAjaxError(x, error, message = false) {
 
 		//set message null as default
-		let message = false, log = "";
+		let log = "";
 
 		let code = _.isObject(x) ? x.status : x;
 		let text = _.isObject(x) ? x.responseText : code;
@@ -403,23 +404,13 @@ export default {
 		}
 		//400 bad request
 		else if (code == 400) {
-			message = APP.TRANS.ALERTS.BAD_REQUEST;
-			log     = "Core -> bad request: " + code;
-		}
-		//403 access forbidden
-		else if (code == 403) {
-			message = APP.TRANS.ALERTS.ACCESS_FORBIDDEN;
+			message = message || APP.TRANS.ALERTS.BAD_REQUEST;
 			log     = "Core -> access forbidden: " + code;
 		}
 		//404 not found
 		else if (code == 404) {
 			message = APP.TRANS.ALERTS.NOT_FOUND;
 			log     = "Core -> not found: " + code;
-		}
-		//method now allowed (invalid GET or POST method)
-		else if (code == 405) {
-			message = APP.TRANS.ALERTS.NOT_FOUND;
-			log     = "Core -> method now allowed: " + code;
 		}
 		//invalid CSRF token
 		else if (code == 498) {
