@@ -289,7 +289,7 @@ export default {
 		return P.resolve(
 			$.ajax(options)
 			//handle fail event for jQuery ajax request
-			.fail(s.handleAjaxError)
+			.fail((x, error) => { s.handleAjaxError(x, error); })
 		)
 		//handle response
 		.then((data) => {
@@ -335,7 +335,7 @@ export default {
 		console.log("Core -> handling xhr response: ", res);
 
 		var s = this;
-		var onErrorResponse = function() {
+		var handleAlert = function(message, type) {
 
 			let onCloseFn = null, onClickFn = null;
 
@@ -350,19 +350,21 @@ export default {
 			 }
 
 			//call the alert message
-			s.ui.showAlert(res.payload, res.type, onCloseFn, onClickFn);
+			s.ui.showAlert(message, type, onCloseFn, onClickFn);
 		};
 
-		//check for ajax error
+		//check for server errors
 		if (res.status == "error") {
 
-			this.handleAjaxError(res.code, res.error, res.message);
+			let message = this.handleAjaxError(res.code, res.error, res.message, false);
+
+			handleAlert(message || res.message, res.type || "warning");
 			return false;
 		}
 		//app errors
 		else if (!_.isUndefined(res.type)) {
 
-			onErrorResponse();
+			handleAlert(res.payload || res.message, res.type || "info");
 			return false;
 		}
 		//redirection
@@ -384,7 +386,7 @@ export default {
 	 * @param  {String} error - The jQuery error object
 	 * @param  {String} message - Iput message
 	 */
-	handleAjaxError(x, error, message = false) {
+	handleAjaxError(x, error, message = false, show_alert = true) {
 
 		//set message null as default
 		let log = "";
@@ -429,8 +431,10 @@ export default {
 		//show the alert message
 		console.warn(log);
 
-		if(message)
+		if(show_alert)
 			core.ui.showAlert(message, "warning");
+
+		return message;
 	},
 
 	/**
