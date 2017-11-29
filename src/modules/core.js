@@ -356,7 +356,7 @@ export default {
 		//check for ajax error
 		if (res.status == "error") {
 
-			this.handleAjaxError(res.code, res.error, res.message || null);
+			this.handleAjaxError(res.code, res.error, res.message);
 			return false;
 		}
 		//app errors
@@ -405,7 +405,12 @@ export default {
 		//400 bad request
 		else if (code == 400) {
 			message = message || APP.TRANS.ALERTS.BAD_REQUEST;
-			log     = "Core -> access forbidden: " + code;
+			log     = "Core -> bad request [" + code +"]:" + message;
+		}
+		//401 unauthorized
+		else if (code == 401) {
+			message = APP.TRANS.ALERTS.ACCESS_FORBIDDEN;
+			log     = "Core -> unauthorize: " + code;
 		}
 		//404 not found
 		else if (code == 404) {
@@ -425,7 +430,7 @@ export default {
 		console.warn(log);
 
 		if(message)
-			core.ui.showAlert(message, "warning");
+			core.ui.showAlert(message, "alert");
 	},
 
 	/**
