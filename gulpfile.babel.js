@@ -12,13 +12,9 @@ import yargs      from "yargs";
 import gulp  from "gulp";
 import gutil from "gulp-util";
 
-//get argument
-let environment = yargs.argv.e;
-let bundle_arg  = yargs.argv.b;
-
-//check args
-environment = (typeof environment != "undefined") ? environment : "production";
-bundle_arg = (typeof bundle_arg != "undefined") ? bundle_arg : "cc";
+//get arguments / defaults
+let environment = yargs.argv.e || "production";
+let bundle_arg  = yargs.argv.b || "cc";
 
 //set consts
 const bundle_name =  bundle_arg;
@@ -40,15 +36,15 @@ const browserify_conf = {
 
 //set browserify object
 let b = watchify(browserify(browserify_conf))
-				//es6 transpiler
-				.transform(babelify, {
-					presets : ["es2015"],
-					ignore  : "./src/plugins/"
-				})
-				//minify
-				.transform({
-					global : true
-				}, "uglifyify");
+		//es6 transpiler
+		.transform(babelify, {
+			presets : ["es2015"],
+			ignore  : "./src/plugins/"
+		})
+		//minify
+		.transform({
+			global : true
+		}, "uglifyify");
 
 //require bundle with expose name
 b.require([bundle_src], { expose : bundle_name });
