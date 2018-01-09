@@ -56,6 +56,13 @@
 /* Placeholders
 ---------------------------------------------------------------------------------------- */
 
+%absolute-center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 %absolute-block {
 	display: block;
 	position: absolute;
