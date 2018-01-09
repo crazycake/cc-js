@@ -4,36 +4,34 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
-	<title>cc-js test</title>
+	<title>Test</title>
 
 	<!-- Global vars -->
 	<script>
 		APP = {
-			dev               : false,
-			version           : "0.1.0",
-			name              : "Webapp",
-			baseUrl           : "http://crazycake.tech/",
-			staticUrl         : "http://crazycake.tech/",
-			UA : {
-				platform     : "Macintosh",
+			dev       : false,
+			version   : "0.0.1",
+			name      : "my app",
+			baseUrl   : "http://crazycake.tech/",
+			staticUrl : "http://crazycake.tech/",
+			UA        : {
+				platform     : "Linux",
 				browser      : "Chrome",
-				version      : "56.0.2924.87",
-				shortVersion : "56",
+				version      : "62.0.3202.94",
+				shortVersion : "62",
 				isMobile     : false,
-				isLegacy     : false,
-				lang         : "es",
-				tokenKey     : "N3NsZDV6L1hUS0w1ZlliRGx5Zzlxdz09",
-				token        : "TXBGamJNRDhESFQ4WDE0VDBEOWtVQT09"
+				tokenKey     : "azlzcXZzWG5oWExRSXJMalFMNjZQUT09",
+				token        : "STRJeXRyRUJzZ1lBam43Z2N6MFVaQT09"
 			},
 			TRANS : {
 				ALERTS : {
-					INTERNAL_ERROR   : "Oops, ha ocurrido un problema, solucionaremos esto a la brevedad.",
-					SERVER_TIMEOUT   : "Hemos perdido la comunicación, prueba revisando tu conexión a Internet.",
-					CSRF             : "Esta página ha estado inactiva por mucho tiempo, haz\n <a href=\"javascript:location.reload();\">click aquí/a> para refrescarla.",
-					NOT_FOUND        : "Oops, el enlace está roto. Por favor inténtalo más tarde.",
-					BAD_REQUEST      : "Lo sentimos, no hemos logrado procesar tu petición. Intenta refrescando esta página.",
-					ACCESS_FORBIDDEN : "Tu sesión ha caducado, por favor <a href=\"./signIn\">ingresa nuevamente aquí/a>.",
-					LOADING          : "cargando..."
+					SERVER_ERROR     : "Ha ocurrido algo inesperado, por favor inténtalo más tarde.",
+					SERVER_TIMEOUT   : "Sin conexión. Revisa tu conexión a Internet e inténtalo de nuevo.",
+					NOT_FOUND        : "Este enlace está roto, por favor inténtalo más tarde.",
+					ACCESS_FORBIDDEN : "Tu sesión ha caducado, debes iniciar sesión nuevamente.",
+					CSRF             : "Esta página ha estado inactiva por mucho tiempo, refréscala haciendo <a href=\"javascript:location.reload();\">click aquí</a>.",
+					LOADING          : "cargando ...",
+					REDIRECTING      : "redireccionado ..."
 				}
 			}
 		};
@@ -49,15 +47,15 @@
 		</h1>
 	</div>
 
-	<!-- Flash Messages -->
+	<!-- flash Messages -->
 	<div id="app-flash" class="hide">
 	</div>
 
-	<!-- Scripts -->
+	<!-- scripts -->
 	<script type="text/javascript" src="dist/js/cc.bundle.min.js"></script>
 	<script>core.start();</script>
 
-	<!-- No script fallback -->
+	<!-- no script fallback -->
 	<noscript class="app-no-js text-center">
 		This site requires Javascript enabled in your browser.
 	</noscript>
