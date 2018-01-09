@@ -12,5 +12,4 @@
 
 # Node
 node_modules
-package.lock
-.eslintrc
+package-lock.json
