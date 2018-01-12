@@ -383,9 +383,10 @@ export default {
 	/**
 	 * jQuery Ajax Handler for loading state
 	 * @method newAjaxLoadingHandler
-	 * @param  {ctx} ctx - The instance context for loading state
+	 * @param  {Object} ctx - The instance context for loading state
+	 * @param  {Int} t - The time interval
 	 */
-	setAjaxLoadingHandler(ctx) {
+	setAjaxLoadingHandler(ctx, seconds = 1000) {
 
 		let ajax_timer;
 		//ajax handler, show loading if ajax takes more than a X secs, only for POST request
@@ -395,7 +396,7 @@ export default {
 				//clear timer
 				clearTimeout(ajax_timer);
 				//waiting time to show loading box
-				ajax_timer = setTimeout(() => { ctx.loading.active = true; }, 1000);
+				ajax_timer = setTimeout(() => { ctx.loading.active = true; }, seconds);
 				return;
 			}
 			//otherwise clear timer and hide loading
