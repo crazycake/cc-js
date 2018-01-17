@@ -275,13 +275,13 @@ export default {
 		let code = _.isObject(xhr) ? xhr.status : xhr;
 		let text = _.isObject(xhr) ? xhr.responseText : xhr;
 
-		//sever parse error
-		if (err == "parsererror") {
+		//sever error
+		if (code == 500 || err == "parsererror") {
 			msg = APP.TRANS.ALERTS.SERVER_ERROR;
-			log = "Core -> server parse error: " + text;
+			log = "Core -> server error: " + text;
 		}
 		//timeout
-		else if (err == "timeout" || code == 408) {
+		else if (code == 408 || err == "timeout") {
 			msg = APP.TRANS.ALERTS.SERVER_TIMEOUT;
 			log = "Core -> server timeout";
 		}
@@ -390,7 +390,7 @@ export default {
 
 		let ajax_timer;
 		//ajax handler, show loading if ajax takes more than a X secs, only for POST request
-		let handler = (opts, set_loading) => {
+		let handler = function(opts, set_loading) {
 
 			if (set_loading) {
 				//clear timer
