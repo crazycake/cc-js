@@ -221,7 +221,7 @@ export default {
 				if (r || r.error)
 					return r;
 
-				return !_.isNil(data.payload) ? data.payload : data;
+				return !_.isUndefined(data.payload) ? data.payload : data;
 			})
 			.fail(function(xhr, textStatus) {
 
