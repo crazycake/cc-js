@@ -214,21 +214,28 @@ export default {
 		console.log("Core -> new xhr request", options);
 
 		return $.ajax(options)
-			.then(function(data) {
+			.then((data) => {
 
-				//parse ajax response (error handling)
-				let r = s.handleAjaxResponse(data);
-				if (r || r.error)
-					return r;
+				//check response
+				console.log("Core -> parsing ajax response [" + (data.status || 0) + "]", data);
 
-				return !_.isUndefined(data.payload) ? data.payload : data;
+				//check for response error
+				if (data.status == "error")
+					return s.parseAjaxError(data.code || 400, 
+											data.error || "not defined", 
+											data.message || data.msg || null);
+				//redirection?
+				if (data.redirect)
+					return location.href = s.baseUrl(data.redirect);
+
+				//success
+				return data.payload || data.response || {};
 			})
-			.fail(function(xhr, textStatus) {
+			.fail((xhr, textStatus) => {
 
-				console.warn("Core -> xhr request failed", xhr);
-				return s.parseAjaxError(xhr, textStatus);
+				console.warn("Core -> ajax request failed!", textStatus, xhr.responseText);
 			}).
-			always(function() {
+			always(() => {
 
 				//re-enable button?
 				if (submit_btn)
@@ -237,85 +244,43 @@ export default {
 	},
 
 	/**
-	 * Ajax Response Handler, checks if response has errors.
-	 * Also can set event-callback function in case the response is an error.
-	 * @method handleAjaxResponse
-	 * @param  {Object} data - The response data object
-	 */
-	handleAjaxResponse(data) {
-
-		console.log("Core -> handling xhr response: ", data);
-
-		if (!_.isObject(data))
-			return false;
-
-		//check for response error
-		if (data.status == "error")
-			return this.parseAjaxError(data.code || 400, 
-									   data.error || "n/a", 
-									   data.message || data.msg || null);
-
-		//redirection?
-		if (!_.isNil(data.redirect)) {
-			location.href = this.baseUrl(data.redirect);
-			return true;
-		}
-
-		return false;
-	},
-
-	/**
 	 * Ajax Error Response Handler
 	 * @method parseAjaxError
-	 * @param  {Object} xhr - The response object
-	 * @param  {String} err - The error string
-	 * @param  {String} msg - The message string
+	 * @param  {Int} code - The code error
+	 * @param  {String} error - The error string
+	 * @param  {String} message - The message string
 	 */
-	parseAjaxError(xhr, err = "", msg = null) {
+	parseAjaxError(code, error, message) {
 
-		let log  = "";
-		let code = _.isObject(xhr) ? xhr.status : xhr;
-		let text = _.isObject(xhr) ? xhr.responseText : xhr;
+		let log = "";
 
 		//sever error
-		if (code == 500 || err == "parsererror") {
+		if (code == 500 || error == "parsererror") {
 
-			msg = APP.TRANS.ALERTS.SERVER_ERROR;
-			log = "Core -> server error: " + text;
+			message = APP.TRANS.ALERTS.SERVER_ERROR;
 		}
 		//timeout
-		else if (code == 408 || err == "timeout") {
+		else if (code == 408 || error == "timeout") {
 
-			msg = APP.TRANS.ALERTS.SERVER_TIMEOUT;
-			log = "Core -> server timeout";
+			message = APP.TRANS.ALERTS.SERVER_TIMEOUT;
 		}
 		//401 unauthorized
 		else if (code == 401) {
 
-			msg = APP.TRANS.ALERTS.ACCESS_FORBIDDEN;
-			log = "Core -> server access forbidden: " + code;
+			message = APP.TRANS.ALERTS.ACCESS_FORBIDDEN;
 		}
 		//404 not found
 		else if (code == 404) {
 
-			msg = APP.TRANS.ALERTS.NOT_FOUND;
-			log = "Core -> server request not found: " + code;
+			message = APP.TRANS.ALERTS.NOT_FOUND;
 		}
 		//invalid CSRF token
 		else if (code == 498) {
 
-			msg = APP.TRANS.ALERTS.CSRF;
-			log = "Core -> invalid CSRF server token: " + code;
+			message = APP.TRANS.ALERTS.CSRF;
 		}
-		else {
-			
-			msg = msg || text;
-			log = "Core -> server response exception: " + text;
-		}
-
-		console.warn(log);
-
-		return { code : code, error : err, message : msg };
+	
+		return { code : code, error : error, message : message };
 	},
 
 	/**
