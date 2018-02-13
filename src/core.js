@@ -216,7 +216,7 @@ export default {
 		return $.ajax(options)
 			.then(function(data) {
 
-				//handle ajax response (error handling)
+				//parse ajax response (error handling)
 				let r = s.handleAjaxResponse(data);
 				if (r || r.error)
 					return r;
@@ -251,7 +251,7 @@ export default {
 
 		//check for response error
 		if (data.status == "error")
-			return this.parseAjaxError(data.code, data.error, data.message || null);
+			return this.parseAjaxError(data.code, data.error, data.message || data.msg || null);
 
 		//redirection?
 		if (!_.isNil(data.redirect)) {
