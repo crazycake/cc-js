@@ -251,7 +251,9 @@ export default {
 
 		//check for response error
 		if (data.status == "error")
-			return this.parseAjaxError(data.code, data.error, data.message || data.msg || null);
+			return this.parseAjaxError(data.code || 400, 
+									   data.error || "n/a", 
+									   data.message || data.msg || null);
 
 		//redirection?
 		if (!_.isNil(data.redirect)) {
