@@ -279,30 +279,36 @@ export default {
 
 		//sever error
 		if (code == 500 || err == "parsererror") {
+
 			msg = APP.TRANS.ALERTS.SERVER_ERROR;
 			log = "Core -> server error: " + text;
 		}
 		//timeout
 		else if (code == 408 || err == "timeout") {
+
 			msg = APP.TRANS.ALERTS.SERVER_TIMEOUT;
 			log = "Core -> server timeout";
 		}
 		//401 unauthorized
 		else if (code == 401) {
+
 			msg = APP.TRANS.ALERTS.ACCESS_FORBIDDEN;
 			log = "Core -> server access forbidden: " + code;
 		}
 		//404 not found
 		else if (code == 404) {
+
 			msg = APP.TRANS.ALERTS.NOT_FOUND;
 			log = "Core -> server request not found: " + code;
 		}
 		//invalid CSRF token
 		else if (code == 498) {
+
 			msg = APP.TRANS.ALERTS.CSRF;
 			log = "Core -> invalid CSRF server token: " + code;
 		}
 		else {
+			
 			msg = msg || text;
 			log = "Core -> server response exception: " + text;
 		}
