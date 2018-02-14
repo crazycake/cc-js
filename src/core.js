@@ -229,7 +229,7 @@ export default {
 					return location.href = s.baseUrl(data.redirect);
 
 				//success
-				return data.payload || data.response || {};
+				return data.payload || {};
 			})
 			.fail((xhr, textStatus) => {
 
@@ -362,7 +362,7 @@ export default {
 	setAjaxLoadingHandler(ctx, seconds = 1000) {
 
 		let ajax_timer;
-		//ajax handler, show loading if ajax takes more than a X secs, only for POST request
+		//ajax handler, show loading if ajax takes more than a X secs
 		let handler = function(opts, set_loading) {
 
 			if (set_loading) {
