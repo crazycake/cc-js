@@ -233,7 +233,7 @@ export default {
 			})
 			.fail((xhr, textStatus) => {
 
-				console.warn("Core -> ajax request failed!", textStatus, xhr.responseText);
+				console.warn("Core -> ajax request failed [" + options.url + "]", textStatus, xhr.responseText || "none");
 			}).
 			always(() => {
 
