@@ -28,9 +28,9 @@
 ---------------------------------------------------------------------------------------- */
 
 /**
- * Load Font, outputs fontface rule
+ * Load Font, outputs font-face rule
  */
-@mixin load-font($name, $path, $weight: null, $style: null, $exts: ttf woff woff2) {
+@mixin load-font($name, $path, $weight: null, $style: null, $exts: woff2 woff ttf) {
 
 	$src: null;
 	$font-path : "../fonts/" + $path + "/" + $path;
