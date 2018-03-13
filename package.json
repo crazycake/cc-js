@@ -30,7 +30,6 @@
     "gulp-cli": "^1.2.2",
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
-    "lodash.assign": "^4.2.0",
     "uglifyify": "^3.0.4",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.9.0",

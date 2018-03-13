@@ -9,7 +9,7 @@ export default {
 
 	//defaults
 	config : {
-		api_version           : "v2.5",                  // openGraph version
+		api_version           : "v2.10",                 // openGraph version
 		lang                  : "en",             		 // set SDK lang (self property)
 		dom_class             : "app-btn-fb",            // jQuery selector
 		graph_url             : "//graph.facebook.com/", // openGraph URL

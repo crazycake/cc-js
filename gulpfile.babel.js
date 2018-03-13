@@ -5,7 +5,6 @@
 //required modules
 import babelify   from "babelify";
 import browserify from "browserify";
-import assign     from "lodash.assign";
 import source     from "vinyl-source-stream";
 import watchify   from "watchify";
 import yargs      from "yargs";
@@ -40,7 +39,7 @@ const browserify_conf = {
 };
 
 //set browserify object
-var webpack = watchify(browserify(assign({}, watchify.args, browserify_conf)))
+var webpack = watchify(browserify(Object.assign({}, watchify.args, browserify_conf)))
 				//es6 transpiler
 				.transform(babelify, {
 					presets : ["es2015"],
