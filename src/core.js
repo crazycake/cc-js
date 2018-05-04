@@ -1,7 +1,6 @@
 /**
  * Core Module
  * Required scope vars: {APP}
- * @module Core
  */
 
 export default {
@@ -36,7 +35,7 @@ export default {
 		if (!modules.length)
 			return
 
-		for (let mod in modules) {
+		for (let mod of modules) {
 
 			if (mod.name)
 				this.modules[mod.name] = mod
