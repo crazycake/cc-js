@@ -140,7 +140,7 @@ export default {
 			submit_btn = null
 
 		//check form element has a form data-invalid attribute
-		if (!form) {
+		if (form) {
 
 			//check for a non jquery object
 			if (form instanceof jQuery === false)
