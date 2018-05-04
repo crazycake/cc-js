@@ -89,10 +89,6 @@ export default {
 		if (APP.UA && APP.UA.isMobile)
 			FastClick.attach(document.body)
 
-		//load UI module
-		if (_.isObject(this.modules.ui))
-			this.modules.ui.init()
-
 		//look for server flash messages
 		this.setFlashAlerts()
 
