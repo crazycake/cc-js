@@ -66,11 +66,12 @@ export default {
 
 		let mod_name, mod, data;
 
-		//1) call inits
+		// call inits
 		for (mod_name in modules) {
 
 			//check module exists
 			if (_.isUndefined(this.modules[mod_name])) {
+
 				console.warn("Core -> Attempting to load an undefined module (" + mod_name + ").");
 				continue;
 			}
@@ -82,29 +83,6 @@ export default {
 			//check if module has init method & call it
 			if (_.isFunction(mod.init))
 				mod.init(data);
-		}
-
-		//2) load viewModels
-		for (mod_name in modules) {
-
-			//check module exists
-			if (_.isUndefined(this.modules[mod_name]))
-				continue;
-
-			//get module
-			mod = this.modules[mod_name];
-
-			//bind model to DOM?
-			if (!_.isObject(mod.vm))
-				continue;
-
-			if(typeof Vue == "undefined")
-				return console.warn("Core -> Vue has not loaded!");
-
-			console.log("Core -> New Vue instance for module: " + mod_name, mod.vm);
-
-			//set new Vue instance (object prop updated)
-			mod.vm = new Vue(mod.vm);
 		}
 
 		//3) load UI
