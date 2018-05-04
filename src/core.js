@@ -13,12 +13,6 @@ export default {
 	modules : {},
 
 	/**
-	 * @property dateFormat - Server Date format
-	 * @type {String}
-	 */
-	dateFormat : "YYYY-MM-DD HH:mm:ss",
-
-	/**
 	 * @property timeout - XHR Max Timeout (seconds)
 	 * @type {Int}
 	 */
@@ -40,14 +34,12 @@ export default {
 	setModules(modules = []) {
 
 		if (!modules.length)
-			return;
+			return
 
-		for (let i = 0; i < modules.length; i++) {
+		for (let mod in modules) {
 
-			let mod = modules[i];
-
-			if (typeof mod.name != "undefined")
-				this.modules[mod.name] = mod;
+			if (mod.name)
+				this.modules[mod.name] = mod
 		}
 	},
 
@@ -58,35 +50,34 @@ export default {
 	 */
 	start(modules = []) {
 
-		console.log("Core -> Starting");
+		console.log("Core -> Starting")
 
 		//Check that App Global scope vars are defined
-		if (typeof APP == "undefined")
-			throw new Error("Core -> APP global scoped var is not defined!");
+		if (APP == undefined) throw new Error("Core -> APP global scoped var is not defined!")
 
-		let mod_name, mod, data;
+		let mod_name, mod, data
 
 		// call inits
 		for (mod_name in modules) {
 
 			//check module exists
-			if (_.isUndefined(this.modules[mod_name])) {
+			if (!this.modules[mod_name]) {
 
-				console.warn("Core -> Attempting to load an undefined module (" + mod_name + ").");
-				continue;
+				console.warn("Core -> Attempting to load an undefined module (" + mod_name + ").")
+				continue
 			}
 
 			//get module
-			mod  = this.modules[mod_name];
-			data = modules[mod_name];
+			mod  = this.modules[mod_name]
+			data = modules[mod_name]
 
 			//check if module has init method & call it
 			if (_.isFunction(mod.init))
-				mod.init(data);
+				mod.init(data)
 		}
 
 		//3) load UI
-		this.loadUI();
+		this.loadUI()
 	},
 
 	/**
@@ -96,21 +87,21 @@ export default {
 	loadUI() {
 
 		//load fast click for mobile
-		if (!_.isNil(APP.UA) && APP.UA.isMobile)
-			FastClick.attach(document.body);
+		if (APP.UA && APP.UA.isMobile)
+			FastClick.attach(document.body)
 
 		//load UI module
-		if (!_.isUndefined(this.modules.ui))
-			this.modules.ui.init();
+		if (_.isObject(this.modules.ui))
+			this.modules.ui.init()
 
 		//look for server flash messages
-		this.setFlashAlerts();
+		this.setFlashAlerts()
 
 		//css async loading
-		if(!_.isNil(APP.cssLazy) && APP.cssLazy) {
+		if(APP.cssLazy) {
 
-			console.log("Core -> Loading CSS file (async)", APP.cssLazy);
-			loadCSS(APP.cssLazy);
+			console.log("Core -> Loading CSS file (async)", APP.cssLazy)
+			loadCSS(APP.cssLazy)
 		}
 	},
 
@@ -118,22 +109,22 @@ export default {
 	* Helper Get BaseUrl
 	* @method baseUrl
 	* @param  {String} uri - Append URI if defined
-	* @return string
+	* @return String
 	*/
 	baseUrl(uri = "") {
 
-		return APP.baseUrl + uri;
+		return APP.baseUrl + uri
 	},
 
 	/**
 	* Helper Get StaticUrl
 	* @method staticUrl
 	* @param  {String} uri - Append URI if defined
-	* @return string
+	* @return String
 	*/
 	staticUrl(uri = "") {
 
-		return APP.staticUrl + uri;
+		return APP.staticUrl + uri
 	},
 
 	/**
@@ -147,78 +138,77 @@ export default {
 	ajaxRequest(request = null, form = null, csrf = true) {
 
 		//validation, request is required
-		if (_.isNull(request))
-			throw new Error("Core -> ajaxRequest: invalid input request object");
+		if (!request) throw new Error("Core -> ajaxRequest: invalid input request object")
 
 		//define payload
 		let payload    = {},
-			submit_btn = null;
+			submit_btn = null
 
 		//check form element has a form data-invalid attribute
-		if (!_.isNull(form)) {
+		if (!form) {
 
 			//check for a non jquery object
 			if (form instanceof jQuery === false)
-				form = $(form);
+				form = $(form)
 
 			//form data to object
-			$.each(form.serializeArray(), function() { payload[this.name] = this.value; });
+			$.each(form.serializeArray(), function() { payload[this.name] = this.value })
 			//disable submit button
-			submit_btn = form.find("button");
+			submit_btn = form.find("button")
 
 			if (submit_btn.length)
-				submit_btn.prop("disabled", true);
+				submit_btn.prop("disabled", true)
 		}
 
 		//append CSRF token?
 		if (csrf && request.method == "POST" && !_.isNil(APP.UA.tokenKey))
-			payload[APP.UA.tokenKey] = APP.UA.token;
+			payload[APP.UA.tokenKey] = APP.UA.token
 
 		//set options
 		let options = _.assign({
 			method   : "GET",
 			timeout  : this.timeout,
 			dataType : "json",
-		}, request);
+		}, request)
 
 		//set payload
-		options.data = _.assign(payload, request.data);
+		options.data = _.assign(payload, request.data)
 
-		if(!_.isNil(options.uri))
-			options.url = this.baseUrl(options.uri);
+		if(options.uri)
+			options.url = this.baseUrl(options.uri)
 
-		let s = this;
+		let s = this
 
-		console.log("Core -> new xhr request", options);
+		console.log("Core -> new xhr request", options)
 
 		return $.ajax(options)
 			.then((data) => {
 
 				//check response
-				console.log("Core -> parsing ajax response [" + (data.status || 0) + "]", data);
+				console.log("Core -> parsing ajax response [" + (data.status || 0) + "]", data)
 
 				//check for response error
 				if (data.status == "error")
 					return s.parseAjaxError(data.code || 400, 
 											data.error || "not defined", 
-											data.message || data.msg || null);
+											data.message || data.msg || null)
 				//redirection?
 				if (data.redirect)
-					return location.href = s.baseUrl(data.redirect);
+					return location.href = s.baseUrl(data.redirect)
 
 				//success
-				return data.payload || {};
+				return data.payload || {}
 			})
 			.fail((xhr, textStatus) => {
 
-				console.warn("Core -> ajax request failed [" + options.url + "]", textStatus, xhr.responseText || "none");
+				console.warn("Core -> ajax request failed [" + options.url + "]", textStatus, xhr.responseText || "none")
 			}).
 			always(() => {
 
 				//re-enable button?
 				if (submit_btn)
-					submit_btn.prop("disabled", false);
-			});
+					submit_btn.prop("disabled", false)
+			})
 	},
 
 	/**
@@ -227,38 +217,39 @@ export default {
 	 * @param  {Int} code - The code error
 	 * @param  {String} error - The error string
 	 * @param  {String} message - The message string
+	 * @return {Object} 
 	 */
 	parseAjaxError(code, error, message) {
 
-		let log = "";
+		let log = ""
 
 		//sever error
 		if (code == 500 || error == "parsererror") {
 
-			message = APP.TRANS.ALERTS.SERVER_ERROR;
+			message = APP.TRANS.ALERTS.SERVER_ERROR
 		}
 		//timeout
 		else if (code == 408 || error == "timeout") {
 
-			message = APP.TRANS.ALERTS.SERVER_TIMEOUT;
+			message = APP.TRANS.ALERTS.SERVER_TIMEOUT
 		}
 		//401 unauthorized
 		else if (code == 401) {
 
-			message = APP.TRANS.ALERTS.ACCESS_FORBIDDEN;
+			message = APP.TRANS.ALERTS.ACCESS_FORBIDDEN
 		}
 		//404 not found
 		else if (code == 404) {
 
-			message = APP.TRANS.ALERTS.NOT_FOUND;
+			message = APP.TRANS.ALERTS.NOT_FOUND
 		}
 		//invalid CSRF token
 		else if (code == 498) {
 
-			message = APP.TRANS.ALERTS.CSRF;
+			message = APP.TRANS.ALERTS.CSRF
 		}
 	
-		return { code : code, error : error, message : message };
+		return { code : code, error : error, message : message }
 	},
 
 	/**
@@ -271,18 +262,18 @@ export default {
 	getQueryString(name, url = false) {
 
 		if (!url)
-			url = window.location.href;
+			url = window.location.href
 
 		let regex   = new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"),
-			results = regex.exec(url);
+			results = regex.exec(url)
 
 		if (!results)
-			return null;
+			return null
 
 		if (!results[2])
-			return "";
+			return ""
 
-		return decodeURIComponent(results[2].replace(/\+/g, " "));
+		return decodeURIComponent(results[2].replace(/\+/g, " "))
 	},
 
 	/**
@@ -297,13 +288,13 @@ export default {
 	resizedImagePath(url = "", key = "TN") {
 
 		let regex   = /\.([0-9a-z]+)(?:[\?#]|$)/i,
-			new_url = url.replace(regex, "_" + key + ".$1?");
+			new_url = url.replace(regex, "_" + key + ".$1?")
 
 		//remove single question marks
 		if(new_url[new_url.length - 1] == "?")
-			new_url = new_url.substring(0, new_url.length - 1);
+			new_url = new_url.substring(0, new_url.length - 1)
 
-		return new_url;
+		return new_url
 	},
 
 	/**
@@ -315,51 +306,52 @@ export default {
 	 */
 	preloadImages(image_path, indexes) {
 
-		if (_.isUndefined(indexes) || indexes === 0)
-			indexes = 1;
+		if (!indexes || indexes === 0)
+			indexes = 1
 
-		let objects = [];
+		let objects = []
 
 		//preload images
 		for (let i = 0; i < indexes; i++) {
 			//create new image object
-			objects[i] = new Image();
+			objects[i] = new Image()
 			//if object has a '$' symbol replace with index
-			objects[i].src = image_path.replace("$", (i+1));
+			objects[i].src = image_path.replace("$", (i+1))
 		}
 
-		return objects;
+		return objects
 	},
 
 	/**
 	 * jQuery Ajax Handler for loading state
 	 * @method newAjaxLoadingHandler
 	 * @param  {Object} ctx - The instance context for loading state
-	 * @param  {Int} t - The time interval
+	 * @param  {Int} seconds - Interval time in seconds
 	 */
 	setAjaxLoadingHandler(ctx, seconds = 1000) {
 
-		let ajax_timer;
+		let ajax_timer
 		//ajax handler, show loading if ajax takes more than a X secs
 		let handler = function(opts, set_loading) {
 
 			if (set_loading) {
 				//clear timer
-				clearTimeout(ajax_timer);
+				clearTimeout(ajax_timer)
 				//waiting time to show loading box
-				ajax_timer = setTimeout(() => { ctx.loading.active = true; }, seconds);
-				return;
+				ajax_timer = setTimeout(() => { ctx.loading.active = true }, seconds)
+				return
 			}
+			
 			//otherwise clear timer and hide loading
-			clearTimeout(ajax_timer);
-			ctx.loading.active = false;
-		};
+			clearTimeout(ajax_timer)
+			ctx.loading.active = false
+		}
 
 		//ajax events
 		$(document)
-		 .ajaxSend((e, xhr, opts)     => { handler(opts, true);  })
-		 .ajaxError((e, xhr, opts)    => { handler(opts, false); })
-		 .ajaxComplete((e, xhr, opts) => { handler(opts, false); });
+		 .ajaxSend((e, xhr, opts)     => { handler(opts, true)  })
+		 .ajaxError((e, xhr, opts)    => { handler(opts, false) })
+		 .ajaxComplete((e, xhr, opts) => { handler(opts, false) })
 	},
 
 	/**
@@ -368,15 +360,15 @@ export default {
 	 */
 	setFlashAlerts() {
 
-		let messages = $("#app-flash");
+		let messages = $("#app-flash")
 
 		if (!messages.length)
-			return;
+			return
 
-		let s = this;
+		let s = this
 		messages.children("div").each(function() {
 
-			s.flashAlerts.push({ content : $(this).html(), type : $(this).attr("class") });
-		});
+			s.flashAlerts.push({ content : $(this).html(), type : $(this).attr("class") })
+		})
 	}
-};
+}
