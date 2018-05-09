@@ -93,7 +93,7 @@ export default {
 		this.setFlashAlerts()
 
 		//css async loading
-		if(APP.cssLazy) {
+		if (APP.cssLazy) {
 
 			console.log("Core -> Loading CSS file (async)", APP.cssLazy)
 			loadCSS(APP.cssLazy)
@@ -169,7 +169,7 @@ export default {
 		//set payload
 		options.data = _.assign(payload, request.data)
 
-		if(options.uri)
+		if (options.uri)
 			options.url = this.baseUrl(options.uri)
 
 		let s = this
@@ -286,7 +286,7 @@ export default {
 			new_url = url.replace(regex, "_" + key + ".$1?")
 
 		//remove single question marks
-		if(new_url[new_url.length - 1] == "?")
+		if (new_url[new_url.length - 1] == "?")
 			new_url = new_url.substring(0, new_url.length - 1)
 
 		return new_url
