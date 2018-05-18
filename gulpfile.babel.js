@@ -46,7 +46,7 @@ let b = watchify(browserify(browserify_conf))
 			global : true
 		}, "uglifyify");
 
-//require bundle with expose name
+//require bundle with expose name, enables require("bundle_name")
 b.require([bundle_src], { expose : bundle_name });
 //events
 b.on("update", bundleApp); //on any dep update, runs the bundler
