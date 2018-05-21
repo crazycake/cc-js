@@ -2,26 +2,25 @@
  * Bundle Builder
  */
 
-//required modules
+// required modules
 import babelify   from "babelify";
 import browserify from "browserify";
 import source     from "vinyl-source-stream";
 import watchify   from "watchify";
 import yargs      from "yargs";
-//gulp
-import gulp  from "gulp";
-import gutil from "gulp-util";
+import gulp       from "gulp";
+import gutil      from "gulp-util";
 
-//get arguments / defaults
+// get arguments / defaults
 let environment = yargs.argv.e || "production";
 let bundle_arg  = yargs.argv.b || "cc";
 
-//set consts
+// set consts
 const bundle_name =  bundle_arg;
 const bundle_src  = "./src/" + bundle_name + ".js";
 const bundle_dist = "./dist/js/";
 
-//set environment
+// set environment
 process.env.NODE_ENV = environment;
 
 //++ Browserify
@@ -34,7 +33,7 @@ const browserify_conf = {
 	debug        : !(environment == "production") //true enables source-maps
 };
 
-//set browserify object
+// browserify instance
 let b = watchify(browserify(browserify_conf))
 		//es6 transpiler
 		.transform(babelify, {
@@ -46,14 +45,14 @@ let b = watchify(browserify(browserify_conf))
 			global : true
 		}, "uglifyify");
 
-//require bundle with expose name, enables require("bundle_name")
+// require bundle with expose name, enables require("bundle_name")
 b.require([bundle_src], { expose : bundle_name });
-//events
+// events
 b.on("update", bundleApp); //on any dep update, runs the bundler
 b.on("log", gutil.log);    //output build logs to terminal
 
 function bundleApp() {
-	//browserify js bundler
+	
 	return b.bundle()
 		.on("error", gutil.log.bind(gutil, "Browserify Bundler Error"))
 		.pipe(source(bundle_name + ".bundle.min.js"))
