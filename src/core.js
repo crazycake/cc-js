@@ -189,7 +189,7 @@ export default {
 											data.message || data.msg || null)
 				//redirection?
 				if (data.redirect)
-					return location.href = s.baseUrl(data.redirect)
+					return location.href = data.redirect
 
 				//success
 				return data.payload || {}
