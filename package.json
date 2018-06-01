@@ -3,7 +3,7 @@
   "version": "1.6.7",
   "author": "Nicolas Pulido <nicolas.pulido@crazycake.cl>",
   "description": "CrazyCake JS Core",
-  "readme": "Run npm install, gulp is required.",
+  "readme": "README.md",
   "license": "MIT",
   "main": "dist/js/core.bundle.min.js",
   "homepage": "https://github.com/crazycake/cc-js",
@@ -11,34 +11,30 @@
     "dist",
     "src"
   ],
-  "scripts": {
-    "build": "gulp build",
-    "watch": "gulp watch"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/crazycake/cc-js.git"
   },
   "devDependencies": {
-    "babel-core": "^6.24.0",
-    "babel-preset-es2015": "^6.24.0",
-    "babelify": "^8.0.0",
-    "browserify": "^15.0.0",
-    "browserify-shim": "^3.8.14",
-    "gulp": "^3.9.0",
-    "gulp-cli": "^2.0.0",
-    "gulp-util": "^3.0.8",
-    "gulp-watch": "^5.0.0",
-    "uglifyify": "^4.0.5",
-    "vinyl-source-stream": "^2.0.0",
-    "watchify": "^3.9.0",
-    "yargs": "^10.0.3"
+  	"ansi-colors": "~2.0.1",
+    "babel-core": "~6.26.3",
+    "babel-preset-env": "~1.7.0",
+    "babelify": "~8.0.0",
+		"browserify": "~16.2.2",
+    "browserify-shim": "~3.8.14",
+    "fancy-log": "~1.3.2",
+    "gulp": "~3.9.1",
+    "gulp-watch": "~5.0.0",
+    "uglifyify": "~5.0.0",
+    "vinyl-source-stream": "~2.0.0",
+    "watchify": "~3.11.0",
+    "yargs": "~11.0.0"
   },
   "dependencies": {
-    "fastclick": "^1.0.6",
-    "fg-loadcss": "^2.0.1",
-    "jquery": "^3.3.1",
-    "lodash": "^4.17.10"
+    "fastclick": "~1.0.6",
+    "fg-loadcss": "~2.0.1",
+    "jquery": "~3.3.1",
+    "lodash": "~4.17.10"
   },
   "browserify": {
     "transform": [

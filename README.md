@@ -6,17 +6,23 @@ JS Core for webapps. Gulp as Task Runner, Browserify as bundler.
 
 ### Requeriments
 
-`npm install gulp npm-release -g`
+Gulp
+
+`npm install gulp-cli yarn -g`
+
+Install
+
+`yarn install`
 
 ###### (Optional)
 
-`npm install npm-check eslint -g`
+`npm install npm-check npm-release eslint -g`
 
 ### Usage
 
-Run `npm run watch` for watch & build.
+Run `gulp watch` for watch & build.
 
-Run `npm run build` for build only.
+Run `gulp build` for build only.
 
 ###### Example
 

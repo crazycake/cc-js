@@ -3,25 +3,29 @@
  */
 
 // required modules
-import babelify   from "babelify";
-import browserify from "browserify";
-import source     from "vinyl-source-stream";
-import watchify   from "watchify";
-import yargs      from "yargs";
-import gulp       from "gulp";
-import gutil      from "gulp-util";
+import babelify   from "babelify"
+import browserify from "browserify"
+import source     from "vinyl-source-stream"
+import watchify   from "watchify"
+import yargs      from "yargs"
+import gulp       from "gulp"
+import colors     from "ansi-colors"
+import logger     from "fancy-log"
 
 // get arguments / defaults
-let environment = yargs.argv.e || "production";
-let bundle_arg  = yargs.argv.b || "cc";
+let environment = yargs.argv.e || "production"
+let bundle_arg  = yargs.argv.b || "cc"
 
 // set consts
-const bundle_name =  bundle_arg;
-const bundle_src  = "./src/" + bundle_name + ".js";
-const bundle_dist = "./dist/js/";
+const bundle_name =  bundle_arg
+const bundle_src  = "./src/" + bundle_name + ".js"
+const bundle_dist = "./dist/js/"
 
 // set environment
-process.env.NODE_ENV = environment;
+process.env.NODE_ENV = environment
+
+logger(colors.blue("Environment: ", environment))
+logger(colors.blue("Bundle: ", bundle_arg))
 
 //++ Browserify
 
@@ -31,38 +35,36 @@ const browserify_conf = {
 	cache        : {},
 	packageCache : {},
 	debug        : !(environment == "production") //true enables source-maps
-};
+}
 
 // browserify instance
 let b = watchify(browserify(browserify_conf))
 		//es6 transpiler
 		.transform(babelify, {
-			presets : ["es2015"],
-			ignore  : "./src/plugins/"
+			presets : ["env"]
 		})
 		//minify
 		.transform({
 			global : true
-		}, "uglifyify");
+		}, "uglifyify")
 
 // require bundle with expose name, enables require("bundle_name")
-b.require([bundle_src], { expose : bundle_name });
+b.require([bundle_src], { expose : bundle_name })
 // events
-b.on("update", bundleApp); //on any dep update, runs the bundler
-b.on("log", gutil.log);    //output build logs to terminal
+b.on("update", bundleApp)  //on any dep update, runs the bundler
+b.on("log", logger)        //output build logs to terminal
 
 function bundleApp() {
-	
+
 	return b.bundle()
-		.on("error", gutil.log.bind(gutil, "Browserify Bundler Error"))
 		.pipe(source(bundle_name + ".bundle.min.js"))
 		//prepend contents
-		.pipe(gulp.dest(bundle_dist));
+		.pipe(gulp.dest(bundle_dist))
 }
 
 //++ Tasks
 
-gulp.task("js", bundleApp);
-gulp.task("watch", ["js"]);
-gulp.task("build", ["js"], () => { process.exit(); });
-gulp.task("default", ["watch"]);
+gulp.task("js", bundleApp)
+gulp.task("watch", ["js"])
+gulp.task("build", ["js"], () => { process.exit() })
+gulp.task("default", ["watch"])
