@@ -8,10 +8,6 @@
 
 /**
  * String Replacer
- * @param  {string} $string - The input string
- * @param  {string} $search - The string to look for
- * @param  {string} $replace - Replace Token
- * @return {string}
  */
 @function str-replace($string, $search, $replace: '') {
 
