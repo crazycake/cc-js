@@ -1,15 +1,8 @@
-# Linux
+# Linux & OSX
 *~
-*.bak
-*.gz
-*.log
-
-# OSX
 .DS_Store
-
-# GIT
-!*.gitkeep
 
 # Node
 node_modules
 package-lock.json
+*.log
