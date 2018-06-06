@@ -5,7 +5,6 @@
   "description": "CrazyCake JS Core",
   "readme": "README.md",
   "license": "MIT",
-  "main": "dist/js/core.bundle.min.js",
   "homepage": "https://github.com/crazycake/cc-js",
   "files": [
     "dist",
