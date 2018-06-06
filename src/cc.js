@@ -1,6 +1,5 @@
 /**
- * Main Bundler
- * ES6 required (babel)
+ * Core Bundle
  */
 
 //load main libraries
@@ -12,6 +11,7 @@ import "fg-loadcss"
 //modules
 import core from "./core.js"
 
-//export core property
-module.exports.core = core
-window.core = core
+// exports to bundle scope
+module.exports.cc = core
+// exports to global scope
+window.cc = core
