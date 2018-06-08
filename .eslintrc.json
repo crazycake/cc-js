@@ -15,7 +15,7 @@
 		"FastClick" : false,
 		"FB"        : false,
 		"P"         : false,
-		"core"      : true
+		"cc"        : true
 	},
 	"parserOptions": {
 		"sourceType": "module"
