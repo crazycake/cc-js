@@ -184,8 +184,8 @@ export default {
 
 				//check for response error
 				if (data.status == "error")
-					return s.parseAjaxError(data.code || 400, 
-											data.error || "not defined", 
+					return s.parseAjaxError(data.code || 400,
+											data.error || "not defined",
 											data.message || data.msg || null)
 				//redirection?
 				if (data.redirect)
@@ -212,7 +212,7 @@ export default {
 	 * @param  {Int} code - The code error
 	 * @param  {String} error - The error string
 	 * @param  {String} message - The message string
-	 * @return {Object} 
+	 * @return {Object}
 	 */
 	parseAjaxError(code, error, message) {
 
@@ -243,7 +243,7 @@ export default {
 
 			message = APP.TRANS.ALERTS.CSRF
 		}
-	
+
 		return { code : code, error : error, message : message }
 	},
 
@@ -293,25 +293,20 @@ export default {
 	},
 
 	/**
-	 * Image preloader, returns an array with image paths [token replaced: "$"]
+	 * Image preloader
 	 * @method preloadImages
-	 * @param  {String} image_path - The source path
-	 * @param  {Int} indexes - The indexes, example: image1.png, image2.png, ...
-	 * @return {Array} The image object array
+	 * @param  {Array} images - The source paths
+	 * @return {Array} An image object array
 	 */
-	preloadImages(image_path, indexes) {
-
-		if (!indexes || indexes === 0)
-			indexes = 1
+	preloadImages(images = []) {
 
 		let objects = []
 
 		//preload images
-		for (let i = 0; i < indexes; i++) {
-			//create new image object
-			objects[i] = new Image()
-			//if object has a '$' symbol replace with index
-			objects[i].src = image_path.replace("$", (i+1))
+		for (let img of images) {
+
+			objects[i]     = new Image()
+			objects[i].src = img
 		}
 
 		return objects
@@ -336,7 +331,7 @@ export default {
 				ajax_timer = setTimeout(() => { ctx.loading.active = true }, seconds)
 				return
 			}
-			
+
 			//otherwise clear timer and hide loading
 			clearTimeout(ajax_timer)
 			ctx.loading.active = false
