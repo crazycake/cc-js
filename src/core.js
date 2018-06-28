@@ -216,33 +216,22 @@ export default {
 	 */
 	parseAjaxError(code, error, message) {
 
-		let log = ""
-
-		//sever error
-		if (code == 500 || error == "parsererror") {
-
-			message = APP.TRANS.ALERTS.SERVER_ERROR
+		const errors = {
+			'401' : APP.TRANS.ALERTS.ACCESS_FORBIDDEN,
+			'408' : APP.TRANS.ALERTS.SERVER_TIMEOUT,
+			'404' : APP.TRANS.ALERTS.NOT_FOUND,
+			'498' : APP.TRANS.ALERTS.CSRF,
+			'500' : APP.TRANS.ALERTS.SERVER_ERROR
 		}
-		//timeout
-		else if (code == 408 || error == "timeout") {
 
-			message = APP.TRANS.ALERTS.SERVER_TIMEOUT
-		}
-		//401 unauthorized
-		else if (code == 401) {
+		// sever error
+		if (error == "parsererror") message = errors['500']
 
-			message = APP.TRANS.ALERTS.ACCESS_FORBIDDEN
-		}
-		//404 not found
-		else if (code == 404) {
+		// timeout
+		else if (error == "timeout") message = errors['408']
 
-			message = APP.TRANS.ALERTS.NOT_FOUND
-		}
-		//invalid CSRF token
-		else if (code == 498) {
-
-			message = APP.TRANS.ALERTS.CSRF
-		}
+		// default
+		else  message = errors[error] || errors['500']
 
 		return { code : code, error : error, message : message }
 	},
