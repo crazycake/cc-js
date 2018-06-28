@@ -214,7 +214,7 @@ export default {
 	 * @param  {String} message - The message string
 	 * @return {Object}
 	 */
-	parseAjaxError(code, error, message) {
+	parseAjaxError(code, error, message = '') {
 
 		const errors = {
 			'401' : APP.TRANS.ALERTS.ACCESS_FORBIDDEN,
@@ -231,7 +231,7 @@ export default {
 		else if (error == "timeout") message = errors['408']
 
 		// default
-		else  message = errors[error] || errors['500']
+		else if (errors[error]) message = errors[error]
 
 		return { code : code, error : error, message : message }
 	},
