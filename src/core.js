@@ -305,8 +305,10 @@ export default {
 		//preload images
 		for (let img of images) {
 
-			objects[i]     = new Image()
-			objects[i].src = img
+			let o = new Image()
+			o.src = img
+
+			objects.push(o)
 		}
 
 		return objects
