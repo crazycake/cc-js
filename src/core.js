@@ -143,8 +143,7 @@ export default {
 		if (form) {
 
 			//check for a non jquery object
-			if (form instanceof jQuery === false)
-				form = $(form)
+			form = form instanceof jQuery === false ? $(form) : form
 
 			//form data to object
 			$.each(form.serializeArray(), function() { payload[this.name] = this.value })
