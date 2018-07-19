@@ -7,14 +7,12 @@
 	},
 	"globals": {
 		"APP"       : false,
-		"$"         : false,
 		"jQuery"    : false,
+		"$"         : false,
 		"_"         : false,
 		"Vue"       : false,
 		"loadCSS"   : false,
 		"FastClick" : false,
-		"FB"        : false,
-		"P"         : false,
 		"cc"        : true
 	},
 	"parserOptions": {
@@ -23,13 +21,7 @@
 	"rules": {
 		"no-console": 0,
 		"no-mixed-spaces-and-tabs": 0,
-		"linebreak-style": [
-			"error",
-			"unix"
-		],
-		"semi": [
-			"warn",
-			"always"
-		]
+		"linebreak-style": ["error", "unix"],
+		"semi": ["warn", "always"]
 	}
 }
