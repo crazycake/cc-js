@@ -2,13 +2,13 @@
  * Core Bundle
  */
 
-//load main libraries
+// load main libraries
 import "fastclick"
 import "lodash"
 import "jquery"
 import "fg-loadcss"
 
-//modules
+// modules
 import core from "./core.js"
 
 // exports to bundle scope

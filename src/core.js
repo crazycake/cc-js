@@ -51,31 +51,30 @@ export default {
 
 		console.log("Core -> Starting")
 
-		//Check that App Global scope vars are defined
+		// check that App Global scope vars are defined
 		if (APP == undefined) throw new Error("Core -> APP global scoped var is not defined!")
 
 		let mod_name, mod, data
 
-		// call inits
+		// call initializers
 		for (mod_name in modules) {
 
-			//check module exists
+			// check module exists
 			if (!this.modules[mod_name]) {
 
 				console.warn("Core -> Attempting to load an undefined module (" + mod_name + ").")
 				continue
 			}
 
-			//get module
+			// get module
 			mod  = this.modules[mod_name]
 			data = modules[mod_name]
 
-			//check if module has init method & call it
+			// check if module has init method & call it
 			if (_.isFunction(mod.init))
 				mod.init(data)
 		}
 
-		//3) load UI
 		this.loadUI()
 	},
 
@@ -85,14 +84,14 @@ export default {
 	 */
 	loadUI() {
 
-		//load fast click for mobile
+		// load fast click for mobile
 		if (APP.UA && APP.UA.isMobile)
 			FastClick.attach(document.body)
 
-		//look for server flash messages
+		// look for server flash messages
 		this.setFlashAlerts()
 
-		//css async loading
+		// css async loading
 		if (APP.cssLazy) {
 
 			console.log("Core -> Loading CSS file (async)", APP.cssLazy)
@@ -132,40 +131,39 @@ export default {
 	 */
 	ajaxRequest(request = null, form = null, csrf = true) {
 
-		//validation, request is required
 		if (!request) throw new Error("Core -> ajaxRequest: invalid input request object")
 
-		//define payload
 		let payload    = {},
 			submit_btn = null
 
-		//check form element has a form data-invalid attribute
+		// check form element has a form data-invalid attribute
 		if (form) {
 
-			//check for a non jquery object
+			// check for a non jquery object
 			form = form instanceof jQuery === false ? $(form) : form
 
-			//form data to object
+			// form data to object
 			$.each(form.serializeArray(), function() { payload[this.name] = this.value })
-			//disable submit button
+
+			// disable submit button
 			submit_btn = form.find("button")
 
 			if (submit_btn.length)
 				submit_btn.prop("disabled", true)
 		}
 
-		//append CSRF token?
+		// append CSRF token?
 		if (csrf && request.method == "POST" && !_.isNil(APP.UA.tokenKey))
 			payload[APP.UA.tokenKey] = APP.UA.token
 
-		//set options
+		// set options
 		let options = _.assign({
 			method   : "GET",
 			timeout  : this.timeout,
 			dataType : "json",
 		}, request)
 
-		//set payload
+		// set payload
 		options.data = _.assign(payload, request.data)
 
 		if (options.uri)
@@ -178,19 +176,18 @@ export default {
 		return $.ajax(options)
 			.then((data) => {
 
-				//check response
 				console.log("Core -> parsing ajax response [" + (data.status || 0) + "]", data)
 
-				//check for response error
+				// check for response error
 				if (data.status == "error")
 					return s.parseAjaxError(data.code || 400,
 											data.error || "not defined",
 											data.message || data.msg || null)
-				//redirection?
+				// redirection?
 				if (data.redirect)
 					return location.href = data.redirect
 
-				//success
+				// success
 				return data.payload || {}
 			})
 			.fail((xhr, textStatus) => {
@@ -199,7 +196,7 @@ export default {
 			}).
 			always(() => {
 
-				//re-enable button?
+				// re-enable button?
 				if (submit_btn)
 					submit_btn.prop("disabled", false)
 			})
@@ -273,7 +270,7 @@ export default {
 		let regex   = /\.([0-9a-z]+)(?:[\?#]|$)/i,
 			new_url = url.replace(regex, "_" + key + ".$1?")
 
-		//remove single question marks
+		// remove single question mark?
 		if (new_url[new_url.length - 1] == "?")
 			new_url = new_url.substring(0, new_url.length - 1)
 
@@ -290,7 +287,6 @@ export default {
 
 		let objects = []
 
-		//preload images
 		for (let img of images) {
 
 			let o = new Image()
@@ -311,23 +307,23 @@ export default {
 	setAjaxLoadingHandler(ctx, seconds = 1000) {
 
 		let ajax_timer
-		//ajax handler, show loading if ajax takes more than a X secs
+
 		let handler = function(opts, set_loading) {
 
 			if (set_loading) {
-				//clear timer
+
 				clearTimeout(ajax_timer)
-				//waiting time to show loading box
+				// waiting time to show loading box
 				ajax_timer = setTimeout(() => { ctx.loading.active = true }, seconds)
 				return
 			}
 
-			//otherwise clear timer and hide loading
+			// otherwise clear timer and hide loading
 			clearTimeout(ajax_timer)
 			ctx.loading.active = false
 		}
 
-		//ajax events
+		// xhr events
 		$(document)
 		 .ajaxSend((e, xhr, opts)     => { handler(opts, true)  })
 		 .ajaxError((e, xhr, opts)    => { handler(opts, false) })
