@@ -153,8 +153,8 @@ export default {
 		}
 
 		// append CSRF token?
-		if (csrf && request.method == "POST" && !_.isNil(APP.UA.tokenKey))
-			payload[APP.UA.tokenKey] = APP.UA.token
+		if (csrf && request.method == "POST" && !_.isNil(APP.UA.csrfKey))
+			payload[APP.UA.csrfKey] = APP.UA.csrfValue
 
 		// set options
 		let options = _.assign({
