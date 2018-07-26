@@ -304,16 +304,20 @@ export default {
 	 * @param  {Object} ctx - The instance context for loading state
 	 * @param  {Int} seconds - Interval time in seconds
 	 */
-	setAjaxLoadingHandler(ctx, seconds = 1000) {
+	setAjaxLoadingHandler(ctx, seconds = 1500) {
 
 		let ajax_timer
 
 		let handler = function(opts, set_loading) {
 
+			// optional parameter to skip loading handler
+			if(opts.loading === false)
+				return
+
 			if (set_loading) {
 
 				clearTimeout(ajax_timer)
-				// waiting time to show loading box
+
 				ajax_timer = setTimeout(() => { ctx.loading.active = true }, seconds)
 				return
 			}
