@@ -90,13 +90,6 @@ export default {
 
 		// look for server flash messages
 		this.setFlashAlerts()
-
-		// css async loading
-		if (APP.cssLazy) {
-
-			console.log("Core -> Loading CSS file (async)", APP.cssLazy)
-			loadCSS(APP.cssLazy)
-		}
 	},
 
 	/**

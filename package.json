@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "fastclick": "~1.0.6",
-    "fg-loadcss": "~2.0.1",
     "jquery": "~3.3.1",
     "lodash": "~4.17.10"
   },
@@ -42,13 +41,11 @@
   },
   "browser": {
     "fastclick": "./node_modules/fastclick/lib/fastclick.js",
-    "fg-loadcss": "./node_modules/fg-loadcss/src/loadCSS.js",
     "jquery": "./node_modules/jquery/dist/jquery.js",
     "lodash": "./node_modules/lodash/lodash.js"
   },
   "browserify-shim": {
     "fastclick": "FastClick",
-    "fg-loadcss": "loadCSS",
     "jquery": "jQuery",
     "lodash": "_"
   }

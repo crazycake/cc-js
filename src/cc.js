@@ -6,7 +6,6 @@
 import "fastclick"
 import "lodash"
 import "jquery"
-import "fg-loadcss"
 
 // modules
 import core from "./core.js"
