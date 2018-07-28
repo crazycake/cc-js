@@ -164,7 +164,7 @@ export default {
 
 		let s = this
 
-		console.log("Core -> new xhr request", options)
+		console.log("Core -> new XHR request", options)
 
 		return $.ajax(options)
 			.then((data) => {
@@ -175,7 +175,7 @@ export default {
 				if (data.status == "error")
 					return s.parseAjaxError(data.code || 400,
 											data.error || "not defined",
-											data.message || data.msg || null)
+											data.message || null)
 				// redirection?
 				if (data.redirect)
 					return location.href = data.redirect
@@ -220,7 +220,7 @@ export default {
 		else if (error == "timeout") message = errors['408']
 
 		// default
-		else if (errors[error]) message = errors[error]
+		else if (errors[code]) message = errors[code]
 
 		return { code : code, error : error, message : message }
 	},
