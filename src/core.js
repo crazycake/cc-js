@@ -304,7 +304,7 @@ export default {
 		let handler = function(opts, set_loading) {
 
 			// optional parameter to skip loading handler
-			if(opts.loading === false)
+			if (opts.loading === false)
 				return
 
 			if (set_loading) {
