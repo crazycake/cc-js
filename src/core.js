@@ -49,8 +49,6 @@ export default {
 	 */
 	start(modules = []) {
 
-		console.log("Core -> Starting")
-
 		// check that App Global scope vars are defined
 		if (APP == undefined) throw new Error("Core -> APP global scoped var is not defined!")
 
