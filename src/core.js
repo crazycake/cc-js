@@ -60,7 +60,7 @@ export default {
 			// check module exists
 			if (!this.modules[mod_name]) {
 
-				console.warn("Core -> Attempting to load an undefined module (" + mod_name + ").")
+				console.warn("Core -> attempting to load an undefined module (" + mod_name + ").")
 				continue
 			}
 
