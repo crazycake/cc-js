@@ -15,7 +15,7 @@ export default {
 	 * @property timeout - XHR Max Timeout (seconds)
 	 * @type {Int}
 	 */
-	timeout : 30000,
+	timeout : 45000,
 
 	/**
 	 * @property flashAlerts
