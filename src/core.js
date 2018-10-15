@@ -9,19 +9,19 @@ export default {
 	 * @property modules
 	 * @type {Object}
 	 */
-	modules : {},
+	modules: {},
 
 	/**
 	 * @property timeout - XHR Max Timeout (seconds)
 	 * @type {Int}
 	 */
-	timeout : 45000,
+	timeout: 45000,
 
 	/**
 	 * @property flashAlerts
 	 * @type {Array}
 	 */
-	flashAlerts : [],
+	flashAlerts: [],
 
 	//++ Methods ++
 
@@ -149,9 +149,9 @@ export default {
 
 		// set options
 		let options = _.assign({
-			method   : "GET",
-			timeout  : this.timeout,
-			dataType : "json",
+			method  : "GET",
+			timeout : this.timeout,
+			dataType: "json",
 		}, request)
 
 		// set payload
@@ -204,11 +204,11 @@ export default {
 	parseAjaxError(code, error, message = '') {
 
 		const errors = {
-			'401' : APP.TRANS.ALERTS.ACCESS_FORBIDDEN,
-			'408' : APP.TRANS.ALERTS.SERVER_TIMEOUT,
-			'404' : APP.TRANS.ALERTS.NOT_FOUND,
-			'498' : APP.TRANS.ALERTS.CSRF,
-			'500' : APP.TRANS.ALERTS.SERVER_ERROR
+			'401': APP.TRANS.ALERTS.ACCESS_FORBIDDEN,
+			'408': APP.TRANS.ALERTS.SERVER_TIMEOUT,
+			'404': APP.TRANS.ALERTS.NOT_FOUND,
+			'498': APP.TRANS.ALERTS.CSRF,
+			'500': APP.TRANS.ALERTS.SERVER_ERROR
 		}
 
 		// sever error
@@ -220,7 +220,7 @@ export default {
 		// default
 		else if (errors[code]) message = errors[code]
 
-		return { code : code, error : error, message : message }
+		return { code, error, message }
 	},
 
 	/**
