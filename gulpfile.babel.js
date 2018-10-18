@@ -66,5 +66,5 @@ function bundleApp() {
 
 gulp.task("js", bundleApp)
 gulp.task("watch", ["js"])
-gulp.task("build", ["js"], () => { process.exit() })
+gulp.task("build", ["js"], () => process.exit())
 gulp.task("default", ["watch"])
