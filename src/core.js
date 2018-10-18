@@ -339,7 +339,7 @@ export default {
 		let s = this
 		messages.children("div").each(function() {
 
-			s.flashAlerts.push({ content : $(this).html(), type : $(this).attr("class") })
+			s.flashAlerts.push({ content: $(this).html(), type: $(this).attr("class") })
 		})
 	}
 }
