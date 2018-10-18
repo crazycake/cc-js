@@ -24,32 +24,32 @@ const bundle_dist = "./dist/js/"
 // set environment
 process.env.NODE_ENV = environment
 
-logger(colors.blue("Environment: ", environment))
-logger(colors.blue("Bundle: ", bundle_arg))
+logger(colors.blue("Environment:", environment))
+logger(colors.blue("Bundle:", bundle_arg))
 
 //++ Browserify
 
 // set up the browserify instance on a task basis
 const browserify_conf = {
-	entries      : [bundle_src],
-	cache        : {},
-	packageCache : {},
-	debug        : !(environment == "production") //true enables source-maps
+	entries     : [bundle_src],
+	cache       : {},
+	packageCache: {},
+	debug       : !(environment == "production") //true enables source-maps
 }
 
 // browserify instance
 let b = watchify(browserify(browserify_conf))
 		//es6 transpiler
 		.transform(babelify, {
-			presets : ["env"]
+			presets: ["env"]
 		})
 		//minify
 		.transform({
-			global : true
+			global: true
 		}, "uglifyify")
 
 // require bundle with expose name, enables require("bundle_name")
-b.require([bundle_src], { expose : bundle_name })
+b.require([bundle_src], { expose: bundle_name })
 // events
 b.on("update", bundleApp)  //on any dep update, runs the bundler
 b.on("log", logger)        //output build logs to terminal
