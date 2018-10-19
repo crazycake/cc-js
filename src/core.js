@@ -23,7 +23,7 @@ export default {
 	//++ Methods ++
 
 	/**
-	* Set modules automatically for require function
+	* Set modules
 	* @param {Array} modules - The required modules
 	*/
 	setModules(modules = []) {
@@ -253,7 +253,7 @@ export default {
 
 		let timer
 
-		let handler = function(opts, activate) {
+		let handler = (opts, activate) => {
 
 			// optional parameter to skip loading handler
 			if (opts.loading === false)
