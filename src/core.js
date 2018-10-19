@@ -13,7 +13,7 @@ export default {
 	/**
 	 * @property timeout - XHR Max Timeout (seconds)
 	 */
-	timeout: 45000,
+	timeout: 44000,
 
 	/**
 	 * @property flashAlerts
@@ -127,7 +127,10 @@ export default {
 			payload[APP.UA.csrfKey] = APP.UA.csrfValue
 
 		// set options
-		let options = _.assign({ method: "GET", dataType: "json", timeout: this.timeout, data: payload }, request)
+		let options = _.assign({ method: "GET", dataType: "json", this.timeout }, request)
+
+		// payload
+		options.data = _.assign(request.data || {}, payload)
 
 		if (options.uri)
 			options.url = this.baseUrl(options.uri)
