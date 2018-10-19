@@ -127,7 +127,7 @@ export default {
 			payload[APP.UA.csrfKey] = APP.UA.csrfValue
 
 		// set options
-		let options = _.assign({ method: "GET", dataType: "json", this.timeout }, request)
+		let options = _.assign({ method: "GET", dataType: "json", timeout: this.timeout }, request)
 
 		// payload
 		options.data = _.assign(request.data || {}, payload)
