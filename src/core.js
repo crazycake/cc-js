@@ -104,7 +104,7 @@ export default {
 	 */
 	ajaxRequest(request = null, ctx = null, csrf = true) {
 
-		if (!request) throw new Error("Core -> ajaxRequest: invalid input request object")
+		if (!request) throw new Error("Core -> ajaxRequest: invalid request object")
 
 		let payload = {},
 			button  = null
@@ -282,7 +282,7 @@ export default {
 	},
 
 	/**
-	 * Sets pending server flash messages (stored in session), loaded automatically.
+	 * Sets pending server flash messages (stored in session)
 	 */
 	setFlashAlerts() {
 
