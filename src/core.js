@@ -167,6 +167,7 @@ export default {
 			message = data.message || null
 
 		const errors = {
+
 			'401': APP.TRANS.ALERTS.ACCESS_FORBIDDEN,
 			'408': APP.TRANS.ALERTS.SERVER_TIMEOUT,
 			'404': APP.TRANS.ALERTS.NOT_FOUND,
