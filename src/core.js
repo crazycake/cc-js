@@ -143,8 +143,7 @@ export default {
 				console.log(`Core -> parsing ajax response [${data.status || 0}]`, data)
 
 				// check for response error
-				if (data.status == "error")
-					return this.parseAjaxError(data.code || 400, data.error || "unknown", data.message || null)
+				if (data.status == "error") return this.parseAjaxError(data)
 
 				// success
 				return data.redirect ? location.href = data.redirect : (data.payload || {})
@@ -158,12 +157,14 @@ export default {
 
 	/**
 	 * Ajax Error Response Handler
-	 * @param  {Int} code - The code error
-	 * @param  {String} error - The error string
-	 * @param  {String} message - The message string
+	 * @param  {Object} data - The response data
 	 * @return {Object}
 	 */
-	parseAjaxError(code, error, message = '') {
+	parseAjaxError(data) {
+
+		let code    = data.code || 400,
+			error   = data.error || "unknown",
+			message = data.message || null
 
 		const errors = {
 			'401': APP.TRANS.ALERTS.ACCESS_FORBIDDEN,
@@ -179,7 +180,7 @@ export default {
 		// timeout
 		else if (error == "timeout") message = errors['408']
 
-		// default
+		// defined message
 		else if (errors[code]) message = errors[code]
 
 		return { code, error, message }
