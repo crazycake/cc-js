@@ -144,7 +144,7 @@ export default {
 
 				// check for response error
 				if (data.status == "error")
-					return this.parseAjaxError(data.code || 400, data.error || "not defined", data.message || null)
+					return this.parseAjaxError(data.code || 400, data.error || "unknown", data.message || null)
 
 				// success
 				return data.redirect ? location.href = data.redirect : (data.payload || {})
