@@ -77,7 +77,7 @@ export default {
 
 	/**
 	* Helper Get BaseUrl
-	* @param  {String} uri - Append URI if defined
+	* @param {String} uri - Append URI if defined
 	* @return String
 	*/
 	baseUrl(uri = "") {
@@ -87,7 +87,7 @@ export default {
 
 	/**
 	* Helper Get StaticUrl
-	* @param  {String} uri - Append URI if defined
+	* @param {String} uri - Append URI if defined
 	* @return String
 	*/
 	staticUrl(uri = "") {
@@ -97,9 +97,9 @@ export default {
 
 	/**
 	 * Ajax request with response handler.
-	 * @param  {Object} request - Axios request object
-	 * @param  {Object} ctx - The html context (prevent bubble clicking)
-	 * @param  {Object} csrf - Append APP.UA CRSF token key & value
+	 * @param {Object} request - Axios request object
+	 * @param {Object} ctx - The html context (prevent bubble clicking)
+	 * @param {Object} csrf - Append APP.UA CRSF token key & value
 	 * @return {Object} promise
 	 */
 	ajaxRequest(request = null, ctx = null, csrf = true) {
@@ -156,7 +156,7 @@ export default {
 
 	/**
 	 * Ajax Error Response Handler
-	 * @param  {Object} data - The response data
+	 * @param {Object} data - The response data
 	 * @return {Object}
 	 */
 	parseAjaxError(data) {
@@ -212,8 +212,8 @@ export default {
 	 * Get resized image path
 	 * Example: `./media/dj/IMAGE1.jpg?v=5`
 	 *          `./media/dj/IMAGE1_TH.jpg?v=5`
-	 * @param  {String} url - An image URL
-	 * @param  {String} key - The suffix key to append
+	 * @param {String} url - An image URL
+	 * @param {String} key - The suffix key to append
 	 * @return {String}
 	 */
 	resizedImagePath(url = "", key = "TN") {
@@ -229,7 +229,7 @@ export default {
 
 	/**
 	 * Image preloader
-	 * @param  {Array} images - The source paths
+	 * @param {Array} images - The source paths
 	 * @return {Array} An image object array
 	 */
 	preloadImages(images = []) {
@@ -249,8 +249,8 @@ export default {
 
 	/**
 	 * jQuery Ajax Handler for loading state
-	 * @param  {Object} ctx - The instance context for loading state
-	 * @param  {Int} seconds - Interval time in seconds
+	 * @param {Object} ctx - The instance context for loading state
+	 * @param {Int} seconds - Interval time in seconds
 	 */
 	setAjaxLoadingHandler(ctx, seconds = 1500) {
 
