@@ -4,6 +4,7 @@
 	"author": "Nicolas Pulido <nicolas.pulido@crazycake.tech>",
 	"description": "CrazyCake JS Core",
 	"readme": "README.md",
+	"main": "core.js",
 	"license": "MIT",
 	"repository": "https://github.com/crazycake/cc-js",
 	"scripts": {
