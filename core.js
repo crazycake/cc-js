@@ -17,7 +17,7 @@ export default {
 	 */
 	timeout: 44000,
 
-	//++ Methods ++
+	// ++ Methods
 
 	/**
 	* Set modules
