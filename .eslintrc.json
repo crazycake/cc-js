@@ -6,13 +6,8 @@
 		"es6"    : true
 	},
 	"globals": {
-		"APP"      : false,
-		"jQuery"   : false,
-		"$"        : false,
-		"_"        : false,
-		"Vue"      : false,
-		"FastClick": false,
-		"cc"       : true
+		"APP": false,
+		"cc" : true
 	},
 	"parserOptions": {
 		"sourceType": "module"

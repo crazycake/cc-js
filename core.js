@@ -3,6 +3,8 @@
  * Required scope vars: {APP}
  */
 
+import axios from "axios"
+
 export default {
 
 	/**
@@ -11,14 +13,9 @@ export default {
 	modules: {},
 
 	/**
-	 * @property timeout - XHR Max Timeout (seconds)
+	 * @property timeout - request timeout (seconds)
 	 */
 	timeout: 44000,
-
-	/**
-	 * @property flashAlerts
-	 */
-	flashAlerts: [],
 
 	//++ Methods ++
 
@@ -36,13 +33,13 @@ export default {
 	},
 
 	/**
-	 * Starter, if module has a viewModel binds it to DOM automatically
+	 * Starter
 	 * @param {Array} - The modules array
 	 */
 	start(modules = []) {
 
 		// check that App Global scope vars are defined
-		if (APP == undefined) throw new Error("Core -> APP global scoped var is not defined!")
+		if (!window.APP) throw new Error("Core -> APP global scoped var is not defined!")
 
 		// call initializers
 		for (let name in modules) {
@@ -55,24 +52,9 @@ export default {
 			}
 
 			// check if module has init method & call it
-			if (_.isFunction(this.modules[name].init))
+			if (typeof this.modules[name].init == "function")
 				this.modules[name].init(modules[name])
 		}
-
-		this.loadUI()
-	},
-
-	/**
-	 * Core load UI, called automatically after loading modules.
-	 */
-	loadUI() {
-
-		// load fast click for mobile
-		if (APP.UA && APP.UA.isMobile && FastClick)
-			FastClick.attach(document.body)
-
-		// look for server flash messages
-		this.setFlashAlerts()
 	},
 
 	/**
@@ -99,7 +81,7 @@ export default {
 	 * Ajax request with response handler.
 	 * @param {Object} request - Axios request object
 	 * @param {Object} ctx - The html context (prevent bubble clicking)
-	 * @param {Object} csrf - Append APP.UA CRSF token key & value
+	 * @param {Object} csrf - Append UA CRSF token key & value
 	 * @return {Object} promise
 	 */
 	ajaxRequest(request = null, ctx = null, csrf = true) {
@@ -112,46 +94,49 @@ export default {
 		// check form element has a form data-invalid attribute
 		if (ctx) {
 
-			// check for a non jquery object
-			ctx = ctx instanceof jQuery === false ? $(ctx) : ctx
-
 			// disable submit button
-			button = ctx.find("button")
+			button = ctx.querySelector("button")
 
-			if (button.length) button.prop("disabled", true)
+			if (button) button.setAttribute("disabled", "true")
 		}
 
 		// append CSRF token?
-		if (request.method == "POST" && csrf && !_.isNil(APP.UA.csrfKey))
+		if (request.method == "POST" && csrf && APP.UA.csrfKey)
 			payload[APP.UA.csrfKey] = APP.UA.csrfValue
 
 		// set options
-		let options = _.assign({ method: "GET", dataType: "json", timeout: this.timeout }, request)
+		let options = Object.assign({ method: "GET", timeout: this.timeout }, request)
+
+		// self url?
+		if (options.uri) options.url = this.baseUrl(options.uri)
 
 		// payload
-		options.data = _.assign(request.data || {}, payload)
-
-		if (options.uri)
-			options.url = this.baseUrl(options.uri)
+		options.data = Object.assign(request.data || {}, payload)
 
 		console.log("Core -> new XHR request", options)
 
-		return $.ajax(options)
-			.then((data) => {
+		return axios(options)
+			// success
+			.then(res => {
 
-				console.log(`Core -> parsing ajax response [${data.status || 0}]`, data)
+				if (button) button.removeAttribute("disabled")
+
+				console.log(`Core -> parsing ajax response [${res.data.status || 200}]`, res.data)
 
 				// check for response error
-				if (data.status == "error") return this.parseAjaxError(data)
+				if (res.data.status == "error") return this.parseAjaxError(res.data)
 
 				// success
-				return data.redirect ? location.href = data.redirect : (data.payload || {})
+				return res.data.redirect ? location.href = res.data.redirect : Promise.resolve(res.data.payload || {})
 			})
-			.fail((xhr, textStatus) => {
+			// error
+			.catch(e => {
 
-				console.warn(`Core -> ajax request failed [${options.url}]`, textStatus, xhr.responseText || "none")
+				if (button) button.removeAttribute("disabled")
+
+				console.warn(`Core -> ajax request failed [${options.url}]`, e)
+				return Promise.reject(e)
 			})
-			.always(() => button ? button.prop("disabled", false) : true)
 	},
 
 	/**
@@ -166,6 +151,7 @@ export default {
 			message = data.message || null
 
 		const errors = {
+
 			'401': APP.TRANS.ALERTS.ACCESS_FORBIDDEN,
 			'408': APP.TRANS.ALERTS.SERVER_TIMEOUT,
 			'404': APP.TRANS.ALERTS.NOT_FOUND,
@@ -186,6 +172,39 @@ export default {
 	},
 
 	/**
+	 * Ajax Handler for loading state
+	 * @param {Object} ctx - The instance context for loading state
+	 * @param {Int} seconds - Interval time in seconds
+	 */
+	setAjaxLoadingHandler(ctx, seconds = 1500) {
+
+		let timer
+
+		let handler = (settings, activate) => {
+
+			// optional parameter to skip loading handler
+			if (settings.loading === false) return
+
+			if (activate) {
+
+				clearTimeout(timer)
+
+				timer = setTimeout(() => ctx.loading.active = true, seconds)
+				return
+			}
+
+			// otherwise clear timer and hide loading
+			clearTimeout(timer), ctx.loading.active = false
+		}
+
+		// request interceptor
+		axios.interceptors.request.use(config => { handler(config, true); return config }, e => { handler(e.config, false); return Promise.reject(e) })
+
+		// response interceptor
+		axios.interceptors.response.use(config => { handler(config, false); return config }, e => { handler(e.config, false); return Promise.reject(e) })
+	},
+
+	/**
 	 * Get URI parameter by name
 	 * @param {String} name - The parameter name
 	 * @param {Boolean} url - Get from window URL by default
@@ -193,8 +212,7 @@ export default {
 	 */
 	getQueryString(name, url = false) {
 
-		if (!url)
-			url = window.location.href
+		if (!url) url = window.location.href
 
 		let regex   = new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"),
 			results = regex.exec(url)
@@ -202,16 +220,12 @@ export default {
 		if (!results)
 			return null
 
-		if (!results[2])
-			return ""
-
-		return decodeURIComponent(results[2].replace(/\+/g, " "))
+		return results[2] ? decodeURIComponent(results[2].replace(/\+/g, " ")) : ""
 	},
 
 	/**
 	 * Get resized image path
-	 * Example: `./media/dj/IMAGE1.jpg?v=5`
-	 *          `./media/dj/IMAGE1_TH.jpg?v=5`
+	 * Example: `./path/IMAGE1.jpg?v=5` => `./path/IMAGE1_TH.jpg?v=5`
 	 * @param {String} url - An image URL
 	 * @param {String} key - The suffix key to append
 	 * @return {String}
@@ -245,56 +259,5 @@ export default {
 		}
 
 		return objects
-	},
-
-	/**
-	 * jQuery Ajax Handler for loading state
-	 * @param {Object} ctx - The instance context for loading state
-	 * @param {Int} seconds - Interval time in seconds
-	 */
-	setAjaxLoadingHandler(ctx, seconds = 1500) {
-
-		let timer
-
-		let handler = (opts, activate) => {
-
-			// optional parameter to skip loading handler
-			if (opts.loading === false)
-				return
-
-			if (activate) {
-
-				clearTimeout(timer)
-
-				timer = setTimeout(() => ctx.loading.active = true, seconds)
-				return
-			}
-
-			// otherwise clear timer and hide loading
-			clearTimeout(timer), ctx.loading.active = false
-		}
-
-		// xhr events
-		$(document)
-		 .ajaxSend((e, xhr, opts)     => handler(opts, true))
-		 .ajaxError((e, xhr, opts)    => handler(opts, false))
-		 .ajaxComplete((e, xhr, opts) => handler(opts, false))
-	},
-
-	/**
-	 * Sets pending server flash messages (stored in session)
-	 */
-	setFlashAlerts() {
-
-		let messages = $("#app-flash")
-
-		if (!messages.length)
-			return
-
-		let s = this
-		messages.children("div").each(function() {
-
-			s.flashAlerts.push({ content: $(this).html(), type: $(this).attr("class") })
-		})
 	}
 }

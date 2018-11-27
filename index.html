@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+	<title>CC Test</title>
+
+</head>
+<body>
+
+	<div id="app">
+
+		<button type="button" onclick="cc.modules.test.fetchTest()">Ajax Call</button>
+
+	</div>
+
+	<script type="text/javascript" src="test.js"></script>
+
+	<script defer>
+
+		APP = {
+			"version"  : "2.5.1",
+			"name"     : "CC Test",
+			"baseUrl"  : "http: //localhost: 1234/",
+			"staticUrl": "http: //localhost: 1234/",
+			"TRANS": {
+				"ALERTS": {
+					"SERVER_ERROR"    : "Ha ocurrido algo inesperado, por favor inténtalo más tarde.",
+					"SERVER_TIMEOUT"  : "Sin conexión. Revisa tu conexión a Internet e inténtalo de nuevo.",
+					"NOT_FOUND"       : "Esta acción está deshabilitada, por favor inténtalo más tarde.",
+					"ACCESS_FORBIDDEN": "Tu sesión ha caducado, debes iniciar sesión nuevamente.",
+					"CSRF"            : "La aplicación ha estado inactiva por mucho tiempo, refréscala haciendo <a href = \"javascript: location.reload();\">click aquí</a>.",
+					"LOADING"         : "cargando ...",
+					"REDIRECTING"     : "redireccionado ..."
+				}
+			},
+			"UA": {
+				"platform"    : "Linux",
+				"browser"     : "Chrome",
+				"version"     : "70.0.3538.77",
+				"shortVersion": "70",
+				"isMobile"    : false,
+				"isLegacy"    : false,
+				"requestedUri": "",
+				"lang"        : "es",
+				"csrfKey"     : "eUpZTU1BdGFLYzRsWVZ4ZTNQS08zUT09",
+				"csrfValue"   : "bFB5SmlORTJDazdTZklzblYydU50QT09"
+			}
+		};
+
+		cc.start({ test: 'hello world' });
+
+	</script>
+
+	<noscript> This site requires Javascript enabled in your browser. </noscript>
+
+</body>
+</html>
