@@ -111,10 +111,16 @@ export default {
 		if (options.uri) options.url = this.baseUrl(options.uri)
 
 		// headers
-		options.headers = Object.assign(request.headers || {}, { 'X-Requested-With': 'XMLHttpRequest' })
+		let headers = {
+
+			'X-Requested-With': 'XMLHttpRequest',
+			'Content-Type'    : 'application/x-www-form-urlencoded'
+		}
+
+		options.headers = Object.assign(headers, request.headers || {})
 
 		// payload
-		options.data = Object.assign(request.data || {}, payload)
+		options.data = Object.assign(payload, request.data || {})
 
 		console.log("Core -> new XHR request", options)
 
