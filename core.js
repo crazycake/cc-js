@@ -127,7 +127,7 @@ export default {
 				if (res.data.status == "error") return this.parseAjaxError(res.data)
 
 				// success
-				return res.data.redirect ? location.href = res.data.redirect : Promise.resolve(res.data.payload || {})
+				return res.data.redirect ? location.href = res.data.redirect : res.data.payload || {}
 			})
 			// error
 			.catch(e => {
@@ -135,7 +135,7 @@ export default {
 				if (button) button.removeAttribute("disabled")
 
 				console.warn(`Core -> ajax request failed [${options.url}]`, e)
-				return Promise.reject(e)
+				return e
 			})
 	},
 
