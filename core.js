@@ -110,6 +110,9 @@ export default {
 		// self url?
 		if (options.uri) options.url = this.baseUrl(options.uri)
 
+		// headers
+		options.headers = Object.assign(request.headers || {}, { 'X-Requested-With': 'XMLHttpRequest' })
+
 		// payload
 		options.data = Object.assign(request.data || {}, payload)
 
