@@ -4,6 +4,7 @@
  */
 
 import axios from "axios"
+import qs    from "query-string"
 
 export default {
 
@@ -114,13 +115,13 @@ export default {
 		let headers = {
 
 			'X-Requested-With': 'XMLHttpRequest',
-			'Content-Type'    : 'application/x-www-form-urlencoded'
+			'Content-Type'    : 'application/x-www-form-urlencoded;charset=UTF-8'
 		}
 
 		options.headers = Object.assign(headers, request.headers || {})
 
 		// payload
-		options.data = Object.assign(payload, request.data || {})
+		options.data = qs.stringify(Object.assign(payload, request.data || {}))
 
 		console.log("Core -> new XHR request", options)
 
@@ -211,25 +212,6 @@ export default {
 
 		// response interceptor
 		axios.interceptors.response.use(config => { handler(config, false); return config }, e => { handler(e.config, false); return Promise.reject(e) })
-	},
-
-	/**
-	 * Get URI parameter by name
-	 * @param {String} name - The parameter name
-	 * @param {Boolean} url - Get from window URL by default
-	 * @return {String}
-	 */
-	getQueryString(name, url = false) {
-
-		if (!url) url = window.location.href
-
-		let regex   = new RegExp("[?&]" + name.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)"),
-			results = regex.exec(url)
-
-		if (!results)
-			return null
-
-		return results[2] ? decodeURIComponent(results[2].replace(/\+/g, " ")) : ""
 	},
 
 	/**
