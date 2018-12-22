@@ -134,7 +134,8 @@ export default {
 				console.log(`Core -> parsing ajax response [${res.data.status || 200}]`, res.data)
 
 				// check for response error
-				if (res.data.status == "error") return this.parseAjaxError(res.data)
+				if (!res.data.status || res.data.status == "error")
+					return this.parseAjaxError(res.data)
 
 				// success
 				return res.data.redirect ? location.href = res.data.redirect : res.data.payload || {}
@@ -145,7 +146,7 @@ export default {
 				if (button) button.removeAttribute("disabled")
 
 				console.warn(`Core -> ajax request failed [${options.url}]`, e)
-				return e
+				return this.parseAjaxError(e)
 			})
 	},
 
@@ -157,7 +158,7 @@ export default {
 	parseAjaxError(data) {
 
 		let code    = data.code || 400,
-			error   = data.error || "unknown",
+			error   = data.error || "parse",
 			message = data.message || null
 
 		const errors = {
@@ -169,11 +170,11 @@ export default {
 			'500': APP.TRANS.ALERTS.SERVER_ERROR
 		}
 
-		// sever error
-		if (error == "parsererror") message = errors['500']
-
 		// timeout
-		else if (error == "timeout") message = errors['408']
+		if (code == "ECONNABORTED") message = errors['408'], error = "timeout"
+
+		// unexpected body response
+		else if (error == "parse") message = errors['500']
 
 		// defined message
 		else if (errors[code]) message = errors[code]
