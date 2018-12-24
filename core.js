@@ -121,7 +121,8 @@ export default {
 		options.headers = Object.assign(headers, request.headers || {})
 
 		// payload
-		options.data = qs.stringify(Object.assign(payload, request.data || {}))
+		if (request.method == "POST")
+			options.data = qs.stringify(Object.assign(payload, request.data || {}))
 
 		console.log("Core -> new XHR request", options)
 
