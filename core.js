@@ -132,7 +132,7 @@ export default {
 
 				if (button) button.removeAttribute("disabled")
 
-				console.log(`Core -> parsing ajax response [${res.data.status || 200}]`, res.data)
+				console.log(`Core -> parsing ajax response [${res.data.status || 200}][${options.url}]`, res.data)
 
 				// check for response error
 				if (!res.data.status || res.data.status == "error")
