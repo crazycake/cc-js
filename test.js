@@ -19,6 +19,8 @@ let Test = {
 		console.log("Test -> initialized", data)
 
 		cc.setAjaxLoadingHandler(this)
+
+		cc.logs = false
 	},
 
 	fetchTest() {
@@ -29,15 +31,12 @@ let Test = {
 
 		console.log("Test (fetch) -> Axios request", url, ctx)
 
-		return cc.ajaxRequest({ method: "GET", url, loading: false }, ctx)
-			.then(payload => {
+		cc.ajaxRequest({ method: "GET", url, loading: false }, ctx)
+		.then(payload => {
 
-				if (payload.error)
-					return console.warn("Test (fetch) -> Payload Error", payload.message)
-
-				console.log("Test (fetch) -> completed!")
-			})
-			.catch(e => console.warn("Test (fetch) -> Axios failed:", e))
+			console.log("Test (fetch) -> Ok, parsed response:", payload)
+		})
+		.catch(e => console.warn("Test (fetch) -> Exception, axios failed", e))
 	}
 }
 

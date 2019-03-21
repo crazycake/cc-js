@@ -18,6 +18,11 @@ export default {
 	 */
 	timeout: 44000,
 
+	/**
+	 * @property logs - flag for console logs
+	 */
+	logs: true,
+
 	// ++ Methods
 
 	/**
@@ -48,7 +53,7 @@ export default {
 			// check module exists
 			if (!this.modules[name]) {
 
-				console.warn(`Core -> attempting to load an undefined module: ${name}.`)
+				this.console('warn', `Core -> attempting to load an undefined module: ${name}.`)
 				continue
 			}
 
@@ -124,7 +129,7 @@ export default {
 		if (request.method == "POST")
 			options.data = qs.stringify(Object.assign(payload, request.data || {}))
 
-		console.log("Core -> new XHR request", options)
+		this.console('log', "Core -> new XHR request", options)
 
 		return axios(options)
 			// success
@@ -132,7 +137,7 @@ export default {
 
 				if (button) button.removeAttribute("disabled")
 
-				console.log(`Core -> parsing ajax response [${res.data.status || 200}][${options.url}]`, res.data)
+				this.console('log', `Core -> parsing response [${res.data.status || 200}][${options.url}]`, res.data)
 
 				// check for response error
 				if (!res.data.status || res.data.status == "error")
@@ -146,7 +151,8 @@ export default {
 
 				if (button) button.removeAttribute("disabled")
 
-				console.warn(`Core -> ajax request failed [${options.url}]`, e)
+				this.console('warn', `Core -> request failed [${options.url}]`, e)
+
 				return this.parseAjaxError(e)
 			})
 	},
@@ -252,5 +258,15 @@ export default {
 		}
 
 		return objects
+	},
+
+	/**
+	 * Console Messages
+	 * @param {String} type - The console fn
+	 * @param {Multiple} - Multiple data params
+	 */
+	console(type, ...data) {
+
+		return this.logs ? console[type](...data) : null
 	}
 }
