@@ -1,6 +1,7 @@
 /**
  * Core Module
- * Required scope vars: {APP}
+ * Required scope var APP:
+ * { baseUrl, staticUrl, UA: { csrfKey }, TRANS: { ALERTS: {} } }
  */
 
 import axios from "axios"
@@ -196,12 +197,11 @@ export default {
 	 */
 	setAjaxLoadingHandler(ctx, seconds = 1500) {
 
-		let timer
-
-		let handler = (settings, activate) => {
+		let timer,
+			handler = (settings, activate) => {
 
 			// optional parameter to skip loading handler
-			if (settings.loading === false) return
+			if (settings && settings.loading === false) return
 
 			if (activate) {
 
