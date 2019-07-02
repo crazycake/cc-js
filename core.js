@@ -166,7 +166,7 @@ export default {
 	parseAjaxError(data) {
 
 		// cancel request
-		if (data.constructor.name == "Cancel") return
+		if (data.constructor.name.match(/Cancel|t/)) return {}
 
 		let code    = data.code || 400,
 			error   = data.error || "parse",
