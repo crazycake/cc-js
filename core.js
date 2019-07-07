@@ -169,7 +169,6 @@ export default {
 			error   = data.error || "parse",
 			message = data.message || null
 
-
 		const errors = {
 
 			'401': APP.TRANS.ALERTS.ACCESS_FORBIDDEN,
