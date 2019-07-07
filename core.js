@@ -165,12 +165,10 @@ export default {
 	 */
 	parseAjaxError(data) {
 
-		// cancel request
-		if (data.constructor.name.match(/Cancel|t/)) return {}
-
 		let code    = data.code || 400,
 			error   = data.error || "parse",
 			message = data.message || null
+
 
 		const errors = {
 
@@ -181,8 +179,11 @@ export default {
 			'500': APP.TRANS.ALERTS.SERVER_ERROR
 		}
 
+		// cancel request
+		if (data.constructor.name.match(/Cancel/)) code = "CANCEL", error = null
+
 		// timeout
-		if (code == "ECONNABORTED") message = errors['408'], error = "timeout"
+		else if (code == "ECONNABORTED") message = errors['408'], error = "timeout"
 
 		// unexpected body response
 		else if (error == "parse") message = errors['500']
