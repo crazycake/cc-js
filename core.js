@@ -6,7 +6,7 @@
  *		baseUrl,
  *		staticUrl,
  *		UA: { csrfKey, csrfValue }, // optional
- *		TRANS: { ALERTS: { ACCESS_FORBIDDEN (401), SERVER_TIMEOUT (408), NOT_FOUND (404), SERVER_ERROR (500) } }
+ *		TRANS: { ALERTS: { ACCESS_FORBIDDEN (401), SERVER_TIMEOUT (408), NOT_FOUND (404), CSRF (498), SERVER_ERROR (500) } }
  *	};
  *
  * Required response struct:
