@@ -145,7 +145,7 @@ export default {
 					return this.parseAjaxError(res.data)
 
 				// success
-				return res.data.redirect ? location.href = res.data.redirect : res.data.payload || {}
+				return res.data.redirect ? window.location.href = res.data.redirect : res.data.payload || {}
 			})
 			// error
 			.catch(e => {
