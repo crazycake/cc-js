@@ -110,11 +110,10 @@ export default {
 	/**
 	 * Ajax request with response handler.
 	 * @param {Object} request - Axios request object
-	 * @param {Object} ctx - The html context (prevent bubble clicking)
-	 * @param {Object} csrf - Append UA CRSF token key & value
+	 * @param {Object} ctx - The html context (auto-disable submit button to prevent bubble clicking)
 	 * @return {Object} promise
 	 */
-	ajaxRequest(request = null, ctx = null, csrf = true) {
+	ajaxRequest(request = null, ctx = null) {
 
 		if (!request) throw new Error("Core -> ajaxRequest: invalid request object")
 
@@ -131,7 +130,7 @@ export default {
 		}
 
 		// append CSRF token?
-		if (request.method == "POST" && csrf && APP.UA.csrfKey)
+		if (request.method == "POST" && APP.UA && APP.UA.csrfKey)
 			payload[APP.UA.csrfKey] = APP.UA.csrfValue
 
 		// set options
