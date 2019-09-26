@@ -1,7 +1,30 @@
 /**
  * Core Module
  * Required scope var APP:
- * { baseUrl, staticUrl, UA: { csrfKey }, TRANS: { ALERTS: {} } }
+ *
+ * APP = {
+ *		baseUrl,
+ *		staticUrl,
+ *		UA: { csrfKey, csrfValue }, // optional
+ *		TRANS: { ALERTS: { ACCESS_FORBIDDEN (401), SERVER_TIMEOUT (408), NOT_FOUND (404), SERVER_ERROR (500) } }
+ *	};
+ *
+ * Required response struct:
+ *
+ * success
+ * 	{
+ * 		code: "200",
+ *		status: "ok",
+ *		payload: { ... }
+ * 	}
+ *
+ * error
+ * 	{
+ * 		code: "400"
+ *		error: "Bad Request"
+ *		message: "Wrong email or password"
+ *		status: "error
+ * 	}
  */
 
 import axios from "axios"
