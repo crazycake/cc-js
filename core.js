@@ -160,7 +160,7 @@ export default {
 
 				if (button) button.removeAttribute("disabled")
 
-				this.console('log', `Core -> parsing response [${res.data.status || 200}][${options.url}]`, res.data)
+				this.console('log', `Core -> parsing response [${res.data.status || 0}][${options.url}]`, res.data)
 
 				// check for response error
 				if (!res.data.status || res.data.status == "error")
@@ -174,8 +174,6 @@ export default {
 
 				if (button) button.removeAttribute("disabled")
 
-				this.console('warn', `Core -> request failed [${options.url}]`, e)
-
 				return this.parseAjaxError(e)
 			})
 	},
@@ -187,8 +185,8 @@ export default {
 	 */
 	parseAjaxError(data) {
 
-		let code    = data.code || 400,
-			error   = data.error || "parse",
+		let code    = data.code || 0,
+			error   = data.error || "canceled",
 			message = data.message || null
 
 		const errors = {
@@ -200,17 +198,13 @@ export default {
 			'500': APP.TRANS.ALERTS.SERVER_ERROR
 		}
 
-		// cancel request
-		if (data.constructor.name.match(/Cancel/)) code = "CANCEL", error = null
-
 		// timeout
-		else if (code == "ECONNABORTED") message = errors['408'], error = "timeout"
-
-		// unexpected body response
-		else if (error == "parse") message = errors['500']
+		if (code == "ECONNABORTED") message = errors['408'], error = "timeout"
 
 		// defined message
 		else if (errors[code]) message = errors[code]
+
+		if (!data.code) this.console('warn', `Core -> parseAjaxError, data:`, data || undefined)
 
 		return { code, error, message }
 	},
