@@ -238,7 +238,7 @@ export default {
 		axios.interceptors.request.use(config => { handler(config, true); return config }, e => { handler(e.config, false); return Promise.reject(e) })
 
 		// response interceptor
-		axios.interceptors.response.use(config => { handler(config, false); return config }, e => { handler(e.config, false); return Promise.reject(e) })
+		axios.interceptors.response.use(resp => { handler(resp.config, false); return resp }, e => { handler(e.config, false); return Promise.reject(e) })
 	},
 
 	/**
