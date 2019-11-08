@@ -20,10 +20,10 @@
  *
  * error
  * 	{
- * 		code: "400"
- *		error: "Bad Request"
+ * 		code: "400",
+ *		status: "error,
+ *		error: "Bad Request",
  *		message: "Wrong email or password"
- *		status: "error
  * 	}
  */
 
