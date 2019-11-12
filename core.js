@@ -1,6 +1,7 @@
 /**
  * Core Module
- * Required scope var APP:
+ *
+ * Global Scope:
  *
  * APP = {
  *		baseUrl,
@@ -11,21 +12,19 @@
  		}
  *	};
  *
- * Required response struct:
+ * Response Struct:
  *
- * success
- * 	{
+ * success {
  * 		code: "200",
  *		status: "ok",
  *		payload: { ... }
  * 	}
  *
- * error
- * 	{
+ * error {
  * 		code: "400",
  *		status: "error,
  *		error: "Bad Request",
- *		message: "Wrong email or password"
+ *		message: "Unexpected response"
  * 	}
  */
 
@@ -33,11 +32,6 @@ import axios from "axios"
 import qs    from "query-string"
 
 export default {
-
-	/**
-	 * @property modules
-	 */
-	modules: {},
 
 	/**
 	 * @property timeout - request timeout (seconds)
@@ -52,62 +46,18 @@ export default {
 	// ++ Methods
 
 	/**
-	* Set modules
-	* @param {Array} modules - The required modules
-	*/
-	setModules(modules = []) {
-
-		for (let mod of modules) {
-
-			if (mod.name)
-				this.modules[mod.name] = mod
-		}
-	},
-
-	/**
-	 * Starter
-	 * @param {Array} - The modules array
-	 */
-	start(modules = []) {
-
-		// check that App Global scope vars are defined
-		if (!window.APP) throw new Error("Core -> APP global scoped var is not defined!")
-
-		// call initializers
-		for (let name in modules) {
-
-			// check module exists
-			if (!this.modules[name]) {
-
-				this.console('warn', `Core -> attempting to load an undefined module: ${name}.`)
-				continue
-			}
-
-			// check if module has init method & call it
-			if (typeof this.modules[name].init == "function")
-				this.modules[name].init(modules[name])
-		}
-	},
-
-	/**
 	* Helper Get BaseUrl
 	* @param {String} uri - Append URI if defined
 	* @return String
 	*/
-	baseUrl(uri = "") {
-
-		return APP.baseUrl + uri
-	},
+	baseUrl: (uri = "") => (APP.baseUrl || './') + uri,
 
 	/**
 	* Helper Get StaticUrl
 	* @param {String} uri - Append URI if defined
 	* @return String
 	*/
-	staticUrl(uri = "") {
-
-		return APP.staticUrl + uri
-	},
+	staticUrl: (uri = "") => (APP.staticUrl || './') + uri,
 
 	/**
 	 * Ajax request with response handler.
@@ -191,14 +141,14 @@ export default {
 			error   = data.error || "canceled",
 			message = data.message || null
 
-		const errors = {
+		const errors = APP.TRANS ? {
 
 			'401': APP.TRANS.ALERTS.ACCESS_FORBIDDEN,
 			'408': APP.TRANS.ALERTS.SERVER_TIMEOUT,
 			'404': APP.TRANS.ALERTS.NOT_FOUND,
 			'498': APP.TRANS.ALERTS.CSRF,
 			'500': APP.TRANS.ALERTS.SERVER_ERROR
-		}
+		} : {}
 
 		// timeout
 		if (code == "ECONNABORTED") message = errors['408'], error = "timeout"
@@ -255,8 +205,7 @@ export default {
 		url = url.replace(/\.([0-9a-z]+)(?:[\?#]|$)/i, "_" + key + ".$1?")
 
 		// remove single question mark?
-		if (url[url.length - 1] == "?")
-			url = url.substring(0, url.length - 1)
+		if (url[url.length - 1] == "?") url = url.substring(0, url.length - 1)
 
 		return url
 	},
@@ -286,8 +235,5 @@ export default {
 	 * @param {String} type - The console fn
 	 * @param {Multiple} - Multiple data params
 	 */
-	console(type, ...data) {
-
-		return this.logs ? console[type](...data) : null
-	}
+	console(type, ...data) { return this.logs ? console[type](...data) : null }
 }
