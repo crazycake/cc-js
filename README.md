@@ -2,7 +2,7 @@ CrazyCake JS
 ------------
 [![npm version](https://badge.fury.io/js/crazycake-js.svg)](https://badge.fury.io/js/crazycake-js)
 
-JS Core for webapps. Parcel as bundler.
+JS Core for webapps.
 
 ### Requeriments
 
