@@ -1,31 +1,30 @@
 /**
- * Core Module
+ * core.js
  *
  * Global Scope:
  *
  * APP = {
- *		baseUrl,
- *		staticUrl,
- *		UA: { csrfKey, csrfValue }, // optional
- *		TRANS: {
- 			ALERTS: { ACCESS_FORBIDDEN (401), SERVER_TIMEOUT (408), NOT_FOUND (404), CSRF (498), SERVER_ERROR (500) }
- 		}
- *	};
+ *   baseUrl: 'https://example.com/',
+ *   staticUrl: 'https://cdn.example.com/',
+ *   TRANS: {
+ *     ALERTS: { ACCESS_FORBIDDEN (401), SERVER_TIMEOUT (408), NOT_FOUND (404), CSRF (498), SERVER_ERROR (500) }
+ *   }
+ * };
  *
  * Response Struct:
  *
- * success {
- * 		code: "200",
- *		status: "ok",
- *		payload: { ... }
- * 	}
+ * success => {
+ *  code: "200",
+ *  status: "ok",
+ *  payload: { ... }
+ * }
  *
- * error {
- * 		code: "400",
- *		status: "error,
- *		error: "Bad Request",
- *		message: "Unexpected response"
- * 	}
+ * error => {
+ *  code: "400",
+ *  status: "error,
+ *  error: "Bad Request",
+ *  message: "Unexpected response"
+ * }
  */
 
 import axios from "axios"
@@ -81,9 +80,9 @@ export default {
 			if (button) button.setAttribute("disabled", "true")
 		}
 
-		// append CSRF token?
-		if (request.method == "POST" && APP.UA && APP.UA.csrfKey)
-			payload[APP.UA.csrfKey] = APP.UA.csrfValue
+		// send CSRF token?
+		if (request.method == "POST" && document.head.querySelector('meta[name="csrf-key"]'))
+			payload[document.head.querySelector('meta[name="csrf-key"]').content] = document.head.querySelector('meta[name="csrf-value"]').content
 
 		// set options
 		let options = Object.assign({ method: "GET", timeout: this.timeout }, request)
