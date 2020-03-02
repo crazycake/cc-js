@@ -5,6 +5,9 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
+	<meta name="csrf-key" content="eUpZTU1BdGFLYzRsWVZ4ZTNQS08zUT09">
+	<meta name="csrf-value" content="bFB5SmlORTJDazdTZklzblYydU50QT09">
+
 	<title>CC Test</title>
 
 </head>
@@ -14,16 +17,16 @@
 
 		<h1>Test</h1>
 
-		<button type="button" onclick="cc.modules.test.fetchTest()">Ajax Call</button>
+		<button type="button" onclick="cc.app.fetchTest()">Ajax Call</button>
 
 	</div>
 
-	<script type="text/javascript" src="test.js"></script>
+	<script defer type="text/javascript" src="test.js"></script>
 
 	<script defer>
 
 		APP = {
-			"version"  : "251",
+			"version"  : "1",
 			"name"     : "CC Test",
 			"baseUrl"  : "http://localhost:1234/",
 			"staticUrl": "http://localhost:1234/",
@@ -50,13 +53,11 @@
 				"isMobile"    : false,
 				"isLegacy"    : false,
 				"requestedUri": "",
-				"lang"        : "es",
-				"csrfKey"     : "eUpZTU1BdGFLYzRsWVZ4ZTNQS08zUT09",
-				"csrfValue"   : "bFB5SmlORTJDazdTZklzblYydU50QT09"
+				"lang"        : "es"
 			}
 		};
 
-		cc.start({ test: 'hello world' });
+		document.addEventListener('DOMContentLoaded', function() { cc.app.init(); }, false);
 
 	</script>
 

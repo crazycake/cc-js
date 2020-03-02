@@ -8,15 +8,15 @@ import cc from "./core.js"
 window.cc = cc
 
 // module example
-let Test = {
+const Test = {
 
 	name: "test",
 
-	loading : { active: false },
+	loading: { active: false },
 
-	init(data) {
+	init() {
 
-		console.log("Test -> initialized", data)
+		console.log("Test -> initialized")
 
 		cc.setAjaxLoadingHandler(this)
 
@@ -25,9 +25,9 @@ let Test = {
 
 	fetchTest() {
 
-		let url = "https://httpbin.org/get"
+		const url = "https://httpbin.org/get"
 
-		let ctx = document.getElementById('app')
+		const ctx = document.getElementById('app')
 
 		console.log("Test (fetch) -> Axios request", url, ctx)
 
@@ -40,5 +40,5 @@ let Test = {
 	}
 }
 
-// set example module
-cc.setModules([ Test ])
+// set example app
+cc.app = Test
