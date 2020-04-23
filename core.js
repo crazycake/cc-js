@@ -49,14 +49,14 @@ export default {
 	* @param {String} uri - Append URI if defined
 	* @return String
 	*/
-	baseUrl: (uri = "") => (APP.baseUrl || './') + uri,
+	baseUrl: (uri = "") => (APP.baseUrl || '/') + uri,
 
 	/**
 	* Helper Get StaticUrl
 	* @param {String} uri - Append URI if defined
 	* @return String
 	*/
-	staticUrl: (uri = "") => (APP.staticUrl || './') + uri,
+	staticUrl: (uri = "") => (APP.staticUrl || '/') + uri,
 
 	/**
 	 * Ajax request with response handler.
