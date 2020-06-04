@@ -80,10 +80,6 @@ export default {
 			if (button) button.setAttribute("disabled", "true")
 		}
 
-		// send CSRF token?
-		if (request.method == "POST" && document.head.querySelector('meta[name="csrf-key"]'))
-			payload[document.head.querySelector('meta[name="csrf-key"]').content] = document.head.querySelector('meta[name="csrf-value"]').content
-
 		// set options
 		let options = Object.assign({ method: "GET", timeout: this.timeout }, request)
 
@@ -97,6 +93,11 @@ export default {
 			'Content-Type'    : 'application/x-www-form-urlencoded; charset=UTF-8'
 		}
 
+		// send CSRF token?
+		if (request.method == "POST" && document.head.querySelector('meta[name="csrf-token"]'))
+			headers['X-Csrf-Token'] = document.head.querySelector('meta[name="csrf-token"]').content
+
+		// merge headers
 		options.headers = Object.assign(headers, request.headers || {})
 
 		// payload
