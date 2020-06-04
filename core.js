@@ -33,6 +33,11 @@ import qs    from "query-string"
 export default {
 
 	/**
+	 * @property version
+	 */
+	version: "2.2.3",
+
+	/**
 	 * @property timeout - request timeout (seconds)
 	 */
 	timeout: 44000,
