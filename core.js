@@ -155,8 +155,8 @@ export default {
 			'500': APP.TRANS.ALERTS.SERVER_ERROR
 		} : {}
 
-		// timeout
-		if (code == "ECONNABORTED") message = errors['408'], error = "timeout"
+		// no connection or timeout
+		if ((data.message && data.message.match('Network Error')) || code.match('ECONNABORTED')) message = errors['408'], error = "timeout"
 
 		// defined message
 		else if (errors[code]) message = errors[code]
