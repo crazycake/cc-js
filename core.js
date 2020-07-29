@@ -35,7 +35,7 @@ export default {
 	/**
 	 * @property version
 	 */
-	version: "2.2.3",
+	version: "2.3.0",
 
 	/**
 	 * @property timeout - request timeout (seconds)
