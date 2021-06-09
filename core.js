@@ -86,13 +86,13 @@ export default {
 		}
 
 		// set options
-		let options = Object.assign({ method: "GET", timeout: this.timeout }, request)
+		const options = Object.assign({ method: "GET", timeout: this.timeout }, request)
 
 		// self url?
 		if (options.uri) options.url = this.baseUrl(options.uri)
 
 		// headers
-		let headers = {
+		const headers = {
 
 			'X-Requested-With': 'XMLHttpRequest',
 			'Content-Type'    : 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -222,11 +222,11 @@ export default {
 	 */
 	preloadImages(images = []) {
 
-		let objects = []
+		const objects = []
 
-		for (let img of images) {
+		for (const img of images) {
 
-			let o = new Image()
+			const o = new Image()
 			o.src = img
 
 			objects.push(o)
