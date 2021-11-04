@@ -29,9 +29,9 @@ const Test = {
 
 		const ctx = document.getElementById('app')
 
-		console.log("Test (fetch) -> Axios request", url, ctx)
+		console.log("Test (fetch) -> Axios request", url)
 
-		cc.ajaxRequest({ method: "GET", url, loading: false }, ctx)
+		cc.ajaxRequest({ method: "GET", url, loading: true }, ctx)
 		.then(payload => {
 
 			console.log("Test (fetch) -> Ok, parsed response:", payload)

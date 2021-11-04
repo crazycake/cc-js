@@ -12,11 +12,11 @@
 		"build": "rm -rf dist && parcel build index.html --no-source-maps"
 	},
 	"devDependencies": {
-		"@babel/core": "7.9.6",
-		"@babel/preset-env": "7.9.6"
+		"@babel/core": "~7.16.0",
+		"@babel/preset-env": "~7.16.0"
 	},
 	"dependencies": {
-		"axios": "~0.18.1",
-		"query-string": "6.12.1"
+		"axios": "~0.24.0",
+		"query-string": "7.0.1"
 	}
 }

@@ -35,7 +35,7 @@ export default {
 	/**
 	 * @property version
 	 */
-	version: "2.3.0",
+	version: "2.4.0",
 
 	/**
 	 * @property timeout - request timeout (seconds)
@@ -156,7 +156,7 @@ export default {
 		} : {}
 
 		// no connection or timeout
-		if ((data.message && data.message.match('Network Error')) || code.match('ECONNABORTED')) message = errors['408'], error = "timeout"
+		if ((data.message && data.message.match('Network Error')) || (code || '').match('ECONNABORTED')) message = errors['408'], error = "timeout"
 
 		// defined message
 		else if (errors[code]) message = errors[code]
