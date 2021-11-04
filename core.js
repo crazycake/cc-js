@@ -28,14 +28,13 @@
  */
 
 import axios from "axios"
-import qs    from "query-string"
 
 export default {
 
 	/**
 	 * @property version
 	 */
-	version: "2.4.0",
+	version: "2.5.0",
 
 	/**
 	 * @property timeout - request timeout (seconds)
@@ -106,8 +105,16 @@ export default {
 		options.headers = Object.assign(headers, request.headers || {})
 
 		// payload
-		if (request.method == "POST")
-			options.data = qs.stringify(Object.assign(payload, request.data || {}))
+		if (request.method == "POST") {
+
+			payload = Object.assign(payload, request.data || {})
+
+			const params = new URLSearchParams()
+
+			for (const key in payload) params.append(key, payload[key])
+
+			options.data = params
+		}
 
 		this.console('log', "Core -> new XHR request", options)
 
